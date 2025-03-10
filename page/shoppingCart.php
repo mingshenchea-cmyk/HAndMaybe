@@ -1,10 +1,10 @@
-// Include the header
-include('_head.php');
-?>
+<?php
+require '..\_base.php';
 
-<h1>My Bag</h1>
+// Include the header
+include '..\_head.php';
+?>
 
 <?php
 // Include the footer
-include('_foot.php');
-?>
+include '..\_foot.php';
