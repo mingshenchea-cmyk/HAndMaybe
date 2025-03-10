@@ -8,6 +8,31 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 session_start();
 
 // ============================================================================
+// Database Setups and Functions
+// ============================================================================
+
+// // Global PDO object
+// $_db = new PDO('mysql:dbname=h&maybe', 'root', '', [
+//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+// ]);
+
+// // Is unique?
+// function is_unique($value, $table, $field) {
+//     global $_db;
+//     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
+//     $stm->execute([$value]);
+//     return $stm->fetchColumn() == 0;
+// }
+
+// // Is exists?
+// function is_exists($value, $table, $field) {
+//     global $_db;
+//     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
+//     $stm->execute([$value]);
+//     return $stm->fetchColumn() > 0;
+// }
+
+// ============================================================================
 // General Page Functions
 // ============================================================================
 

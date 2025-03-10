@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>H&Maybe | Women's, Men's & Kids' Fashion | H&Maybe MY</title>
     <link rel="icon" href="/images/HAndMaybe.png">
-    <link rel="stylesheet" href="css/handmaybe.css">
+    <link rel="stylesheet" href="/css/handmaybe.css">
     <script src="/js/handmaybe.js"></script>
 </head>
 
