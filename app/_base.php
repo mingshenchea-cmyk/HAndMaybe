@@ -4,6 +4,10 @@
 // PHP Setups
 // ============================================================================
 
+// $_db = new PDO('mysql:dbname=h_and_maybe_db', 'root', '', [
+//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+// ]);
+
 date_default_timezone_set('Asia/Kuala_Lumpur');
 session_start();
 
@@ -12,46 +16,52 @@ session_start();
 // ============================================================================
 
 // Is GET request?
-function is_get() {
+function is_get()
+{
     return $_SERVER['REQUEST_METHOD'] == 'GET';
 }
 
 // Is POST request?
-function is_post() {
+function is_post()
+{
     return $_SERVER['REQUEST_METHOD'] == 'POST';
 }
 
 // Obtain GET parameter
-function get($key, $value = null) {
+function get($key, $value = null)
+{
     $value = $_GET[$key] ?? $value;
     return is_array($value) ? array_map('trim', $value) : trim($value);
 }
 
 // Obtain POST parameter
-function post($key, $value = null) {
+function post($key, $value = null)
+{
     $value = $_POST[$key] ?? $value;
     return is_array($value) ? array_map('trim', $value) : trim($value);
 }
 
 // Obtain REQUEST (GET and POST) parameter
-function req($key, $value = null) {
+function req($key, $value = null)
+{
     $value = $_REQUEST[$key] ?? $value;
     return is_array($value) ? array_map('trim', $value) : trim($value);
 }
 
 // Redirect to URL
-function redirect($url = null) {
+function redirect($url = null)
+{
     $url ??= $_SERVER['REQUEST_URI'];
     header("Location: $url");
     exit();
 }
 
 // Set or get temporary session variable
-function temp($key, $value = null) {
+function temp($key, $value = null)
+{
     if ($value !== null) {
         $_SESSION["temp_$key"] = $value;
-    }
-    else {
+    } else {
         $value = $_SESSION["temp_$key"] ?? null;
         unset($_SESSION["temp_$key"]);
         return $value;
@@ -63,18 +73,21 @@ function temp($key, $value = null) {
 // ============================================================================
 
 // Encode HTML special characters
-function encode($value) {
+function encode($value)
+{
     return htmlentities($value);
 }
 
 // Generate <input type='text'>
-function html_text($key, $attr = '') {
+function html_text($key, $attr = '')
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo "<input type='text' id='$key' name='$key' value='$value' $attr>";
 }
 
 // Generate <input type='radio'> list
-function html_radios($key, $items, $br = false) {
+function html_radios($key, $items, $br = false)
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo '<div>';
     foreach ($items as $id => $text) {
@@ -88,7 +101,8 @@ function html_radios($key, $items, $br = false) {
 }
 
 // Generate <select>
-function html_select($key, $items, $default = '- Select One -', $attr = '') {
+function html_select($key, $items, $default = '- Select One -', $attr = '')
+{
     $value = encode($GLOBALS[$key] ?? '');
     echo "<select id='$key' name='$key' $attr>";
     if ($default !== null) {
@@ -109,12 +123,12 @@ function html_select($key, $items, $default = '- Select One -', $attr = '') {
 $_err = [];
 
 // Generate <span class='err'>
-function err($key) {
+function err($key)
+{
     global $_err;
     if ($_err[$key] ?? false) {
         echo "<span class='err'>$_err[$key]</span>";
-    }
-    else {
+    } else {
         echo '<span></span>';
     }
 }
@@ -122,3 +136,7 @@ function err($key) {
 // ============================================================================
 // Global Constants and Variables
 // ============================================================================
+// $_product = $_db->query('SELECT product_id, name FROM product')
+//     ->fetchAll(PDO::FETCH_KEY_PAIR);
+
+// print_r($_product);
