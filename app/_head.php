@@ -10,6 +10,10 @@
     <script src="/js/handmaybe.js"></script>
 </head>
 
+<!-- <?php
+$currentPage = basename($_SERVER['PHP_SELF']);
+?> -->
+
 <body>
     <header>
         <img src="/images/HAndMaybe.png" class="logo">
@@ -17,28 +21,30 @@
         <div class="right-nav">
             <a href="/" class="nav-item">
                 <img src="/images/profile-icon.webp" alt="Sign In">
-                <p>Sign in</p>
+                <p class="sign_in">Sign in</p>
             </a>
-            <a href="/" class="nav-item" alt="Shopping Bag">
+            <a href="../page/shoppingCart.php" class="nav-item" alt="Shopping Bag">
                 <img src="/images/118096.png">
-                <p>Shopping bag (0)</p>
+                <p class="cart">Shopping bag (0)</p>
             </a>
         </div>
     </header>
 
-    <nav>
-        <div class="menu">
-            <a href="../page/women.php">Women</a>
-            <a href="../page/men.php">Men</a>
-            <!-- <a href="/">Baby</a>
+    <?php if ($currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): ?>
+        <nav>
+            <div class="menu">
+                <a href="../page/product.php?category=Women">Women</a>
+                <a href="../page/product.php?category=Men">Men</a>
+                <!-- <a href="/">Baby</a>
             <a href="/">Kids</a>
             <a href="/">Sale</a> -->
-        </div>
+            </div>
 
-        <div class = "search">
-            <img src="/images/search.jpg">
-            <input type="text" placeholder="Search">
-        </div>
-    </nav>
+            <div class="search">
+                <img src="/images/search.jpg">
+                <input type="text" placeholder="Search">
+            </div>
+        </nav>
+    <?php endif; ?>
 
     <main>
