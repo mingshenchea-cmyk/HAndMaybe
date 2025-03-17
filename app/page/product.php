@@ -33,13 +33,13 @@ include '../_head.php';
             if ($product->category == $category) {
                 if ($product->product_id == $variation->product_id) {
                     if ($variation->color !== $color_shown) {
+                        $color_shown = $variation->color;
                         echo "<div class='product'>";
-                        echo "<a href='../page/product_detail.php?variation_id=" . $variation->variation_id . "' class='product_link'>";
+                        echo "<a href='../page/product_detail.php?variation_id=" . $variation->variation_id . "&color= ".$color_shown."' class='product_link'>";
                         echo "<img class= 'product_photo' src='" . $variation->product_photo . "' alt='" .$product->name . "'>";
                         echo "<p class='name'>" . $product->name . "</p>";
                         echo "<p class='price'>RM" . number_format($product->price, 2) . "</p>";
-                        echo "</div>";
-                        $color_shown = $variation->color;
+                        echo "</div>";                        
                     }
                 }
             }
