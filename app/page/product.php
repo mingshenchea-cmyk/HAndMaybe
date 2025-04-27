@@ -13,19 +13,6 @@ $color_shown = [];
 include '../_head.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H&Maybe | Women's, Men's Fashion | H&Maybe MY</title>
-    <link rel="icon" href="/images/HAndMaybe.png">
-    <link rel="stylesheet" href="/css/handmaybe.css">
-    <link rel="stylesheet" href="/css/product.css">
-    <script src="/js/handmaybe.js"></script>
-</head>
-
 <div class="container">
     <?php
     foreach ($_product as $product) {

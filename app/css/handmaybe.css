@@ -26,28 +26,18 @@ header .logo {
 }
 
 .nav-item {
+    display: flex;
     align-items: center;
     text-decoration: none;
 }
 
-.right-nav a {
-    display: flex;
-}
-
-.right-nav a img {
+.nav-icon {
     height: 25px;
     margin-right: 5px;
     margin-left: 10px;
 }
 
-.sign_in {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 12px;
-    text-decoration: none;
-    color: black;
-}
-
-.cart {
+.sign_in, .cart {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
     text-decoration: none;

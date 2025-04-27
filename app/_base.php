@@ -4,9 +4,9 @@
 // PHP Setups
 // ============================================================================
 
-// $_db = new PDO('mysql:dbname=h_and_maybe_db', 'root', '', [
-//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
-// ]);
+$_db = new PDO('mysql:dbname=h_and_maybe_db', 'root', '', [
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+]);
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
 session_start();

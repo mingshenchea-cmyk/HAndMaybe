@@ -7,24 +7,12 @@ $_product_variation = $_db->query('SELECT * FROM product_variation')->fetchAll()
 
 $variation_id = get('variation_id');
 $color = get('color');
+$size = null;
 
 //-----------------------------------------------------------------------------
 // Include the header
 include '../_head.php';
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H&Maybe | Women's, Men's Fashion | H&Maybe MY</title>
-    <link rel="icon" href="/images/HAndMaybe.png">
-    <link rel="stylesheet" href="/css/handmaybe.css">
-    <link rel="stylesheet" href="/css/product.css">
-    <script src="/js/handmaybe.js"></script>
-</head>
 
 <div class="container">
     <?php
@@ -49,18 +37,22 @@ include '../_head.php';
             // echo "<form action='' method='GET'>
             echo "<table class='size'>
             <tr>
-            <td onclick=\"selectSize('XS')\">XS</td>
+            <td>XS</td>
             <td>S</td>
             <td>M</td>
             <td>L</td>
             <td>XL</td>
             </tr>
             </table>";
-            echo "<form>
-            <button class='add_button'>
-            <img class='button_icon' src='/images/shopping_bag.png'>
-            <p class='add'>Add</p>
-            </button>
+            echo 
+            "<form action='../add_to_cart.php' method='POST'>
+                <input type='hidden' name='variation_id' value='$variation->variation_id'>
+                <input type='hidden' name='quantity' value='1'>
+                <input type='hidden' name='size' value='$size'>
+                <button type='submit' class='add_button'>
+                    <img class='button_icon' src='/images/shopping_bag.png'>
+                    <p class='add'>Add</p>
+                </button>
             </form>";            
             echo "</div>";
             echo "</div>";
