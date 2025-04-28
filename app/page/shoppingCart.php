@@ -2,6 +2,8 @@
 require '../_base.php';
 
 // ----------------------------------------------------------------------------
+// Handle Cart Updates
+// ----------------------------------------------------------------------------
 
 if (is_post()) {
     $btn = req('btn');
@@ -10,16 +12,21 @@ if (is_post()) {
         redirect('?'); 
     }
 
-    $id = req('id');
-    $unit = req('unit');
-    update_cart($id, $unit);
+    $variation_id = req('variation_id');
+    $quantity = req('quantity');
+    update_cart($variation_id, $quantity);
     redirect(); 
 }
 
 // ----------------------------------------------------------------------------
+// Display Shopping Cart
+// ----------------------------------------------------------------------------
 
 $_title = 'My Cart';
 include '../_head.php';
+
+// Check if user is logged in
+$is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
 ?>
 <link rel="stylesheet" href="/path/to/cart.css">
 
@@ -27,40 +34,60 @@ include '../_head.php';
     <h1 class="cart-header">My Cart</h1>
 
     <?php
-    $count = 0;
     $total = 0;
     $cart = get_cart();
-    $stm = $_db->prepare('SELECT * FROM product WHERE id = ?');
+    
+    // Prepare queries
+    $product_stm = $_db->prepare('SELECT * FROM product WHERE product_id = ?');
+    $variation_stm = $_db->prepare('SELECT * FROM product_variation WHERE variation_id = ?');
 
     if (empty($cart)): ?>
         <p class="empty-cart">Your cart is empty</p>
     <?php else: ?>
-        <?php foreach ($cart as $id => $unit):
-            $stm->execute([$id]);
-            $p = $stm->fetch();
-            $subtotal = $p->price * $unit;
-            $count += $unit;
+        <?php foreach ($cart as $variation_id => $item):
+            // Get quantity - handle both array and simple value formats
+            $quantity = is_array($item) ? $item['quantity'] : $item;
+            
+            // Get variation details
+            $variation_stm->execute([$variation_id]);
+            $variation = $variation_stm->fetch();
+            
+            if (!$variation) continue;
+            
+            // Get product details
+            $product_stm->execute([$variation->product_id]);
+            $product = $product_stm->fetch();
+            
+            if (!$product) continue;
+            
+            $subtotal = $product->price * $quantity;
             $total += $subtotal;
         ?>
             <div class="cart-item">
-                <img src="/products/<?= encode($p->photo) ?>" alt="<?= encode($p->name) ?>" class="cart-item-image">
+                <img src="<?= htmlspecialchars($variation->product_photo) ?>" alt="<?= htmlspecialchars($product->name) ?>" class="cart-item-image">
                 <div class="cart-item-details">
-                    <h2 class="cart-item-title"><?= encode($p->name) ?></h2>
-                    <p class="cart-item-price">Each RM<?= number_format($p->price, 2) ?></p>
+                    <h2 class="cart-item-title"><?= htmlspecialchars($product->name) ?></h2>
+                    <p class="cart-item-variant">
+                        Color: <?= htmlspecialchars($variation->color) ?> | 
+                        Size: <?= htmlspecialchars($variation->size) ?>
+                    </p>
+                    <p class="cart-item-price">Each RM<?= number_format($product->price, 2) ?></p>
                     
                     <div class="quantity-selector">
                         <span class="quantity-label">Quantity:</span>
                         <form method="post" class="quantity-form">
-                            <input type="hidden" name="id" value="<?= $id ?>">
-                            <select name="unit" class="quantity-input">
-                                <?php foreach (range(1, 10) as $i): ?>
-                                    <option value="<?= $i ?>" <?= $i == $unit ? 'selected' : '' ?>><?= $i ?></option>
-                                <?php endforeach ?>
+                            <input type="hidden" name="variation_id" value="<?= htmlspecialchars($variation_id) ?>">
+                            <select name="quantity" class="quantity-input">
+                                <?php foreach (range(1, 10) as $qty): ?>
+                                    <option value="<?= $qty ?>" <?= $qty == $quantity ? 'selected' : '' ?>>
+                                        <?= $qty ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </form>
                     </div>
                     
-                    <p class="cart-item-price">Subtotal: RM<?= number_format($subtotal, 2) ?></p>
+                    <p class="cart-item-subtotal">Subtotal: RM<?= number_format($subtotal, 2) ?></p>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -101,10 +128,10 @@ include '../_head.php';
             </div>
             
             <div class="cart-actions">
-                <?php if ($cart): ?>
+                <?php if (!empty($cart)): ?>
                     <button data-post="?btn=clear" class="clear-btn">Clear Cart</button>
                     
-                    <?php if ($_user?->role == 'Member'): ?>
+                    <?php if ($is_member): ?>
                         <button data-post="checkout.php" class="checkout-btn">Proceed to Checkout</button>
                     <?php else: ?>
                         <p class="login-prompt">Please <a href="/login.php">login</a> as member to checkout</p>
@@ -117,8 +144,8 @@ include '../_head.php';
 
 <script>
     $(function() {
-        $('select').on('change', function(e) {
-            e.target.form.submit();
+        $('.quantity-input').on('change', function() {
+            $(this).closest('form').submit();
         });
     });
 </script>

@@ -100,6 +100,12 @@ function html_radios($key, $items, $br = false)
     echo '</div>';
 }
 
+// Generate <input type='hidden'>
+function html_hidden($key, $value = '', $attr = '') {
+    $value = encode($value);
+    echo "<input type='hidden' id='$key' name='$key' value='$value' $attr>";
+}
+
 // Generate <select>
 function html_select($key, $items, $default = '- Select One -', $attr = '')
 {
@@ -113,6 +119,14 @@ function html_select($key, $items, $default = '- Select One -', $attr = '')
         echo "<option value='$id' $state>$text</option>";
     }
     echo '</select>';
+}
+
+// Check if variation exists
+function variation_exists($variation_id) {
+    global $_db;
+    $stm = $_db->prepare("SELECT COUNT(*) FROM product_variation WHERE variation_id = ?");
+    $stm->execute([$variation_id]);
+    return $stm->fetchColumn() > 0;
 }
 
 // ============================================================================
@@ -159,15 +173,25 @@ function set_cart($cart = []) {
     $_SESSION['cart'] = $cart;
 }
 
-// Update shopping cart
-function update_cart($id, $unit) {
+// Update shopping cart to handle variations
+function update_cart($variation_id, $quantity) {
     $cart = get_cart();
-
-    if($unit>=1 && $unit <=10 && is_exists($id, 'product', 'id')){
-        $cart[$id] = $unit;
+    
+    // Check if variation exists and get product_id
+    global $_db;
+    $stm = $_db->prepare('SELECT product_id FROM product_variation WHERE variation_id = ?');
+    $stm->execute([$variation_id]);
+    $product_id = $stm->fetchColumn();
+    
+    if ($quantity >= 1 && $quantity <= 10 && $product_id) {
+        // Store both product_id and variation_id in cart
+        $cart[$variation_id] = [
+            'product_id' => $product_id,
+            'quantity' => $quantity
+        ];
         ksort($cart);
-    } else{
-        unset($cart[$id]);
+    } else {
+        unset($cart[$variation_id]);
     }
     set_cart($cart);
 }
