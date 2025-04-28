@@ -7,16 +7,10 @@ require '../_base.php';
 
 if (is_post()) {
     $variation_id = post('variation_id');
-    $quantity = 1; // Fixed quantity since we're not including quantity selector
-    $size = post('size');
-    
-    // Get product ID from variation to work with your existing cart system
-    $stm = $_db->prepare('SELECT product_id FROM product_variation WHERE variation_id = ?');
-    $stm->execute([$variation_id]);
-    $product_id = $stm->fetchColumn();
-    
-    if ($product_id) {
-        update_cart($product_id, $quantity); // Uses your existing update_cart function
+    $quantity = 1; // Fixed quantity (no quantity selector yet)
+
+    if ($variation_id) {
+        update_cart($variation_id, $quantity); // Pass variation_id directly
     }
     redirect();
 }
@@ -40,39 +34,41 @@ include '../_head.php';
     foreach ($_product_variation as $variation) {
         if ($variation_id == $variation->variation_id) {
             echo "<div class='product_box'>";
-            echo "<img class='product_image' src='" . $variation->product_photo . "' alt='" . $variation_id . "'>";
+            echo "<img class='product_image' src='" . htmlspecialchars($variation->product_photo) . "' alt='" . htmlspecialchars($variation_id) . "'>";
             echo "<div class='detail'>";
+            
             foreach ($_product as $product) {
                 if ($variation->product_id == $product->product_id) {
-                    echo "<p class='detail_name'>" . $product->name . "</p>";
+                    echo "<p class='detail_name'>" . htmlspecialchars($product->name) . "</p>";
                     echo "<p class='detail_price'>RM" . number_format($product->price, 2) . "</p>";
-                    echo "<p class='description'>".$product->description."</p>";
+                    echo "<p class='description'>" . htmlspecialchars($product->description) . "</p>";
                     $color = $variation->color;
                     break;
                 }
             }
-            echo "<p class='color'>Color: ".$color."</p>";
+
+            echo "<p class='color'>Color: " . htmlspecialchars($color) . "</p>";
             echo "<p class='select_size'>Select size</p>";
             echo "<table class='size'>
                 <tr>
-                <td>XS</td>
-                <td>S</td>
-                <td>M</td>
-                <td>L</td>
-                <td>XL</td>
+                    <td>XS</td>
+                    <td>S</td>
+                    <td>M</td>
+                    <td>L</td>
+                    <td>XL</td>
                 </tr>
                 </table>";
             
             echo "<form method='post'>";
-            echo "<input type='hidden' name='variation_id' value='$variation->variation_id'>";
-            echo "<input type='hidden' name='quantity' value='1'>"; // Fixed quantity of 1
+            echo "<input type='hidden' name='variation_id' value='" . htmlspecialchars($variation->variation_id) . "'>";
+            echo "<input type='hidden' name='quantity' value='1'>"; // Always 1
             echo "<input type='hidden' name='size' value=''>"; 
             echo "<button type='submit' class='add_button'>";
             echo "<img class='button_icon' src='/images/shopping_bag.png'>";
             echo "<span class='add'>Add to Cart</span>";
             echo "</button>";
             echo "</form>";
-            
+
             echo "</div>";
             echo "</div>";
             break;
@@ -83,3 +79,4 @@ include '../_head.php';
 
 <?php
 include '../_foot.php';
+?>

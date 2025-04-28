@@ -39,10 +39,11 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
     
     // Single optimized query to get all product and variation details
     $cart_query = $_db->prepare('
-        SELECT p.product_id, p.name, p.price, p.description,
-               pv.variation_id, pv.color, pv.size, pv.product_photo, pv.stock_quantity
-        FROM product_variation pv
-        JOIN product p ON pv.product_id = p.product_id
+        SELECT 
+            p.product_id, p.name, p.description, p.price,
+            pv.variation_id, pv.color, pv.size, pv.product_photo, pv.stock_quantity
+        FROM product p
+        JOIN product_variation pv ON p.product_id = pv.product_id
         WHERE pv.variation_id = ?
     ');
 
@@ -55,24 +56,25 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
             
             // Get product and variation details
             $cart_query->execute([$variation_id]);
-            $item_details = $cart_query->fetch();
+            $product = $cart_query->fetch();
             
-            if (!$item_details) continue; // Skip if not found
+            if (!$product) continue; // Skip if not found
             
-            $subtotal = $item_details->price * $quantity;
+            $subtotal = $product->price * $quantity;
             $total += $subtotal;
         ?>
             <div class="cart-item">
-                <img src="<?= htmlspecialchars($item_details->product_photo) ?>" 
-                     alt="<?= htmlspecialchars($item_details->name) ?>" 
+                <img src="<?= htmlspecialchars($product->product_photo) ?>" 
+                     alt="<?= htmlspecialchars($product->name) ?>" 
                      class="cart-item-image">
                 <div class="cart-item-details">
-                    <h2 class="cart-item-title"><?= htmlspecialchars($item_details->name) ?></h2>
+                    <h2 class="cart-item-title"><?= htmlspecialchars($product->name) ?></h2>
+                    <p class="description"><?= htmlspecialchars($product->description) ?></p>
                     <p class="cart-item-variant">
-                        Color: <?= htmlspecialchars($item_details->color) ?> | 
-                        Size: <?= htmlspecialchars($item_details->size) ?>
+                        <strong>Color:</strong> <?= htmlspecialchars($product->color) ?> | 
+                        <strong>Size:</strong> <?= htmlspecialchars($product->size) ?>
                     </p>
-                    <p class="cart-item-price">Each RM<?= number_format($item_details->price, 2) ?></p>
+                    <p class="cart-item-price">Price: RM<?= number_format($product->price, 2) ?></p>
                     
                     <div class="quantity-selector">
                         <span class="quantity-label">Quantity:</span>
@@ -80,7 +82,7 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
                             <input type="hidden" name="variation_id" value="<?= htmlspecialchars($variation_id) ?>">
                             <select name="quantity" class="quantity-input">
                                 <?php 
-                                $max_qty = min(10, $item_details->stock_quantity);
+                                $max_qty = min(10, $product->stock_quantity);
                                 for ($qty = 1; $qty <= $max_qty; $qty++): ?>
                                     <option value="<?= $qty ?>" <?= $qty == $quantity ? 'selected' : '' ?>>
                                         <?= $qty ?>
@@ -90,20 +92,11 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
                         </form>
                     </div>
                     
-                    <p class="cart-item-subtotal">Subtotal: RM<?= number_format($subtotal, 2) ?></p>
+                    <p class="cart-item-subtotal"><strong>Subtotal:</strong> RM<?= number_format($subtotal, 2) ?></p>
                 </div>
             </div>
         <?php endforeach; ?>
 
-        <!-- Promo Code Section -->
-        <div class="promo-section">
-            <h3 class="promo-title">ENTER PROMO CODE</h3>
-            <form class="promo-input-group">
-                <input type="text" class="promo-input" placeholder="Promo Code">
-                <button type="submit" class="promo-submit">Submit</button>
-            </form>
-        </div>
-        
         <!-- Order Summary -->
         <div class="order-summary">
             <h3 class="summary-title">Order Summary</h3>
