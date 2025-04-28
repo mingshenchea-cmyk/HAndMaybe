@@ -9,31 +9,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Auth Tabs */
-.auth-tabs {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.auth-tabs button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.auth-tabs button.active {
-    background-color: #0056b3;
-}
-
 /* Auth Forms */
-.auth-form {
-    display: none;
-}
 
 .auth-form.active {
     display: block;
@@ -42,50 +18,146 @@
 .auth-form h2 {
     margin-bottom: 20px;
     text-align: center;
+    color: #333;
 }
 
-.auth-form input {
-    width: 90%;
+.auth-form p {
+    text-align: center;
+    color: #333;
+}
+
+/* Form Layout */
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input Fields */
+.auth-form label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+}
+
+.auth-form input:not([type="checkbox"]):not([type="radio"]) {
+    width: 95%;
     padding: 10px;
-    margin-left: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 14px;
 }
 
-.auth-form input#age {
-    width: 10%;
-    margin-right: 50px;
+.auth-form input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-.auth-form input#gender_M, .auth-form input#gender_F{
-    width: 10%;
+/* Remember Me Checkbox */
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.remember-me input {
+    margin-right: 8px;
+}
+
+/* Gender Radio Buttons */
+.gender-options {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.gender-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Photo Upload */
+.upload img {
+    display: block;
+    border: 1px solid #333;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* Form Buttons */
+.form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .auth-form button {
-    width: 20%;
-    padding: 10px;
+    padding: 10px 25px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.auth-form button[type="reset"] {
+    background-color: #6c757d;
 }
 
 .auth-form button:hover {
-    background-color: #0056b3;
+    background-color: #0069d9;
 }
 
-.auth-form p {
-    text-align: center;
-    margin-top: 10px;
+.auth-form button[type="reset"]:hover {
+    background-color: #5a6268;
 }
 
+/* Links */
 .auth-form a {
     color: #007bff;
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .auth-form a:hover {
+    color: #0056b3;
     text-decoration: underline;
+}
+
+/* Error Messages */
+.err {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .auth-container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+    
+    .auth-tabs button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .auth-form button {
+        width: 100%;
+    }
 }
