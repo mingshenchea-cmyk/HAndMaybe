@@ -140,3 +140,46 @@ function err($key)
 //     ->fetchAll(PDO::FETCH_KEY_PAIR);
 
 // print_r($_product);
+
+
+// Range 1-10 shopping cart
+$_units = array_combine(range(1, 10), range(1, 10));
+
+// ============================================================================
+// Shopping Cart
+// ============================================================================
+
+// Get shopping cart
+function get_cart() {
+    return $_SESSION['cart'] ?? [];
+}
+
+// Set shopping cart
+function set_cart($cart = []) {
+    $_SESSION['cart'] = $cart;
+}
+
+// Update shopping cart
+function update_cart($id, $unit) {
+    $cart = get_cart();
+
+    if($unit>=1 && $unit <=10 && is_exists($id, 'product', 'id')){
+        $cart[$id] = $unit;
+        ksort($cart);
+    } else{
+        unset($cart[$id]);
+    }
+    set_cart($cart);
+}
+
+// ============================================================================
+// Database Setups and Functions
+// ============================================================================
+
+// Is exists?
+function is_exists($value, $table, $field) {
+    global $_db;
+    $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
+    $stm->execute([$value]);
+    return $stm->fetchColumn() > 0;
+}
