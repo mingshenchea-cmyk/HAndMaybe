@@ -1,0 +1,138 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.product {
+    display: block;
+    width: 300px;
+    /* margin: auto; */
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+
+.product_photo {
+    width: 300px;
+}
+
+.price {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
+    color: black;
+    margin-left: 20px;
+}
+
+.name {
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 15px;
+    color: black;
+    margin-left: 20px;
+}
+
+.product_link {
+    text-decoration: none;
+}
+
+.product_image {
+    width: 400px;
+    margin-right: 30px;
+}
+
+.detail {
+    display: block;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 700px;
+}
+
+.product_box {
+    display: flex;
+    margin: auto;
+}
+
+.detail_name,
+.detail_price,
+.description,
+.color,
+.add_button {
+    margin-left: 20px;
+    margin-bottom: 30px;
+}
+
+.select_size {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.detail_name {
+    font-weight: bold;
+}
+
+.detail_price {
+    font-size: 20px;
+}
+
+.description {
+    font-weight: 100;
+}
+
+.color {
+    font-size: 15px;
+}
+
+.size {
+    border-collapse: collapse;
+    margin-left: 20px;
+}
+
+td {
+    border: 1px solid gray;
+    padding: 10px 20px;
+    text-align: center;
+    width: 40px;
+    height: 30px;
+    /* cursor: pointer; */
+    font-weight: bold;
+    border-color: lightgray;
+}
+
+td:hover {
+    background-color: lightgray;
+    border-color: black;
+}
+
+.add_button {
+    margin-top: 50px;
+    width: 680px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    border: none;
+}
+
+.add_button:hover {
+    background-color: gray;
+}
+
+.button_icon {
+    padding-top: auto;
+    padding-bottom: auto;
+    padding-right: 5px;
+    width: 20px;
+}
+
+.add {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
+}

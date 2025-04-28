@@ -10,57 +10,61 @@ header {
     display: flex;
 }
 
-header img {
+header .logo {
     height: 50px;
     margin: auto;
-    margin-left: 720px;
-    margin-right: 440px;
+    position: relative;
+    left: 150px;
 }
 
-header div {
+.right-nav {
     display: flex;
-    margin-right: 45px;
+    align-items: center;
+    margin-right: 30px;
+    margin-bottom: 25px;
+    width: 230px;
 }
 
-header box {
+.nav-item {
     display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
-header box img {
+.nav-icon {
     height: 25px;
-    margin: 35px 0px 0px 0px;
+    margin-right: 5px;
+    margin-left: 10px;
 }
 
-header a {
+.sign_in, .cart {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
-    font-weight: 100;
     text-decoration: none;
     color: black;
-    margin-left: 5px;
-    margin-right: 10px;
-    margin-top: 40px;
 }
 
 footer {
     height: 200px;
     background-color: #EEEEEE;
+    /* justify-content: center; */
 }
 
-footer div {
+.footer {
     width: fit-content;
     height: fit-content;
-    margin: auto;
-    margin-top: 65px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 50px;
 }
 
-footer p {
+.footer_text {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 10px;
     font-weight: 500;
 }
 
-footer img {
+.footer_image {
     height: 30px;
     display: block;
     margin: auto;
@@ -73,7 +77,7 @@ nav {
     align-items: center;
 }
 
-nav box {
+nav .menu {
     display: flex;
     width: 100%;
     margin-left: 240px;
@@ -95,10 +99,10 @@ nav a:hover {
     text-decoration: underline;
 }
 
-nav div {
+nav .search {
     display: flex;
     border-bottom: 1px solid;
-    margin-right: 50px;
+    margin-right: 40px;
 }
 
 nav img {
