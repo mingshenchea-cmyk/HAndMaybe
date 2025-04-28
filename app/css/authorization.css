@@ -45,15 +45,25 @@
 }
 
 .auth-form input {
-    width: 100%;
+    width: 90%;
     padding: 10px;
+    margin-left: 5px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
+.auth-form input#age {
+    width: 10%;
+    margin-right: 50px;
+}
+
+.auth-form input#gender_M, .auth-form input#gender_F{
+    width: 10%;
+}
+
 .auth-form button {
-    width: 100%;
+    width: 20%;
     padding: 10px;
     background-color: #007bff;
     color: #fff;

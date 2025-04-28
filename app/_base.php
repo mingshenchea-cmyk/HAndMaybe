@@ -20,13 +20,13 @@ session_start();
 //     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
 // ]);
 
-// // Is unique?
-// function is_unique($value, $table, $field) {
-//     global $_db;
-//     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
-//     $stm->execute([$value]);
-//     return $stm->fetchColumn() == 0;
-// }
+// Is unique?
+function is_unique($value, $table, $field) {
+    global $_db;
+    $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
+    $stm->execute([$value]);
+    return $stm->fetchColumn() == 0;
+}
 
 // // Is exists?
 // function is_exists($value, $table, $field) {
@@ -35,6 +35,42 @@ session_start();
 //     $stm->execute([$value]);
 //     return $stm->fetchColumn() > 0;
 // }
+
+// ============================================================================
+// Security
+// ============================================================================
+
+// Global user object
+$_user = $_SESSION['user'] ?? null;
+
+// Login user
+function login($user, $url = '/') {
+    $_SESSION['user'] = $user;
+    redirect($url);
+}
+
+// Logout user
+function logout($url = '/') {
+    unset($_SESSION['user']);
+    redirect($url);
+}
+
+// Authorization
+function auth(...$roles) {
+    global $_user;
+    if ($_user) {
+        if ($roles) {
+            if (in_array($_user->role, $roles)) {
+                return; // OK
+            }
+        }
+        else {
+            return; // OK
+        }
+    }
+    
+    redirect('/login.php');
+}
 
 // ============================================================================
 // General Page Functions
@@ -93,6 +129,40 @@ function temp($key, $value = null)
     }
 }
 
+// Obtain uploaded file --> cast to object
+function get_file($key) {
+    $f = $_FILES[$key] ?? null;
+    
+    if ($f && $f['error'] == 0) {
+        return (object)$f;
+    }
+
+    return null;
+}
+
+// Crop, resize and save photo
+function save_photo($f, $folder, $width = 200, $height = 200) {
+    $photo = uniqid() . '.jpg';
+    
+    require_once 'lib/SimpleImage.php';
+    $img = new SimpleImage();
+    $img->fromFile($f->tmp_name)
+        ->thumbnail($width, $height)
+        ->toFile("$folder/$photo", 'image/jpeg');
+
+    return $photo;
+}
+
+// Is email?
+function is_email($value) {
+    return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+// Is money?
+function is_money($value) {
+    return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
+}
+
 // ============================================================================
 // HTML Helpers
 // ============================================================================
@@ -101,6 +171,12 @@ function temp($key, $value = null)
 function encode($value)
 {
     return htmlentities($value);
+}
+
+// Generate <input type='password'>
+function html_password($key, $attr = '') {
+    $value = encode($GLOBALS[$key] ?? '');
+    echo "<input type='password' id='$key' name='$key' value='$value' $attr>";
 }
 
 // Generate <input type='text'>
@@ -138,6 +214,18 @@ function html_select($key, $items, $default = '- Select One -', $attr = '')
         echo "<option value='$id' $state>$text</option>";
     }
     echo '</select>';
+}
+
+// Generate <input type='number'>
+function html_number($key, $min = '', $max = '', $step = '', $attr = '') {
+    $value = encode($GLOBALS[$key] ?? '');
+    echo "<input type='number' id='$key' name='$key' value='$value'
+                min='$min' max='$max' step='$step' $attr>";
+}
+
+// Generate <input type='file'>
+function html_file($key, $accept = '', $attr = '') {
+    echo "<input type='file' id='$key' name='$key' accept='$accept' $attr>";
 }
 
 // ============================================================================
