@@ -8,6 +8,7 @@
     <link rel="icon" href="/images/HAndMaybe.png">
     <link rel="stylesheet" href="/css/handmaybe.css">
     <link rel="stylesheet" href="/css/product.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/handmaybe.js"></script>
 </head>
 
@@ -20,7 +21,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
 
         <div class="right-nav">
-            <a href="/" class="nav-item">
+            <a href="/authorization.php" class="nav-item">
                 <img src="/images/profile-icon.webp" alt="Sign In" class="nav-icon">
                 <p class="sign_in">Sign in</p>
             </a>
