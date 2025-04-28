@@ -37,52 +37,55 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
     $total = 0;
     $cart = get_cart();
     
-    // Prepare queries
-    $product_stm = $_db->prepare('SELECT * FROM product WHERE product_id = ?');
-    $variation_stm = $_db->prepare('SELECT * FROM product_variation WHERE variation_id = ?');
+    // Single optimized query to get all product and variation details
+    $cart_query = $_db->prepare('
+        SELECT p.product_id, p.name, p.price, p.description,
+               pv.variation_id, pv.color, pv.size, pv.product_photo, pv.stock_quantity
+        FROM product_variation pv
+        JOIN product p ON pv.product_id = p.product_id
+        WHERE pv.variation_id = ?
+    ');
 
     if (empty($cart)): ?>
         <p class="empty-cart">Your cart is empty</p>
     <?php else: ?>
         <?php foreach ($cart as $variation_id => $item):
-            // Get quantity - handle both array and simple value formats
+            // Get quantity
             $quantity = is_array($item) ? $item['quantity'] : $item;
             
-            // Get variation details
-            $variation_stm->execute([$variation_id]);
-            $variation = $variation_stm->fetch();
+            // Get product and variation details
+            $cart_query->execute([$variation_id]);
+            $item_details = $cart_query->fetch();
             
-            if (!$variation) continue;
+            if (!$item_details) continue; // Skip if not found
             
-            // Get product details
-            $product_stm->execute([$variation->product_id]);
-            $product = $product_stm->fetch();
-            
-            if (!$product) continue;
-            
-            $subtotal = $product->price * $quantity;
+            $subtotal = $item_details->price * $quantity;
             $total += $subtotal;
         ?>
             <div class="cart-item">
-                <img src="<?= htmlspecialchars($variation->product_photo) ?>" alt="<?= htmlspecialchars($product->name) ?>" class="cart-item-image">
+                <img src="<?= htmlspecialchars($item_details->product_photo) ?>" 
+                     alt="<?= htmlspecialchars($item_details->name) ?>" 
+                     class="cart-item-image">
                 <div class="cart-item-details">
-                    <h2 class="cart-item-title"><?= htmlspecialchars($product->name) ?></h2>
+                    <h2 class="cart-item-title"><?= htmlspecialchars($item_details->name) ?></h2>
                     <p class="cart-item-variant">
-                        Color: <?= htmlspecialchars($variation->color) ?> | 
-                        Size: <?= htmlspecialchars($variation->size) ?>
+                        Color: <?= htmlspecialchars($item_details->color) ?> | 
+                        Size: <?= htmlspecialchars($item_details->size) ?>
                     </p>
-                    <p class="cart-item-price">Each RM<?= number_format($product->price, 2) ?></p>
+                    <p class="cart-item-price">Each RM<?= number_format($item_details->price, 2) ?></p>
                     
                     <div class="quantity-selector">
                         <span class="quantity-label">Quantity:</span>
                         <form method="post" class="quantity-form">
                             <input type="hidden" name="variation_id" value="<?= htmlspecialchars($variation_id) ?>">
                             <select name="quantity" class="quantity-input">
-                                <?php foreach (range(1, 10) as $qty): ?>
+                                <?php 
+                                $max_qty = min(10, $item_details->stock_quantity);
+                                for ($qty = 1; $qty <= $max_qty; $qty++): ?>
                                     <option value="<?= $qty ?>" <?= $qty == $quantity ? 'selected' : '' ?>>
                                         <?= $qty ?>
                                     </option>
-                                <?php endforeach; ?>
+                                <?php endfor; ?>
                             </select>
                         </form>
                     </div>
