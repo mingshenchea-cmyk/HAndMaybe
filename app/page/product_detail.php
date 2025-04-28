@@ -2,8 +2,8 @@
 require '../_base.php';
 //-----------------------------------------------------------------------------
 
-$_product = $_db->query('SELECT * FROM product')->fetchAll();
-$_product_variation = $_db->query('SELECT * FROM product_variation')->fetchAll();
+$_product = getAllProducts();
+$_product_variation = getAllProductVariations();
 
 $variation_id = get('variation_id');
 $color = get('color');
@@ -26,7 +26,6 @@ include '../_head.php';
                     echo "<p class='detail_name'>" . $product->name . "</p>";
                     echo "<p class='detail_price'>RM" . number_format($product->price, 2) . "</p>";
                     echo "<p class='description'>".$product->description."</p>";
-                    // echo "<p class='color'>Color: ".$variation->color."</p>";
                     $color = $variation->color;
                     break;
                 }
@@ -34,21 +33,44 @@ include '../_head.php';
             echo "<p class='color'>Color: ".$color."</p>";
             echo "";
             echo "<p class='select_size'>Select size</p>";
-            // echo "<form action='' method='GET'>
+
+            $size = $variation->size;
+            $product_id = $variation->product_id;
             echo "<table class='size'>
-            <tr>
-            <td>XS</td>
-            <td>S</td>
-            <td>M</td>
-            <td>L</td>
-            <td>XL</td>
-            </tr>
+            <tr>";
+
+            $sizes = ['XS', 'S', 'M', 'L', 'XL'];
+            $target_variation_id = null;
+            foreach ($sizes as $s) {
+                foreach ($_product_variation as $v) {
+                    if ($v->product_id == $product_id && $v->color == $color && $v->size == $s) {
+                        $target_variation_id = $v->variation_id;
+                        break;
+                    }
+                }
+                // Only if found
+                if ($target_variation_id !== null) {
+                    $selected = ($s == $size) ? "class='selected'" : "";
+                    echo "<td $selected><a href='?variation_id=$target_variation_id&color=$color' class='size_selected'>$s</a></td>";
+                }  
+            }
+            echo "</tr>
             </table>";
+
+            // Handle the form submission and call the add_to_cart function
+            if (is_post() && isset($_POST['variation_id'])) {
+                // Extract form data
+                $variation_id = post('variation_id');
+                $quantity = post('quantity', 1); // Default to 1 if not provided
+                // Call the add_to_cart function
+                add_to_cart($variation_id, $quantity);
+                exit(); // Prevent further code execution after adding to cart
+            }
+
             echo 
-            "<form action='../add_to_cart.php' method='POST'>
+            "<form action='' method='POST'>
                 <input type='hidden' name='variation_id' value='$variation->variation_id'>
                 <input type='hidden' name='quantity' value='1'>
-                <input type='hidden' name='size' value='$size'>
                 <button type='submit' class='add_button'>
                     <img class='button_icon' src='/images/shopping_bag.png'>
                     <p class='add'>Add</p>

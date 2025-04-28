@@ -1,3 +1,7 @@
+<?php
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,10 +14,6 @@
     <link rel="stylesheet" href="/css/product.css">
     <script src="/js/handmaybe.js"></script>
 </head>
-
-<!-- <?php
-$currentPage = basename($_SERVER['PHP_SELF']);
-?> -->
 
 <body>
     <header>
@@ -31,7 +31,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </div>
     </header>
 
-    <?php if ($currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): ?>
+    <?php 
+        if ($currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
+    ?>
         <nav>
             <div class="menu">
                 <a href="../page/product.php?category=Women">Women</a>
@@ -42,13 +44,33 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
 
             <div class="search">
-                <img src="/images/search.jpg">
-                <input type="text" name="query" placeholder="Search" id="searchInput">
-                <!--<form action="search.php" method="GET">
+                <form action="product.php" method="GET" class="search_product">
+                    <img src="/images/search.jpg" class="search_icon">
                     <input type="text" name="query" placeholder="Search" id="searchInput">
-                    <button type="submit">Search</button>
-                </form> -->
+                </form>
             </div>
+        </nav>
+    <?php endif; ?>
+
+    <?php 
+        if ($currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
+    ?>
+        <nav>
+            <div class="admin_menu">
+                <a href="../page/member_maintenance.php">Member Maintenance</a>
+                <a href="../page/product_maintenance.php">Product Maintenance</a>
+                <a href="../page/order_maintenance.php">Order Maintenance</a>
+            </div>
+
+            <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):
+            echo '<div class="search">';
+                echo '<form action="product_maintenance.php" method="GET" class="search_product">';
+                    echo '<img src="/images/search.jpg" class="search_icon">';
+                    echo '<input type="text" name="query" placeholder="Search" id="searchInput">';
+                echo '</form>';
+            echo '</div>';
+            ?>
+            <?php endif; ?>
         </nav>
     <?php endif; ?>
 

@@ -140,3 +140,94 @@ function err($key)
 //     ->fetchAll(PDO::FETCH_KEY_PAIR);
 
 // print_r($_product);
+//global $_db;
+// ============================================================================
+// Get Product function
+// ============================================================================
+function getAllProducts() {
+    global $_db;
+    return $_db->query('SELECT * FROM product')->fetchAll();
+}
+
+function getAllProductVariations() {
+    global $_db;
+    return $_db->query('SELECT * FROM product_variation')->fetchAll();
+}
+
+// ============================================================================
+// Add to cart function
+// ============================================================================
+function add_to_cart($variation_id, $quantity = 1){
+    $user_id = $_SESSION['user_id'];
+    $cart_id = null;
+    $variation_id = post('variation_id');
+    $quantity = 1;
+
+    if (!$user_id) {
+        // If not logged in, redirect to login page
+        header('Location: ../page/login.php');
+        exit;
+    }
+
+    // Check if user already has a cart
+    global $_db;
+    $stmt = $_db->prepare("SELECT * FROM cart WHERE user_id = ?");
+    $stmt->execute([$user_id]);  // Bind $user_id to the query
+    $cart = $stmt->fetch();  // Fetch the result
+
+    if (!$cart) {
+        $stmt = $_db->prepare("INSERT INTO cart (user_id, created_at) VALUES (?, NOW())");
+        $stmt->execute([$user_id]);
+
+        // Get the last inserted cart_id
+        $cart_id = $_db->lastInsertId();
+    } else {
+        $cart_id = $cart->cart_id;
+    }
+
+    // Check if product already exists in cart_items
+    $stmt = $_db->prepare("SELECT * FROM cart_items WHERE cart_id = ? AND variation_id = ?");
+    $stmt->execute([$cart_id, $variation_id]);
+    $cart_item = $stmt->fetch();
+
+    if ($cart_item) {
+        // If item exists, update quantity
+        $stmt = $_db->prepare("UPDATE cart_items SET quantity = quantity + ? WHERE cart_item_id = ?");
+        $stmt->execute([$quantity, $cart_item->cart_item_id]);
+
+        // Set success message for updating quantity
+        $_SESSION['cart_message'] = "Item quantity updated in your cart.";
+    } else {
+        // If item not exists, insert new item
+        $stmt = $_db->prepare("INSERT INTO cart_items (cart_id, variation_id, quantity) VALUES (?, ?, ?)");
+        $stmt->execute([$cart_id, $variation_id, $quantity]);
+
+        
+        // Set success message for adding new item
+        $_SESSION['cart_message'] = "Item added to your cart.";
+    }
+
+    // Redirect back to product page or cart page
+    header('Location: ../page/product_detail.php');
+    exit;
+}
+// ============================================================================
+// Product Maintenance function
+// ============================================================================
+function updateProduct($product_id, $name, $price, $description, $category) {
+    global $_db;
+    $stmt = $_db->prepare("UPDATE product SET name = ?, price = ?, description = ?, category = ? WHERE product_id = ?");
+    return $stmt->execute([$name, $price, $description, $category, $product_id]);
+}
+
+function updateProductVariation($product_id, $old_color, $new_color, $new_photo_path) {
+    global $_db;
+    $stmt = $_db->prepare("UPDATE product_variation SET color = ?, product_photo = ? WHERE product_id = ? AND color = ?");
+    return $stmt->execute([$new_color, $new_photo_path, $product_id, $old_color]);
+}
+
+function deleteProductVariation($product_id, $color) {
+    global $_db;
+    $stmt = $_db->prepare("DELETE FROM product_variation WHERE product_id = ? AND color = ?");
+    return $stmt->execute([$product_id, $color]);
+}
