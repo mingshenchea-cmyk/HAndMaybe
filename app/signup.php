@@ -10,8 +10,8 @@ if (is_post()) {
     $name     = req('name');
     $age      = req('age');
     $gender   = req('gender');
-    $phone    = req('phone');
-    $f = get_file('photo');
+    $phone_no = req('phone_no');
+    $f = get_file('profile_photo');
 
     // Validate: email
     if (!$email) {
@@ -63,11 +63,11 @@ if (is_post()) {
     }
 
     // Validate: phone
-    if (!$phone) {
-        $_err['phone'] = 'Required';
+    if (!$phone_no) {
+        $_err['phone_no'] = 'Required';
     }
-    else if (strlen($phone) < 9 || strlen($phone) > 10) {
-        $_err['phone'] = 'Not valid phone number';
+    else if (strlen($phone_no) < 9 || strlen($phone_no) > 10) {
+        $_err['phone_no'] = 'Not valid phone number';
     }
 
     // Validate: age
@@ -85,13 +85,13 @@ if (is_post()) {
 
     // Validate: photo (file)
     if (!$f) {
-        $_err['photo'] = 'Required';
+        $_err['profile_photo'] = 'Required';
     }
     else if (!str_starts_with($f->type, 'image/')) {
-        $_err['photo'] = 'Must be image';
+        $_err['profile_photo'] = 'Must be image';
     }
     else if ($f->size > 5 * 1024 * 1024) {
-        $_err['photo'] = 'Maximum 5MB';
+        $_err['profile_photo'] = 'Maximum 5MB';
     }
 
     // DB operation
@@ -105,7 +105,7 @@ if (is_post()) {
             INSERT INTO user (role, name, password, age, gender, phone_no, email, profile_photo)
             VALUES ("Member", ?, SHA1(?), ?, ?, ?, ? ,?)
         ');
-        $stm->execute([$name, $password, $age, $gender, $phone, $email, $photo]);
+        $stm->execute([$name, $password, $age, $gender, $phone_no, $email, $photo]);
 
         temp('info', 'Record inserted');
         redirect('/login.php');

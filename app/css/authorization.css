@@ -154,11 +154,6 @@
         padding: 15px;
     }
     
-    .auth-tabs button {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
-    
     .form-buttons {
         flex-direction: column;
         gap: 10px;
