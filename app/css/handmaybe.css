@@ -37,7 +37,7 @@ header .logo {
     margin-left: 10px;
 }
 
-.sign_in, .cart {
+.profile, .sign_in, .cart {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
     text-decoration: none;

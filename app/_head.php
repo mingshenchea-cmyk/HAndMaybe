@@ -21,10 +21,17 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
 
         <div class="right-nav">
-            <a href="/login.php" class="nav-item">
-                <img src="/images/profile-icon.webp" alt="Sign In" class="nav-icon">
-                <p class="sign_in">Sign in</p>
-            </a>
+            <?php if (!$_user): ?>
+                <a href="/login.php" class="nav-item">
+                    <img src="/images/profile-icon.webp" alt="Sign In" class="nav-icon">
+                    <p class="sign_in">Sign in</p>
+                </a>
+            <?php else: ?>
+                <a href="/page/profile.php" class="nav-item">
+                    <img src="/images/profile-icon.webp" alt="Profile" class="nav-icon">
+                    <p class="profile">Profile</p>
+                </a>
+            <?php endif ?>
             <a href="../page/shoppingCart.php" class="nav-item">
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
