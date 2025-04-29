@@ -50,7 +50,7 @@ function login($user, $url = '/') {
 }
 
 // Logout user
-function logout($url = '/') {
+function logout($url = 'login.php') {
     unset($_SESSION['user']);
     redirect($url);
 }
@@ -229,6 +229,7 @@ function variation_exists($variation_id) {
     $stm->execute([$variation_id]);
     return $stm->fetchColumn() > 0;
 }
+
 // Generate <input type='number'>
 function html_number($key, $min = '', $max = '', $step = '', $attr = '') {
     $value = encode($GLOBALS[$key] ?? '');
