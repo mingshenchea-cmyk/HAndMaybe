@@ -1,11 +1,11 @@
-/* Base Styles */
+/* Base Styles
 body {
     color: #333;
     line-height: 1.6;
     margin: 0;
     padding: 0;
     background-color: #f8f8f8;
-}
+} */
 
 .cart-container {
     display: flex;
