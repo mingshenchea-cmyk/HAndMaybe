@@ -269,8 +269,7 @@ function err($key)
 // print_r($_product);
 
 
-// Range 1-10 shopping cart
-$_units = array_combine(range(1, 10), range(1, 10));
+
 
 // ============================================================================
 // Shopping Cart
