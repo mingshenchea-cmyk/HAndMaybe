@@ -19,8 +19,8 @@ if (is_post()) {
 // Display Product Details 
 // ----------------------------------------------------------------------------
 
-$_product = $_db->query('SELECT * FROM product')->fetchAll();
-$_product_variation = $_db->query('SELECT * FROM product_variation')->fetchAll();
+$_product = getAllProducts();
+$_product_variation = getAllProductVariations();
 
 $variation_id = get('variation_id');
 $color = get('color');
@@ -49,26 +49,49 @@ include '../_head.php';
 
             echo "<p class='color'>Color: " . htmlspecialchars($color) . "</p>";
             echo "<p class='select_size'>Select size</p>";
-            echo "<table class='size'>
-                <tr>
-                    <td>XS</td>
-                    <td>S</td>
-                    <td>M</td>
-                    <td>L</td>
-                    <td>XL</td>
-                </tr>
-                </table>";
-            
-            echo "<form method='post'>";
-            echo "<input type='hidden' name='variation_id' value='" . htmlspecialchars($variation->variation_id) . "'>";
-            echo "<input type='hidden' name='quantity' value='1'>"; // Always 1
-            echo "<input type='hidden' name='size' value=''>"; 
-            echo "<button type='submit' class='add_button'>";
-            echo "<img class='button_icon' src='/images/shopping_bag.png'>";
-            echo "<span class='add'>Add to Cart</span>";
-            echo "</button>";
-            echo "</form>";
 
+            $size = $variation->size;
+            $product_id = $variation->product_id;
+            echo "<table class='size'>
+            <tr>";
+
+            $sizes = ['XS', 'S', 'M', 'L', 'XL'];
+            $target_variation_id = null;
+            foreach ($sizes as $s) {
+                foreach ($_product_variation as $v) {
+                    if ($v->product_id == $product_id && $v->color == $color && $v->size == $s) {
+                        $target_variation_id = $v->variation_id;
+                        break;
+                    }
+                }
+                // Only if found
+                if ($target_variation_id !== null) {
+                    $selected = ($s == $size) ? "class='selected'" : "";
+                    echo "<td $selected><a href='?variation_id=$target_variation_id&color=$color' class='size_selected'>$s</a></td>";
+                }  
+            }
+            echo "</tr>
+            </table>";
+
+            // Handle the form submission and call the add_to_cart function
+            if (is_post() && isset($_POST['variation_id'])) {
+                // Extract form data
+                $variation_id = post('variation_id');
+                $quantity = post('quantity', 1); // Default to 1 if not provided
+                // Call the add_to_cart function
+                add_to_cart($variation_id, $quantity);
+                exit(); // Prevent further code execution after adding to cart
+            }
+
+            echo 
+            "<form action='' method='POST'>
+                <input type='hidden' name='variation_id' value='$variation->variation_id'>
+                <input type='hidden' name='quantity' value='1'>
+                <button type='submit' class='add_button'>
+                    <img class='button_icon' src='/images/shopping_bag.png'>
+                    <p class='add'>Add</p>
+                </button>
+            </form>";            
             echo "</div>";
             echo "</div>";
             break;

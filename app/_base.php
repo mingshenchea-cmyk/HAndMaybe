@@ -12,6 +12,67 @@ date_default_timezone_set('Asia/Kuala_Lumpur');
 session_start();
 
 // ============================================================================
+// Database Setups and Functions
+// ============================================================================
+
+// // Global PDO object
+// $_db = new PDO('mysql:dbname=h&maybe', 'root', '', [
+//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+// ]);
+
+// Is unique?
+function is_unique($value, $table, $field) {
+    global $_db;
+    $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
+    $stm->execute([$value]);
+    return $stm->fetchColumn() == 0;
+}
+
+// // Is exists?
+// function is_exists($value, $table, $field) {
+//     global $_db;
+//     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
+//     $stm->execute([$value]);
+//     return $stm->fetchColumn() > 0;
+// }
+
+// ============================================================================
+// Security
+// ============================================================================
+
+// Global user object
+$_user = $_SESSION['user'] ?? null;
+
+// Login user
+function login($user, $url = '/') {
+    $_SESSION['user'] = $user;
+    redirect($url);
+}
+
+// Logout user
+function logout($url = '/') {
+    unset($_SESSION['user']);
+    redirect($url);
+}
+
+// Authorization
+function auth(...$roles) {
+    global $_user;
+    if ($_user) {
+        if ($roles) {
+            if (in_array($_user->role, $roles)) {
+                return; // OK
+            }
+        }
+        else {
+            return; // OK
+        }
+    }
+    
+    redirect('/login.php');
+}
+
+// ============================================================================
 // General Page Functions
 // ============================================================================
 
@@ -68,6 +129,40 @@ function temp($key, $value = null)
     }
 }
 
+// Obtain uploaded file --> cast to object
+function get_file($key) {
+    $f = $_FILES[$key] ?? null;
+    
+    if ($f && $f['error'] == 0) {
+        return (object)$f;
+    }
+
+    return null;
+}
+
+// Crop, resize and save photo
+function save_photo($f, $folder, $width = 200, $height = 200) {
+    $photo = uniqid() . '.jpg';
+    
+    require_once 'lib/SimpleImage.php';
+    $img = new SimpleImage();
+    $img->fromFile($f->tmp_name)
+        ->thumbnail($width, $height)
+        ->toFile("$folder/$photo", 'image/jpeg');
+
+    return $photo;
+}
+
+// Is email?
+function is_email($value) {
+    return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+// Is money?
+function is_money($value) {
+    return preg_match('/^\-?\d+(\.\d{1,2})?$/', $value);
+}
+
 // ============================================================================
 // HTML Helpers
 // ============================================================================
@@ -76,6 +171,12 @@ function temp($key, $value = null)
 function encode($value)
 {
     return htmlentities($value);
+}
+
+// Generate <input type='password'>
+function html_password($key, $attr = '') {
+    $value = encode($GLOBALS[$key] ?? '');
+    echo "<input type='password' id='$key' name='$key' value='$value' $attr>";
 }
 
 // Generate <input type='text'>
@@ -127,6 +228,17 @@ function variation_exists($variation_id) {
     $stm = $_db->prepare("SELECT COUNT(*) FROM product_variation WHERE variation_id = ?");
     $stm->execute([$variation_id]);
     return $stm->fetchColumn() > 0;
+}
+// Generate <input type='number'>
+function html_number($key, $min = '', $max = '', $step = '', $attr = '') {
+    $value = encode($GLOBALS[$key] ?? '');
+    echo "<input type='number' id='$key' name='$key' value='$value'
+                min='$min' max='$max' step='$step' $attr>";
+}
+
+// Generate <input type='file'>
+function html_file($key, $accept = '', $attr = '') {
+    echo "<input type='file' id='$key' name='$key' accept='$accept' $attr>";
 }
 
 // ============================================================================
@@ -206,4 +318,95 @@ function is_exists($value, $table, $field) {
     $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
     $stm->execute([$value]);
     return $stm->fetchColumn() > 0;
+}
+//global $_db;
+// ============================================================================
+// Get Product function
+// ============================================================================
+function getAllProducts() {
+    global $_db;
+    return $_db->query('SELECT * FROM product')->fetchAll();
+}
+
+function getAllProductVariations() {
+    global $_db;
+    return $_db->query('SELECT * FROM product_variation')->fetchAll();
+}
+
+// ============================================================================
+// Add to cart function
+// ============================================================================
+function add_to_cart($variation_id, $quantity = 1){
+    $user_id = $_SESSION['user_id'];
+    $cart_id = null;
+    $variation_id = post('variation_id');
+    $quantity = 1;
+
+    if (!$user_id) {
+        // If not logged in, redirect to login page
+        header('Location: ../page/login.php');
+        exit;
+    }
+
+    // Check if user already has a cart
+    global $_db;
+    $stmt = $_db->prepare("SELECT * FROM cart WHERE user_id = ?");
+    $stmt->execute([$user_id]);  // Bind $user_id to the query
+    $cart = $stmt->fetch();  // Fetch the result
+
+    if (!$cart) {
+        $stmt = $_db->prepare("INSERT INTO cart (user_id, created_at) VALUES (?, NOW())");
+        $stmt->execute([$user_id]);
+
+        // Get the last inserted cart_id
+        $cart_id = $_db->lastInsertId();
+    } else {
+        $cart_id = $cart->cart_id;
+    }
+
+    // Check if product already exists in cart_items
+    $stmt = $_db->prepare("SELECT * FROM cart_items WHERE cart_id = ? AND variation_id = ?");
+    $stmt->execute([$cart_id, $variation_id]);
+    $cart_item = $stmt->fetch();
+
+    if ($cart_item) {
+        // If item exists, update quantity
+        $stmt = $_db->prepare("UPDATE cart_items SET quantity = quantity + ? WHERE cart_item_id = ?");
+        $stmt->execute([$quantity, $cart_item->cart_item_id]);
+
+        // Set success message for updating quantity
+        $_SESSION['cart_message'] = "Item quantity updated in your cart.";
+    } else {
+        // If item not exists, insert new item
+        $stmt = $_db->prepare("INSERT INTO cart_items (cart_id, variation_id, quantity) VALUES (?, ?, ?)");
+        $stmt->execute([$cart_id, $variation_id, $quantity]);
+
+        
+        // Set success message for adding new item
+        $_SESSION['cart_message'] = "Item added to your cart.";
+    }
+
+    // Redirect back to product page or cart page
+    header('Location: ../page/product_detail.php');
+    exit;
+}
+// ============================================================================
+// Product Maintenance function
+// ============================================================================
+function updateProduct($product_id, $name, $price, $description, $category) {
+    global $_db;
+    $stmt = $_db->prepare("UPDATE product SET name = ?, price = ?, description = ?, category = ? WHERE product_id = ?");
+    return $stmt->execute([$name, $price, $description, $category, $product_id]);
+}
+
+function updateProductVariation($product_id, $old_color, $new_color, $new_photo_path) {
+    global $_db;
+    $stmt = $_db->prepare("UPDATE product_variation SET color = ?, product_photo = ? WHERE product_id = ? AND color = ?");
+    return $stmt->execute([$new_color, $new_photo_path, $product_id, $old_color]);
+}
+
+function deleteProductVariation($product_id, $color) {
+    global $_db;
+    $stmt = $_db->prepare("DELETE FROM product_variation WHERE product_id = ? AND color = ?");
+    return $stmt->execute([$product_id, $color]);
 }

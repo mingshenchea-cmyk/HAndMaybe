@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 07:21 PM
+-- Generation Time: Apr 28, 2025 at 07:29 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -278,9 +278,9 @@ CREATE TABLE `user` (
   `user_id` int(5) NOT NULL,
   `role` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `password_hashed` char(5) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `age` int(10) NOT NULL,
-  `gender` varchar(10) NOT NULL,
+  `gender` varchar(1) NOT NULL,
   `phone_no` int(20) NOT NULL,
   `email` varchar(100) NOT NULL,
   `profile_photo` varchar(100) NOT NULL
@@ -290,12 +290,13 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `role`, `name`, `password_hashed`, `age`, `gender`, `phone_no`, `email`, `profile_photo`) VALUES
-(1, 'admin', 'Chea Ming Shen', '12345', 21, 'male', 123456789, 'cms@gmail.com', '../images/cms_pfp'),
-(2, 'admin', 'Chong Ming Li', '12345', 21, 'male', 141047104, 'cml@gmail.com', '../images/cml_pfp'),
-(3, 'member', 'Elaine Pang', '12345', 21, 'female', 184012398, 'ep@gmail.com', '../images/ep_pfp'),
-(4, 'member', 'Sum Ting Wong', '12345', 30, 'male', 175419326, 'stw@gmail.com', '../images/stw_pfp'),
-(5, 'member', 'Ho Lee Fuk', '12345', 25, 'female', 190213092, 'hlf@gmail.com', '../images/hlf_pfp');
+INSERT INTO `user` (`user_id`, `role`, `name`, `password`, `age`, `gender`, `phone_no`, `email`, `profile_photo`) VALUES
+(1, 'Admin', 'Chea Ming Shen', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'M', 123456789, 'cms@gmail.com', 'cms_pfp.png'),
+(2, 'Admin', 'Chong Ming Li', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'M', 141047104, 'cml@gmail.com', 'cml_pfp.png'),
+(3, 'Member', 'Elaine Pang', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'F', 184012398, 'ep@gmail.com', 'ep_pfp.png'),
+(4, 'Member', 'Sum Ting Wong', '8cb2237d0679ca88db6464eac60da96345513964', 30, 'M', 175419326, 'stw@gmail.com', 'stw_pfp.png'),
+(5, 'Member', 'Ho Lee Fuk', '8cb2237d0679ca88db6464eac60da96345513964', 25, 'F', 190213092, 'hlf@gmail.com', 'hlf_pfp.png'),
+(9, 'Member', 'Ming Li Test', '8cb2237d0679ca88db6464eac60da96345513964', 18, 'M', 136926384, 'mlt@gmail.com', '680fba98bfda6.jpg');
 
 --
 -- Indexes for dumped tables
@@ -408,7 +409,7 @@ ALTER TABLE `product_variation`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
