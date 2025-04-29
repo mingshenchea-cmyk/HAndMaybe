@@ -141,20 +141,19 @@ include '../_head.php';
     <label for="phone">Phone no.</label>
     <?= html_text('phone', 'maxlength="10"') ?>
     <?= err('phone') ?>
-    
-    <label for="age">age</label>
-    <input type='number' id='age' name='age' value='1' min=1 max=99>
+
+    <label for="age">Age</label>
+    <?= html_number('age', 1, 99) ?>
     <?= err('age') ?>
 
-    <label>Gender</label>
-        <div class="gender-options">
-            <label class="gender-option">
-                <input type="radio" name="gender" value="M" checked> Male
-            </label>
-            <label class="gender-option">
-                <input type="radio" name="gender" value="F"> Female
-            </label>
-        </div>
+    <label for="gender">Gender</label>
+    <?php
+        $gender_options = [
+            'M' => 'Male',
+            'F' => 'Female'
+        ];
+    ?>
+    <?= html_radios('gender', $gender_options); ?>
     <?= err('gender') ?>
 
     <section>
