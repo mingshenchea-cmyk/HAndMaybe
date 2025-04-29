@@ -10,6 +10,12 @@ if (is_post()) {
     if ($btn == 'clear') {
         set_cart();
         redirect('?'); 
+    } else if ($btn == 'remove') {
+        $variation_id = req('variation_id');
+        $cart = get_cart();
+        unset($cart[$variation_id]);
+        set_cart($cart);
+        redirect();
     }
 
     $variation_id = req('variation_id');
@@ -28,16 +34,16 @@ include '../_head.php';
 // Check if user is logged in
 $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
 ?>
-<link rel="stylesheet" href="/path/to/cart.css">
+<link rel="stylesheet" href="../css/shoppingCart.css">
 
-<div class="cart-container">
+<div class="shopping-cart"> 
     <h1 class="cart-header">My Cart</h1>
 
     <?php
     $total = 0;
+    $shipping_fee = 10.00;
     $cart = get_cart();
     
-    // Single optimized query to get all product and variation details
     $cart_query = $_db->prepare('
         SELECT 
             p.product_id, p.name, p.description, p.price,
@@ -48,18 +54,17 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
     ');
 
     if (empty($cart)): ?>
-        <p class="empty-cart">Your cart is empty</p>
+        <p class="empty-cart">Your cart is empty.</p>
+        <div class="browse-link-wrapper">
+            <a href="../page/product.php" class="browse-link-btn">Browse Products</a>
+        </div>
     <?php else: ?>
         <?php foreach ($cart as $variation_id => $item):
-            // Get quantity
             $quantity = is_array($item) ? $item['quantity'] : $item;
-            
-            // Get product and variation details
             $cart_query->execute([$variation_id]);
             $product = $cart_query->fetch();
-            
-            if (!$product) continue; // Skip if not found
-            
+            if (!$product) continue;
+
             $subtotal = $product->price * $quantity;
             $total += $subtotal;
         ?>
@@ -93,6 +98,11 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
                     </div>
                     
                     <p class="cart-item-subtotal"><strong>Subtotal:</strong> RM<?= number_format($subtotal, 2) ?></p>
+
+                    <form method="post" class="remove-form">
+                        <input type="hidden" name="variation_id" value="<?= htmlspecialchars($variation_id) ?>">
+                        <button type="submit" name="btn" value="remove" class="remove-btn">Remove</button>
+                    </form>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -107,8 +117,8 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
             </div>
             
             <div class="summary-row">
-                <span class="summary-label">Shipping</span>
-                <span class="summary-value">TBD</span>
+                <span class="summary-label">Shipping Fee</span>
+                <span class="summary-value">RM<?= number_format($shipping_fee, 2) ?></span>
             </div>
             
             <div class="summary-row">
@@ -119,19 +129,16 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
             <div class="estimated-total">
                 <div class="summary-row">
                     <span>Estimated Total</span>
-                    <span>RM<?= number_format($total, 2) ?></span>
+                    <span>RM<?= number_format($total + $shipping_fee, 2) ?></span>
                 </div>
             </div>
             
             <div class="cart-actions">
-                <?php if (!empty($cart)): ?>
-                    <button data-post="?btn=clear" class="clear-btn">Clear Cart</button>
-                    
-                    <?php if ($is_member): ?>
-                        <button data-post="checkout.php" class="checkout-btn">Proceed to Checkout</button>
-                    <?php else: ?>
-                        <p class="login-prompt">Please <a href="/login.php">login</a> as member to checkout</p>
-                    <?php endif ?>
+                <button data-post="?btn=clear" class="clear-btn">Clear Cart</button>
+                <?php if ($is_member): ?>
+                    <button data-post="checkout.php" class="checkout-btn">Proceed to Checkout</button>
+                <?php else: ?>
+                    <p class="login-prompt">Please <a href="/login.php">login</a> as member to checkout</p>
                 <?php endif ?>
             </div>
         </div>
@@ -146,5 +153,4 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
     });
 </script>
 
-<?php
-include '../_foot.php';
+<?php include '../_foot.php'; ?>
