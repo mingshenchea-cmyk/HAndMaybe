@@ -132,7 +132,6 @@ $_title = 'User | Register Member';
                 <img src="/images/photo.jpg">
             </label>
             <?= err('photo') ?>
-            <br><br>
 
             <label for="name">Name</label>
             <?= html_text('name', 'maxlength="100"') ?>

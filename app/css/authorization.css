@@ -79,6 +79,13 @@
 }
 
 /* Photo Upload */
+.upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
 .upload img {
     display: block;
     border: 1px solid #333;
