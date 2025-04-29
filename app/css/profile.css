@@ -101,6 +101,10 @@
     background-color: #6c757d;
 }
 
+.profile-container .logout-btn {
+    color: #e74c3c;
+}
+
 .profile-container button:hover {
     background-color: #0069d9;
 }

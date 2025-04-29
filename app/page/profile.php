@@ -166,6 +166,7 @@ include '../_head.php';
         <div class="form-buttons">
             <button>Update</button>
             <button type="reset">Reset</button>
+            <a href="../logout.php" class="logout-btn">Log Out</a>
         </div>
     </div>
 </form>
