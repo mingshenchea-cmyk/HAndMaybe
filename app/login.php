@@ -31,7 +31,11 @@ if (is_post()) {
 
         if ($u) {
             temp('info', 'Login successfully!');
-            login($u, 'member_maintenance.php');
+            if ($u->role == 'Admin') {
+                login($u, 'member_maintenance.php'); 
+            } else {
+                login($u, 'page/profile.php'); 
+            }
         }
         else {
             $_err['password'] = 'Incorrect password!';

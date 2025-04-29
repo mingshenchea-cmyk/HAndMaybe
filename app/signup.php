@@ -129,7 +129,7 @@ $_title = 'User | Register Member';
             <label for="photo">Profile Picture</label>
             <label class="upload" tabindex="0">
                 <?= html_file('photo', 'image/*', 'hidden') ?>
-                <img src="/images/photo.jpg">
+                <img src="/images/image.jpg">
             </label>
             <?= err('photo') ?>
 

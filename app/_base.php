@@ -50,7 +50,7 @@ function login($user, $url = '/') {
 }
 
 // Logout user
-function logout($url = '/') {
+function logout($url = 'login.php') {
     unset($_SESSION['user']);
     redirect($url);
 }
