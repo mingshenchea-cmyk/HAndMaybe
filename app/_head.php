@@ -18,7 +18,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 <body>
     <header>
-        <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
+        <a href="/index.php">
+            <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
+        </a>
 
         <div class="right-nav">
             <?php if (!$_user): ?>

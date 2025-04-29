@@ -6,23 +6,24 @@ body {
 }
 
 header {
-    height: 120px;
+    height: 100px;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding: 0 30px;
 }
 
-header .logo {
+.logo {
     height: 50px;
-    margin: auto;
-    position: relative;
-    left: 150px;
+    margin: 0 auto;
 }
 
 .right-nav {
     display: flex;
     align-items: center;
-    margin-right: 30px;
-    margin-bottom: 25px;
-    width: 230px;
+    position: absolute;
+    right: 30px;
 }
 
 .nav-item {
@@ -75,6 +76,7 @@ nav {
     height: 30px;
     display: flex;
     align-items: center;
+    justify-content: end;
 }
 
 nav .menu .admin_menu{
@@ -105,7 +107,8 @@ div .search_product{
 
 nav .search {
     border-bottom: 1px solid;
-    margin-right: 40px;
+    margin-top: 10px;
+    margin-right: 20px;
 }
 
 .search_icon {
