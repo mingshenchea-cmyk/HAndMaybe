@@ -126,12 +126,12 @@ $_title = 'User | Register Member';
         <h2><?php echo $_title; ?></h2>
         <p>Already a member? Log in <a href="login.php">here!</a></p>
         <form method="post" class="form" enctype="multipart/form-data">
-            <label for="photo">Profile Picture</label>
+            <label for="profile_photo">Profile Picture</label>
             <label class="upload" tabindex="0">
-                <?= html_file('photo', 'image/*', 'hidden') ?>
+                <?= html_file('profile_photo', 'image/*', 'hidden') ?>
                 <img src="/images/image.jpg">
             </label>
-            <?= err('photo') ?>
+            <?= err('profile_photo') ?>
 
             <label for="name">Name</label>
             <?= html_text('name', 'maxlength="100"') ?>
@@ -149,9 +149,9 @@ $_title = 'User | Register Member';
             <?= html_password('confirm', 'maxlength="100"') ?>
             <?= err('confirm') ?>
 
-            <label for="phone">Phone no.</label>
-            <?= html_text('phone', 'maxlength="10"') ?>
-            <?= err('phone') ?>
+            <label for="phone_no">Phone no.</label>
+            <?= html_text('phone_no', 'maxlength="10"') ?>
+            <?= err('phone_no') ?>
 
             <label for="age">Age</label>
             <?= html_number('age', 1, 99) ?>

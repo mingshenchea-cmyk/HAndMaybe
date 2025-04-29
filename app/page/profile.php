@@ -17,6 +17,7 @@ if (is_get()) {
 
     extract((array)$u);
     $_SESSION['photo'] = $u->profile_photo;
+    $photo = $_SESSION['photo'];
 }
 
 if (is_post()) {
@@ -109,7 +110,7 @@ if (is_post()) {
         // (3) Update global user object
         $_user->email = $email;
         $_user->name = $name;
-        $_user->photo = $photo;
+        $_user->profile_photo = $photo;
 
         temp('info', 'Record updated');
         redirect('/');
@@ -123,12 +124,12 @@ include '../_head.php';
 ?>
 
 <form method="post" class="form" enctype="multipart/form-data">
-    <label for="photo">Photo</label>
+    <label for="profile_photo">Photo</label>
     <label class="upload" tabindex="0">
-        <?= html_file('photo', 'image/*', 'hidden') ?>
+        <?= html_file('profile_photo', 'image/*', 'hidden') ?>
         <img src="../photos/<?= $photo ?>">
     </label>
-    <?= err('photo') ?>
+    <?= err('profile_photo') ?>
 
     <label for="name">Name</label>  
     <?= html_text('name', 'maxlength="100"') ?>
@@ -138,9 +139,9 @@ include '../_head.php';
     <?= html_text('email', 'maxlength="100"') ?>
     <?= err('email') ?>
 
-    <label for="phone">Phone no.</label>
-    <?= html_text('phone', 'maxlength="10"') ?>
-    <?= err('phone') ?>
+    <label for="phone_no">Phone no.</label>
+    <?= html_text('phone_no', 'maxlength="10"') ?>
+    <?= err('phone_no') ?>
 
     <label for="age">Age</label>
     <?= html_number('age', 1, 99) ?>
