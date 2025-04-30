@@ -49,7 +49,7 @@ include '../../_head.php';
 $_title = 'Login';
 ?>
 
-<link rel="stylesheet" href="/css/authorization.css">
+<link rel="stylesheet" href="/css/security.css">
 
 <div class="auth-container">
     <div class="auth-form">
@@ -68,6 +68,7 @@ $_title = 'Login';
                 <button type="submit">Login</button>
                 <button type="reset">Reset</button>
             </div>
+        <p>Forgot your password? Reset password <a href="reset.php">here!</a></p>
         </form>
     </div>
 </div>

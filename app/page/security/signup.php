@@ -119,7 +119,7 @@ include '../../_head.php';
 $_title = 'User | Register Member';
 ?>
 
-<link rel="stylesheet" href="/css/authorization.css">
+<link rel="stylesheet" href="/css/security.css">
 
 <div class="auth-container">
     <div class="auth-form">
