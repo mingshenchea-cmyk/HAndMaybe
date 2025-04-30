@@ -95,7 +95,7 @@ if (is_post()) {
         // (1) Delete and save photo --> optional
         if ($f) {
             unlink("../../photos/$profile_photo");
-            $profile_photo = save_photo($f, '../photos');
+            $profile_photo = save_photo($f, '../../photos');
         }
         
         // (2) Update user (email, name, photo)
