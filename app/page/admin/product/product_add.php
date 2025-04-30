@@ -3,7 +3,7 @@ require '../../../_base.php';
 //-----------------------------------------------------------------------------
 
 // Get data
-$_category = $_db->query('SELECT DISTINCT category FROM product')->fetchAll();
+$_category = getAllCategory();
 
 //-----------------------------------------------------------------------------
 // Include the header

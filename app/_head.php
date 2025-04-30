@@ -1,5 +1,6 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
+$_category = getAllCategory();
 ?>
 
 <!DOCTYPE html>
@@ -52,8 +53,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     ?>
         <nav>
             <div class="menu">
-                <a href="/page/product/product.php?category=Women">Women</a>
-                <a href="/page/product/product.php?category=Men">Men</a>
+                <a href="/page/product/product.php">View All</a>
+                <?php foreach($_category as $categorys): ?>
+                    <a href="/page/product/product.php?category=<?=$categorys->category_id?>"><?=$categorys->category?></a>
+                <?php endforeach ?>
                 <!-- <a href="/">Baby</a>
             <a href="/">Kids</a>
             <a href="/">Sale</a> -->

@@ -345,9 +345,17 @@ function getAllUser() {
 }
 
 // ============================================================================
+// Get Category function
+// ============================================================================
+function getAllCategory() {
+    global $_db;
+    return $_db->query('SELECT * FROM category')->fetchAll();
+}
+
+// ============================================================================
 // Add to cart function
 // ============================================================================
-function add_to_cart($variation_id, $quantity = 1, $category){
+function add_to_cart($variation_id, $quantity = 1, $category_num){
     global $_user;
     //$user_id = $_SESSION['user_id'] ?? 1;
     //$cart_id = null;
@@ -398,7 +406,7 @@ function add_to_cart($variation_id, $quantity = 1, $category){
     }
 
     // Redirect back to product page or cart page
-    redirect("/page/product/product.php?category=$category");
+    redirect("/page/product/product.php?category=$category_num");
 }
 // ============================================================================
 // Product Maintenance function
