@@ -40,9 +40,7 @@ $_category = getAllCategory();
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
                 <?php
-                    $cart = get_cart();
-                    $count = count($cart);
-                    if ($count) echo "($count)";
+                    if ($count ?? false) echo " ($count)";
                 ?>
             </a>
         </div>

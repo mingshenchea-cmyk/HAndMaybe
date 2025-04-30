@@ -273,85 +273,6 @@ function err($key)
 // print_r($_product);
 
 
-
-
-// ============================================================================
-// Shopping Cart
-// ============================================================================
-
-// Get shopping cart
-function get_cart() {
-    return $_SESSION['cart'] ?? [];
-}
-
-// Set shopping cart
-function set_cart($cart = []) {
-    $_SESSION['cart'] = $cart;
-}
-
-// Update shopping cart to handle variations
-function update_cart($variation_id, $quantity) {
-    $cart = get_cart();
-    
-    // Check if variation exists and get product_id
-    global $_db;
-    $stm = $_db->prepare('SELECT product_id FROM product_variation WHERE variation_id = ?');
-    $stm->execute([$variation_id]);
-    $product_id = $stm->fetchColumn();
-    
-    if ($quantity >= 1 && $quantity <= 10 && $product_id) {
-        // Store both product_id and variation_id in cart
-        $cart[$variation_id] = [
-            'product_id' => $product_id,
-            'quantity' => $quantity
-        ];
-        ksort($cart);
-    } else {
-        unset($cart[$variation_id]);
-    }
-    set_cart($cart);
-}
-
-// ============================================================================
-// Database Setups and Functions
-// ============================================================================
-
-// Is exists?
-function is_exists($value, $table, $field) {
-    global $_db;
-    $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
-    $stm->execute([$value]);
-    return $stm->fetchColumn() > 0;
-}
-//global $_db;
-// ============================================================================
-// Get Product function
-// ============================================================================
-function getAllProducts() {
-    global $_db;
-    return $_db->query('SELECT * FROM product')->fetchAll();
-}
-
-function getAllProductVariations() {
-    global $_db;
-    return $_db->query('SELECT * FROM product_variation')->fetchAll();
-}
-// ============================================================================
-// Get User function
-// ============================================================================
-function getAllUser() {
-    global $_db;
-    return $_db->query('SELECT * FROM user')->fetchAll();
-}
-
-// ============================================================================
-// Get Category function
-// ============================================================================
-function getAllCategory() {
-    global $_db;
-    return $_db->query('SELECT * FROM category')->fetchAll();
-}
-
 // ============================================================================
 // Add to cart function
 // ============================================================================
@@ -408,6 +329,47 @@ function add_to_cart($variation_id, $quantity = 1, $category_num){
     // Redirect back to product page or cart page
     redirect("/page/product/product.php?category=$category_num");
 }
+
+// ============================================================================
+// Database Setups and Functions
+// ============================================================================
+
+// Is exists?
+function is_exists($value, $table, $field) {
+    global $_db;
+    $stm = $_db->prepare("SELECT COUNT(*) FROM $table WHERE $field = ?");
+    $stm->execute([$value]);
+    return $stm->fetchColumn() > 0;
+}
+//global $_db;
+// ============================================================================
+// Get Product function
+// ============================================================================
+function getAllProducts() {
+    global $_db;
+    return $_db->query('SELECT * FROM product')->fetchAll();
+}
+
+function getAllProductVariations() {
+    global $_db;
+    return $_db->query('SELECT * FROM product_variation')->fetchAll();
+}
+// ============================================================================
+// Get User function
+// ============================================================================
+function getAllUser() {
+    global $_db;
+    return $_db->query('SELECT * FROM user')->fetchAll();
+}
+
+// ============================================================================
+// Get Category function
+// ============================================================================
+function getAllCategory() {
+    global $_db;
+    return $_db->query('SELECT * FROM category')->fetchAll();
+}
+
 // ============================================================================
 // Product Maintenance function
 // ============================================================================

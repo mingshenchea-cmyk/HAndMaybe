@@ -3,25 +3,45 @@ require '../../_base.php';
 
 auth('Member');
 
-if (is_post()) {
-    $btn = req('btn');
-    if ($btn == 'clear') {
-        set_cart();
-        redirect('?');
-    } else if ($btn == 'remove') {
-        $variation_id = req('variation_id');
-        $cart = get_cart();
-        unset($cart[$variation_id]);
-        set_cart($cart);
-        redirect();
-    }
+$stm = $_db->prepare('
+    SELECT * FROM cart WHERE user_id = ?'
+);
+$stm->execute([$_user->user_id]);
+$user_cart = $stm->fetch();
 
-    $variation_id = req('variation_id');
-    $quantity = req('quantity');
-    update_cart($variation_id, $quantity);
-    redirect();
+$stm = $_db->prepare('
+    SELECT * FROM cart_items WHERE cart_id = ?'
+);
+$stm->execute([$user_cart->cart_id]);
+$cart = $stm->fetchAll();
+
+if (is_post()) {
+    if (req('btn') === 'remove') {
+        $variation_id = req('variation_id');
+        $stm = $_db->prepare('
+            DELETE FROM cart_items 
+            WHERE cart_id = ? AND variation_id = ?
+        ');
+        $stm->execute([$user_cart->cart_id, $variation_id]);
+    } elseif (req('btn') === 'update') {
+        $variation_id = req('variation_id');
+        $quantity = (int) req('quantity');
+
+        if ($quantity > 0) {
+            $stm = $_db->prepare('
+                UPDATE cart_items 
+                SET quantity = ? 
+                WHERE cart_id = ? AND variation_id = ?
+            ');
+            $stm->execute([$quantity, $user_cart->cart_id, $variation_id]);
+        }
+    }
+    $stm = $_db->prepare('SELECT * FROM cart_items WHERE cart_id = ?');
+    $stm->execute([$user_cart->cart_id]);
+    $cart = $stm->fetchAll();
 }
 
+// ----------------------------------------------------------------------------
 $_title = 'My Cart';
 
 include '../../_head.php';
@@ -35,7 +55,6 @@ include '../../_head.php';
     $total = 0;
     $total_items = 0;
     $shipping_fee = 10.00;
-    $cart = get_cart();
 
     $cart_query = $_db->prepare('
         SELECT 
@@ -52,8 +71,9 @@ include '../../_head.php';
             <a href="/page/product/product.php" class="browse-link-btn">Browse Products</a>
         </div>
     <?php else: ?>
-        <?php foreach ($cart as $variation_id => $item):
-            $quantity = is_array($item) ? $item['quantity'] : $item;
+        <?php foreach ($cart as $item):
+            $variation_id = $item->variation_id;
+            $quantity = $item->quantity;
             $cart_query->execute([$variation_id]);
             $product = $cart_query->fetch();
             if (!$product) continue;
@@ -84,6 +104,7 @@ include '../../_head.php';
                         <span class="quantity-label">Quantity:</span>
                         <form method="post" class="quantity-form">
                             <input type="hidden" name="variation_id" value="<?= $variation_id ?>">
+                            <input type="hidden" name="btn" value="update">
                             <select name="quantity" class="quantity-input">
                                 <?php
                                 $max_qty = min(10, $product->stock_quantity);
