@@ -1,5 +1,5 @@
 <?php
-include '../_base.php';
+include '.././_base.php';
 auth('Member');
 
 $user_id = $_user->user_id;
@@ -116,7 +116,7 @@ foreach ($cart as $variation_id => $item) {
 }
 
 $_title = 'Checkout';
-include '../_head.php';
+include '../../_head.php';
 ?>
 <link rel="stylesheet" href="../css/checkout.css">
 
@@ -164,4 +164,4 @@ include '../_head.php';
     </form>
 </div>
 
-<?php include '../_foot.php'; ?>
+<?php include '../../_foot.php'; ?>

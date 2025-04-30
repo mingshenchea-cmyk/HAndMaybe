@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../../_base.php';
 //-----------------------------------------------------------------------------
 
 // Get product and variation data
@@ -9,7 +9,7 @@ $new_product_id = null;
 
 //-----------------------------------------------------------------------------
 // Include the header
-include '../_head.php';
+include '../../../_head.php';
 ?>
 
 <link rel="stylesheet" href="/css/product.css">
@@ -28,7 +28,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
 
     $photo_tmp_path = $_FILES['product_photo']['tmp_name'];
     $photo_name = basename($_FILES['product_photo']['name']);
-    $new_photo = '../images/' . $photo_name; 
+    $new_photo = '/images/' . $photo_name; 
     ?>
 
     <?php
@@ -60,14 +60,14 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
         <?php $stmt = $_db->prepare("INSERT INTO product_variation (product_id,size,color,stock_quantity,product_photo) VALUES (?,?,?,?,?)"); ?>
         <?php $stmt->execute([$new_product_id, $new_size, $new_color, $new_quantity, $new_photo]); ?>
 
-        <?php redirect("../page/product_maintenance.php"); ?>
+        <?php redirect("/page/admin/product/product_maintenance.php"); ?>
     <?php endif ?>
 <?php endif ?>
 
 <div class="container">
     <div class='product_box'>
         <div class="add_item">
-            <img class='add_icon' src='../images/add_circle.png' alt='add_circle'>
+            <img class='add_icon' src='/images/add_circle.png' alt='add_circle'>
         </div>
         <div class='detail'>
 
@@ -117,5 +117,5 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
 
     <?php
     // Include the footer
-    include '../_foot.php';
+    include '../../../_foot.php';
     ?>

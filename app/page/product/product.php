@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 //-----------------------------------------------------------------------------
 
 $_product = getAllProducts();
@@ -11,7 +11,7 @@ $color_shown = [];
 
 //-----------------------------------------------------------------------------
 // Include the header
-include '../_head.php';
+include '../../_head.php';
 ?>
 
 <link rel="stylesheet" href="/css/product.css">
@@ -44,7 +44,7 @@ include '../_head.php';
                     <?php if ($variation->color !== $color_shown): ?>
                         <?php $color_shown = $variation->color; ?>
                         <div class='product'>
-                            <a href="../page/product_detail.php?variation_id=<?= $variation->variation_id ?>&color=<?=$color_shown?>" class='product_link'>
+                            <a href="/page/product/product_detail.php?variation_id=<?= $variation->variation_id ?>&color=<?=$color_shown?>" class='product_link'>
                                 <img class="product_photo" src="<?= $variation->product_photo ?>" alt="<?= $product->name ?>">
                                 <p class="name"><?= $product->name ?></p>
                                 <p class="price">RM<?= number_format($product->price, 2)?></p>
@@ -61,5 +61,5 @@ include '../_head.php';
 
 <?php
 // Include the footer
-include '../_foot.php';
+include '../../_foot.php';
 ?>
