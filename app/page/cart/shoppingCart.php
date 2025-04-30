@@ -65,19 +65,17 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
         ?>
             <div class="cart-item">
                 <div class="cart-item-left">
-                    <img src="<?= htmlspecialchars($product->product_photo) ?>"
-                         alt="<?= htmlspecialchars($product->name) ?>"
-                         class="cart-item-image">
+                    <img src="<?= $product->product_photo ?>" alt="<?= $product->name ?>" class="cart-item-image">
                     <div class="cart-item-details">
-                        <h2 class="cart-item-title"><?= htmlspecialchars($product->name) ?></h2>
-                        <p class="description"><?= htmlspecialchars($product->description) ?></p>
+                        <h2 class="cart-item-title"><?= $product->name ?></h2>
+                        <p class="description"><?= $product->description ?></p>
                         <p class="cart-item-variant">
-                            <strong>Color:</strong> <?= htmlspecialchars($product->color) ?> |
-                            <strong>Size:</strong> <?= htmlspecialchars($product->size) ?>
+                            <strong>Color:</strong> <?= $product->color ?> |
+                            <strong>Size:</strong> <?= $product->size ?>
                         </p>
                         <p class="cart-item-price">Price: RM<?= number_format($product->price, 2) ?></p>
                         <form method="post" class="remove-form">
-                            <input type="hidden" name="variation_id" value="<?= htmlspecialchars($variation_id) ?>">
+                            <input type="hidden" name="variation_id" value="<?= $variation_id ?>">
                             <button type="submit" name="btn" value="remove" class="remove-btn">Remove</button>
                         </form>
                     </div>
@@ -86,7 +84,7 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
                     <div class="quantity-selector">
                         <span class="quantity-label">Quantity:</span>
                         <form method="post" class="quantity-form">
-                            <input type="hidden" name="variation_id" value="<?= htmlspecialchars($variation_id) ?>">
+                            <input type="hidden" name="variation_id" value="<?= $variation_id ?>">
                             <select name="quantity" class="quantity-input">
                                 <?php
                                 $max_qty = min(10, $product->stock_quantity);
@@ -103,7 +101,6 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
             </div>
         <?php endforeach; ?>
 
-        <!-- Order Summary -->
         <div class="order-summary">
             <h3 class="summary-title">Order Summary</h3>
 
