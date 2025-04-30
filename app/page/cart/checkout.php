@@ -77,6 +77,7 @@ $user = $stm->fetch();
 
 $cart_items = [];
 $total = 0;
+$total_items = 0;
 $shipping_fee = 10.00;
 $stm = $_db->prepare('
     SELECT p.product_id, p.name, p.description, p.price,
@@ -92,6 +93,7 @@ foreach ($cart as $variation_id => $item) {
     if ($product) {
         $subtotal = $product->price * $quantity;
         $total += $subtotal;
+        $total_items += $quantity;
         $cart_items[] = [
             'photo' => $product->product_photo,
             'name' => $product->name,
@@ -118,6 +120,8 @@ include '../../_head.php';
             <p><strong>Email:</strong> <?= $user->email ?></p>
             <p><strong>Phone:</strong> <?= $user->phone_no ?></p>
 
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
             <h3>Shipping Address</h3>
             <label>Address Line 1: <input name="address_line1" required></label>
             <label>City: <input name="city" required></label>
@@ -129,7 +133,7 @@ include '../../_head.php';
 
         <div class="checkout-right">
             <div class="summary-header">
-                <h2>Cart Summary</h2>
+                <h2>Order Summary</h2>
                 <a href="shopping_cart.php" class="edit-cart-btn">Edit Cart</a>
             </div>
 
@@ -148,8 +152,12 @@ include '../../_head.php';
             <?php endforeach; ?>
 
             <div class="checkout-summary">
+                <p>Total Items: <?= $total_items ?></p>
                 <p>Subtotal: RM<?= number_format($total, 2) ?></p>
                 <p>Shipping Fee: RM<?= number_format($shipping_fee, 2) ?></p>
+                
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
                 <h3>Total: RM<?= number_format($total + $shipping_fee, 2) ?></h3>
                 <button type="submit" class="pay-btn">Pay Now</button>
             </div>

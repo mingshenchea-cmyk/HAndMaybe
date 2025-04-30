@@ -25,7 +25,6 @@ if (is_post()) {
 $_title = 'My Cart';
 
 include '../../_head.php';
-
 ?>
 <link rel="stylesheet" href="/css/shoppingcart.css">
 
@@ -34,6 +33,7 @@ include '../../_head.php';
 
     <?php
     $total = 0;
+    $total_items = 0;
     $shipping_fee = 10.00;
     $cart = get_cart();
 
@@ -60,6 +60,7 @@ include '../../_head.php';
 
             $subtotal = $product->price * $quantity;
             $total += $subtotal;
+            $total_items += $quantity;
         ?>
             <div class="cart-item">
                 <div class="cart-item-left">
@@ -100,7 +101,12 @@ include '../../_head.php';
         <?php endforeach; ?>
 
         <div class="order-summary">
-            <h3 class="summary-title">Order Summary</h3>
+            <h3 class="summary-title">Cart Summary</h3>
+
+            <div class="summary-row">
+                <span class="summary-label">Total Items</span>
+                <span class="summary-value"><?= $total_items ?></span>
+            </div>
 
             <div class="summary-row">
                 <span class="summary-label">Subtotal</span>
@@ -110,11 +116,6 @@ include '../../_head.php';
             <div class="summary-row">
                 <span class="summary-label">Shipping Fee</span>
                 <span class="summary-value">RM<?= number_format($shipping_fee, 2) ?></span>
-            </div>
-
-            <div class="summary-row">
-                <span class="summary-label">Discount</span>
-                <span class="summary-value">RM0.00</span>
             </div>
 
             <div class="estimated-total">

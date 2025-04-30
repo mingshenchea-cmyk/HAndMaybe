@@ -27,7 +27,7 @@
 .checkout-left h2,
 .checkout-right h2 {
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: #333;
 }
 
@@ -121,25 +121,30 @@
 
 .pay-btn {
     display: inline-block;
-    background-color: #666;
-    color: white;
+    background-color: #242323;
+    color: #fff;
     border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 18px;
     cursor: pointer;
-    margin-top: 20px;
-    text-decoration: none;
+    margin-top: 30px;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-/* ✅ Center Pay Now button */
 .checkout-summary .pay-btn {
     display: block;
-    margin: 20px auto 0;
+    margin: 30px auto 0;
 }
 
 .pay-btn:hover {
-    background-color: #218838;
+    background-color: #161616;
+}
+
+.checkout-divider {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 30px 0;
 }
 
 @media (max-width: 900px) {
