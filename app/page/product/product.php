@@ -45,7 +45,7 @@ include '../../_head.php';
                         <?php $color_shown = $variation->color; ?>
                         <div class='product'>
                             <a href="/page/product/product_detail.php?variation_id=<?= $variation->variation_id ?>&color=<?=$color_shown?>" class='product_link'>
-                                <img class="product_photo" src="<?= $variation->product_photo ?>" alt="<?= $product->name ?>">
+                                <img class="product_photo" src="/images/<?= $variation->product_photo ?>" alt="<?= $product->name ?>">
                                 <p class="name"><?= $product->name ?></p>
                                 <p class="price">RM<?= number_format($product->price, 2)?></p>
                             </a>

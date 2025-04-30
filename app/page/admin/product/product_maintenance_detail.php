@@ -23,7 +23,7 @@ include '../../../_head.php';
     foreach ($_product_variation as $variation):
         if ($variation_id == $variation->variation_id): ?>
             <div class='product_box'>
-                <img class='product_image' src='<?= $variation->product_photo ?>' alt='<?= $variation_id ?>'>
+                <img class='product_image' src='/images/<?= $variation->product_photo ?>' alt='<?= $variation_id ?>'>
                 <div class='detail'>
 
                     <?php foreach ($_product as $product):

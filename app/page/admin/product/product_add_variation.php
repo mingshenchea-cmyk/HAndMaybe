@@ -27,8 +27,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
     $new_quantity = post('product_quantity');
 
     $photo_tmp_path = $_FILES['product_photo']['tmp_name'];
-    $photo_name = basename($_FILES['product_photo']['name']);
-    $new_photo = '/images/' . $photo_name; 
+    $new_photo = basename($_FILES['product_photo']['name']);
     ?>
 
     <?php

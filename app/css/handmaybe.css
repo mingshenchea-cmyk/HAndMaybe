@@ -135,3 +135,15 @@ nav input:focus {
 .err{
     color: red;
 }
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.index1{
+    width: 100px;
+}
