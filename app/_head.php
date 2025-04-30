@@ -33,7 +33,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <p class="profile">Profile</p>
                 </a>
             <?php endif ?>
-            <a href="/page/cart/shoppingCart.php" class="nav-item">
+            <a href="/page/cart/shopping_cart.php" class="nav-item">
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
                 <?php
@@ -46,7 +46,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     </header>
 
     <?php 
-        if ($currentPage == 'shoppingCart.php' || $currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
+        if ($currentPage == 'shopping_cart.php' || $currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
     ?>
         <nav>
             <div class="menu">

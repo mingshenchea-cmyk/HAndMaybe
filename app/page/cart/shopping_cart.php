@@ -29,7 +29,7 @@ include '../../_head.php';
 // Check if user is logged in
 $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
 ?>
-<link rel="stylesheet" href="/css/shoppingCart.css">
+<link rel="stylesheet" href="/css/shoppingcart.css">
 
 <div class="shopping-cart">
     <h1 class="cart-header">My Cart</h1>
