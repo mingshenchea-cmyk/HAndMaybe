@@ -3,7 +3,7 @@ require '../../../_base.php';
 //-----------------------------------------------------------------------------
 
 // Get data
-$_category = $_db->query('SELECT DISTINCT category FROM product')->fetchAll();
+$_category = getAllCategory();
 
 //-----------------------------------------------------------------------------
 // Include the header
@@ -61,7 +61,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
             $stmt = $_db->prepare("INSERT INTO product (name, category, description, price, created_at) VALUES (?,?,?,?,NOW())");
             $stmt->execute([$new_name, $new_category, $new_description, $new_price]);
 
-            redirect("/page/admin/prodcut/product_maintenance.php");
+            redirect("/page/admin/product/product_maintenance.php");
         ?>
         <?php endif ?>
     <?php endif ?>

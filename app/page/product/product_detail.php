@@ -4,25 +4,13 @@ require '../../_base.php';
 
 $_product = getAllProducts();
 $_product_variation = getAllProductVariations();
+$_category = getAllCategory();
 
 $variation_id = get('variation_id');
 $color = get('color');
 $category = null;
+$category_num;
 $size = null;
-
-// ----------------------------------------------------------------------------
-// Handle Add to Cart Session
-// ----------------------------------------------------------------------------
-
-if (is_post()) {
-    $variation_id = post('variation_id');
-    $quantity = 1;
-
-    if ($variation_id) {
-        update_cart($variation_id, $quantity);
-    }
-    redirect();
-}
 
 //-----------------------------------------------------------------------------
 // Include the header
@@ -34,18 +22,10 @@ include '../../_head.php';
 <?php
 // Handle the form submission and call the add_to_cart function
 if (is_post()): ?>
-    <?php foreach ($_product_variation as $variation): ?>
-        <?php if ($variation_id == $variation->variation_id): ?>
-            <?php foreach ($_product as $product): ?>
-                <?php if ($variation->product_id == $product->product_id): ?>
-                    <?php $category = $product->category ?>
-                <?php endif ?>
-            <?php endforeach ?>
-        <?php endif ?>
-    <?php endforeach ?>
     <?php $quantity = 1; // Default to 1 if not provided ?>
     <?php // Call the add_to_cart function
-        add_to_cart($variation_id, $quantity, $category); ?>
+        add_to_cart($variation_id, $quantity, $category_num);
+        update_cart($variation_id, $quantity); ?>
 <?php endif ?>
 
 <div class="container">
@@ -60,9 +40,16 @@ if (is_post()): ?>
                             <p class='detail_price'>RM<?= number_format($product->price, 2) ?></p>
                             <p class='description'><?= $product->description ?></p>
                             <?php $color = $variation->color; ?>
+                            <?php foreach ($_category as $categorys): ?>
+                                <?php if ($categorys->category_id == $product->category_id): ?>
+                                    <?php $category = $categorys->category ?>
+                                    <?php $category_num = $categorys->category_id ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
                         <?php endif ?>
                     <?php endforeach ?>
                     <p class='color'>Color: <?= $color ?></p>
+                    <p class='color'>Category: <?= $category ?></p>
                     <p class='select_size'>Select size</p>
 
                     <?php $size = $variation->size;

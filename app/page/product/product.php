@@ -4,6 +4,7 @@ require '../../_base.php';
 
 $_product = getAllProducts();
 $_product_variation = getAllProductVariations();
+$_category = getAllCategory();
 
 $category = get('category');
 $query = get('query');
@@ -20,7 +21,7 @@ include '../../_head.php';
     <?php foreach ($_product as $product):
         foreach ($_product_variation as $variation): ?>
             <!-- Check if searching or category filtering -->
-            <?= $shouldDisplay = false; ?>
+            <?php $shouldDisplay = false; ?>
 
             <?php if (!empty($query)): ?>
                 <?php
@@ -32,10 +33,12 @@ include '../../_head.php';
             <?php elseif (!empty($category)): ?>
                 <?php
                 // If there is a category
-                if ($product->category == $category) {
+                if ($product->category_id == $category) {
                     $shouldDisplay = true;
                 }
                 ?>
+            <?php else: ?>
+                <?php $shouldDisplay = true; ?>                
             <?php endif ?>
 
             <!-- If product should be displayed based on search or category -->
@@ -44,10 +47,11 @@ include '../../_head.php';
                     <?php if ($variation->color !== $color_shown): ?>
                         <?php $color_shown = $variation->color; ?>
                         <div class='product'>
-                            <a href="/page/product/product_detail.php?variation_id=<?= $variation->variation_id ?>&color=<?=$color_shown?>" class='product_link'>
+                            <a href="/page/product/product_detail.php?variation_id=<?= $variation->variation_id ?>&color=<?= $color_shown ?>"
+                                class='product_link'>
                                 <img class="product_photo" src="/images/<?= $variation->product_photo ?>" alt="<?= $product->name ?>">
                                 <p class="name"><?= $product->name ?></p>
-                                <p class="price">RM<?= number_format($product->price, 2)?></p>
+                                <p class="price">RM<?= number_format($product->price, 2) ?></p>
                             </a>
                         </div>
                     <?php endif ?>
