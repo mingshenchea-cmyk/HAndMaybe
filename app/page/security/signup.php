@@ -98,7 +98,7 @@ if (is_post()) {
     if (!$_err) {
 
         // (1) Save photo
-        $photo = save_photo($f, 'photos');
+        $photo = save_photo($f, '../../photos');
         
         // (2) Insert user (member)
         $stm = $_db->prepare('
@@ -108,7 +108,7 @@ if (is_post()) {
         $stm->execute([$name, $password, $age, $gender, $phone_no, $email, $photo]);
 
         temp('info', 'Record inserted');
-        redirect('/login.php');
+        redirect('login.php');
     }
 }
 
