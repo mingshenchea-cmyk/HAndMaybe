@@ -144,6 +144,17 @@ nav input:focus {
     margin-bottom: 30px;
 }
 
+.index_image {
+    display: flex;
+    margin-top: -10px;
+}
+
 .index1{
-    width: 100px;
+    width: 100%;
+    object-fit: contain;
+}
+
+.index_image .index2 {
+    width: 100%;
+    max-width: 50%;
 }
