@@ -17,12 +17,11 @@ include '../../../_head.php';
 <?php
 // Check if the form is submitted to update
 if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
-    <?php 
+    <?php
     $new_product_name = post('product_name');
     $new_size = post('product_size');
 
     $new_color = post('product_color');
-    $new_color = ucfirst(strtolower($new_color));
 
     $new_quantity = post('product_quantity');
 
@@ -30,19 +29,42 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
     $new_photo = basename($_FILES['product_photo']['name']);
     ?>
 
+    <?php if ($new_photo == ''):
+        $_err['product_photo'] = "Required";
+    ?>
+    <?php endif ?>
+
+    <?php if ($new_product_name == ''):
+        $_err['product_name'] = "Required";
+    ?>
+    <?php endif ?>
+
+    <?php if ($new_color == ''):
+        $_err['product_size'] = "Required";
+    ?>
+    <?php endif ?>
+
+    <?php if ($new_quantity === ''):
+        $_err['product_quantity'] = "Required";
+    ?>
+    <?php endif ?>
+
+    <?php if (!is_numeric($new_quantity) || (int)$new_quantity < 0):
+        $_err['product_quantity'] = "Enter a valid quantity";
+    ?>
+    <?php endif ?>
+
+    <?php $new_color = ucfirst(strtolower($new_color)); ?>
+
     <?php
     if (!empty($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK): ?>
         <?php move_uploaded_file($photo_tmp_path, $new_photo); ?>
     <?php endif ?>
 
     <?php
-    echo $new_product_name;
     //Find product_id
     foreach ($_product as $p): ?>
         <?php if ($p->name == $new_product_name): ?>
-            <?php
-            echo $new_product_name;
-            ?>
             <?php $new_product_id = $p->product_id; ?>
         <?php endif ?>
     <?php endforeach ?>
@@ -53,13 +75,15 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
     $check_stmt->execute([$new_product_id, $new_size, $new_color, $new_photo]);
     $count = $check_stmt->fetchColumn(); ?>
 
-    <?php
-    //if (isset($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK) {
-    if ($count == 0): ?>
-        <?php $stmt = $_db->prepare("INSERT INTO product_variation (product_id,size,color,stock_quantity,product_photo) VALUES (?,?,?,?,?)"); ?>
-        <?php $stmt->execute([$new_product_id, $new_size, $new_color, $new_quantity, $new_photo]); ?>
+    <?php if (!$_err): ?>
+        <?php
+        //if (isset($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK) {
+        if ($count == 0): ?>
+            <?php $stmt = $_db->prepare("INSERT INTO product_variation (product_id,size,color,stock_quantity,product_photo) VALUES (?,?,?,?,?)"); ?>
+            <?php $stmt->execute([$new_product_id, $new_size, $new_color, $new_quantity, $new_photo]); ?>
 
-        <?php redirect("/page/admin/product/product_maintenance.php"); ?>
+            <?php redirect("/page/admin/product/product_maintenance.php"); ?>
+        <?php endif ?>
     <?php endif ?>
 <?php endif ?>
 
@@ -76,7 +100,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
 
                 <div class="category_div">
                     <p class='color'>Photo: </p>
-                    <?= html_file('product_photo','image/*') ?>
+                    <?= html_file('product_photo', 'image/*') ?>
                     <!--<input type='file' name='product_photo'>-->
                 </div>
 
