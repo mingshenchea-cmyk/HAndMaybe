@@ -356,7 +356,7 @@ function add_to_cart($variation_id, $quantity = 1, $category){
 
     if (!$_user) {
         // If not logged in, redirect to login page
-        redirect('../login.php');
+        redirect('/page/security/login.php');
     }
 
     // Check if user already has a cart
@@ -398,8 +398,7 @@ function add_to_cart($variation_id, $quantity = 1, $category){
     }
 
     // Redirect back to product page or cart page
-    header("Location: ../page/product.php?category=$category");
-    exit();
+    redirect("/page/product/product.php?category=$category");
 }
 // ============================================================================
 // Product Maintenance function
