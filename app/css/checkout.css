@@ -123,7 +123,6 @@
     display: inline-block;
     background-color: #666;
     color: white;
-    
     border: none;
     padding: 12px 20px;
     font-size: 16px;
@@ -131,6 +130,12 @@
     cursor: pointer;
     margin-top: 20px;
     text-decoration: none;
+}
+
+/* ✅ Center Pay Now button */
+.checkout-summary .pay-btn {
+    display: block;
+    margin: 20px auto 0;
 }
 
 .pay-btn:hover {

@@ -1,7 +1,7 @@
 <?php
 require '../../_base.php';
 
-auth();
+auth('Member');
 
 if (is_post()) {
     $btn = req('btn');
@@ -26,8 +26,6 @@ $_title = 'My Cart';
 
 include '../../_head.php';
 
-// Check if user is logged in
-$is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
 ?>
 <link rel="stylesheet" href="/css/shoppingcart.css">
 
@@ -65,7 +63,7 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
         ?>
             <div class="cart-item">
                 <div class="cart-item-left">
-                    <img src="<?= $product->product_photo ?>" alt="<?= $product->name ?>" class="cart-item-image">
+                    <img src="/images/<?= $product->product_photo ?>" alt="<?= $product->name ?>" class="cart-item-image">
                     <div class="cart-item-details">
                         <h2 class="cart-item-title"><?= $product->name ?></h2>
                         <p class="description"><?= $product->description ?></p>

@@ -10,6 +10,20 @@ $color = get('color');
 $category = null;
 $size = null;
 
+// ----------------------------------------------------------------------------
+// Handle Add to Cart Session
+// ----------------------------------------------------------------------------
+
+if (is_post()) {
+    $variation_id = post('variation_id');
+    $quantity = 1;
+
+    if ($variation_id) {
+        update_cart($variation_id, $quantity);
+    }
+    redirect();
+}
+
 //-----------------------------------------------------------------------------
 // Include the header
 include '../../_head.php';
