@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2025 at 07:29 PM
+-- Generation Time: Apr 30, 2025 at 06:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `h_and_maybe_db`
 --
+CREATE DATABASE IF NOT EXISTS `h_and_maybe_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `h_and_maybe_db`;
 
 -- --------------------------------------------------------
 
@@ -121,6 +123,18 @@ CREATE TABLE `order_items` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `token` varchar(64) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `expiry` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product`
 --
 
@@ -167,106 +181,106 @@ CREATE TABLE `product_variation` (
 --
 
 INSERT INTO `product_variation` (`variation_id`, `product_id`, `size`, `color`, `stock_quantity`, `product_photo`) VALUES
-(1, 1, 'XS', 'Light Beige', 23, '../images/crew-t-beige.avif'),
-(2, 1, 'S', 'Light Beige', 12, '../images/crew-t-beige.avif'),
-(3, 1, 'M', 'Light Beige', 45, '../images/crew-t-beige.avif'),
-(4, 1, 'L', 'Light Beige', 6, '../images/crew-t-beige.avif'),
-(5, 1, 'XL', 'Light Beige', 37, '../images/crew-t-beige.avif'),
-(6, 1, 'XS', 'White', 50, '../images/crew-t-white.avif'),
-(7, 1, 'S', 'White', 19, '../images/crew-t-white.avif'),
-(8, 1, 'M', 'White', 0, '../images/crew-t-white.avif'),
-(9, 1, 'L', 'White', 8, '../images/crew-t-white.avif'),
-(10, 1, 'XL', 'White', 32, '../images/crew-t-white.avif'),
-(11, 1, 'XS', 'Black', 28, '../images/crew-t-black.avif'),
-(12, 1, 'S', 'Black', 14, '../images/crew-t-black.avif'),
-(13, 1, 'M', 'Black', 46, '../images/crew-t-black.avif'),
-(14, 1, 'L', 'Black', 41, '../images/crew-t-black.avif'),
-(15, 1, 'XL', 'Black', 25, '../images/crew-t-black.avif'),
-(16, 2, 'XS', 'Pink', 9, '../images/vneck-pink.avif'),
-(17, 2, 'S', 'Pink', 33, '../images/vneck-pink.avif'),
-(18, 2, 'M', 'Pink', 11, '../images/vneck-pink.avif'),
-(19, 2, 'L', 'Pink', 5, '../images/vneck-pink.avif'),
-(20, 2, 'XL', 'Pink', 39, '../images/vneck-pink.avif'),
-(21, 2, 'XS', 'Navy Blue', 26, '../images/vneck-navy.avif'),
-(22, 2, 'S', 'Navy Blue', 0, '../images/vneck-navy.avif'),
-(23, 2, 'M', 'Navy Blue', 44, '../images/vneck-navy.avif'),
-(24, 2, 'L', 'Navy Blue', 3, '../images/vneck-navy.avif'),
-(25, 2, 'XL', 'Navy Blue', 18, '../images/vneck-navy.avif'),
-(26, 3, 'XS', 'Dark Grey', 36, '../images/slim-jeans-grey.avif'),
-(27, 3, 'S', 'Dark Grey', 48, '../images/slim-jeans-grey.avif'),
-(28, 3, 'M', 'Dark Grey', 2, '../images/slim-jeans-grey.avif'),
-(29, 3, 'L', 'Dark Grey', 40, '../images/slim-jeans-grey.avif'),
-(30, 3, 'XL', 'Dark Grey', 7, '../images/slim-jeans-grey.avif'),
-(31, 3, 'XS', 'Black', 22, '../images/slim-jeans-black.avif'),
-(32, 3, 'S', 'Black', 0, '../images/slim-jeans-black.avif'),
-(33, 3, 'M', 'Black', 31, '../images/slim-jeans-black.avif'),
-(34, 3, 'L', 'Black', 4, '../images/slim-jeans-black.avif'),
-(35, 3, 'XL', 'Black', 47, '../images/slim-jeans-black.avif'),
-(36, 3, 'XS', 'Pale Blue', 29, '../images/slim-jeans-pale.avif'),
-(37, 3, 'S', 'Pale Blue', 16, '../images/slim-jeans-pale.avif'),
-(38, 3, 'M', 'Pale Blue', 43, '../images/slim-jeans-pale.avif'),
-(39, 3, 'L', 'Pale Blue', 27, '../images/slim-jeans-pale.avif'),
-(40, 3, 'XL', 'Pale Blue', 20, '../images/slim-jeans-pale.avif'),
-(41, 4, 'XS', 'Light Beige', 30, '../images/cargo-pants-beige.avif'),
-(42, 4, 'S', 'Light Beige', 38, '../images/cargo-pants-beige.avif'),
-(43, 4, 'M', 'Light Beige', 13, '../images/cargo-pants-beige.avif'),
-(44, 4, 'L', 'Light Beige', 21, '../images/cargo-pants-beige.avif'),
-(45, 4, 'XL', 'Light Beige', 24, '../images/cargo-pants-beige.avif'),
-(46, 4, 'XS', 'Dark Khaki Green', 34, '../images/cargo-pants-khaki.avif'),
-(47, 4, 'S', 'Dark Khaki Green', 49, '../images/cargo-pants-khaki.avif'),
-(48, 4, 'M', 'Dark Khaki Green', 10, '../images/cargo-pants-khaki.avif'),
-(49, 4, 'L', 'Dark Khaki Green', 15, '../images/cargo-pants-khaki.avif'),
-(50, 4, 'XL', 'Dark Khaki Green', 1, '../images/cargo-pants-khaki.avif'),
-(51, 5, 'XS', 'Black', 42, '../images/high-skirt-black.avif'),
-(52, 5, 'S', 'Black', 25, '../images/high-skirt-black.avif'),
-(53, 5, 'M', 'Black', 12, '../images/high-skirt-black.avif'),
-(54, 5, 'L', 'Black', 37, '../images/high-skirt-black.avif'),
-(55, 5, 'XL', 'Black', 19, '../images/high-skirt-black.avif'),
-(56, 5, 'XS', 'Dark Brown', 50, '../images/high-skirt-brown.avif'),
-(57, 5, 'S', 'Dark Brown', 6, '../images/high-skirt-brown.avif'),
-(58, 5, 'M', 'Dark Brown', 33, '../images/high-skirt-brown.avif'),
-(59, 5, 'L', 'Dark Brown', 0, '../images/high-skirt-brown.avif'),
-(60, 5, 'XL', 'Dark Brown', 5, '../images/high-skirt-brown.avif'),
-(61, 5, 'XS', 'White', 32, '../images/high-skirt-white.avif'),
-(62, 5, 'S', 'White', 8, '../images/high-skirt-white.avif'),
-(63, 5, 'M', 'White', 28, '../images/high-skirt-white.avif'),
-(64, 5, 'L', 'White', 23, '../images/high-skirt-white.avif'),
-(65, 5, 'XL', 'White', 46, '../images/high-skirt-white.avif'),
-(66, 6, 'XS', 'Pink', 41, '../images/jogger-pink.avif'),
-(67, 6, 'S', 'Pink', 11, '../images/jogger-pink.avif'),
-(68, 6, 'M', 'Pink', 45, '../images/jogger-pink.avif'),
-(69, 6, 'L', 'Pink', 14, '../images/jogger-pink.avif'),
-(70, 6, 'XL', 'Pink', 9, '../images/jogger-pink.avif'),
-(71, 6, 'XS', 'Light Blue', 39, '../images/jogger-blue.avif'),
-(72, 6, 'S', 'Light Blue', 0, '../images/jogger-blue.avif'),
-(73, 6, 'M', 'Light Blue', 26, '../images/jogger-blue.avif'),
-(74, 6, 'L', 'Light Blue', 3, '../images/jogger-blue.avif'),
-(75, 6, 'XL', 'Light Blue', 36, '../images/jogger-blue.avif'),
-(76, 6, 'XS', 'Dark Grey', 18, '../images/jogger-grey.avif'),
-(77, 6, 'S', 'Dark Grey', 48, '../images/jogger-grey.avif'),
-(78, 6, 'M', 'Dark Grey', 2, '../images/jogger-grey.avif'),
-(79, 6, 'L', 'Dark Grey', 40, '../images/jogger-grey.avif'),
-(80, 6, 'XL', 'Dark Grey', 7, '../images/jogger-grey.avif'),
-(81, 7, 'XS', 'Cream', 22, '../images/graphics-tee-cream.avif'),
-(82, 7, 'S', 'Cream', 47, '../images/graphics-tee-cream.avif'),
-(83, 7, 'M', 'Cream', 0, '../images/graphics-tee-cream.avif'),
-(84, 7, 'L', 'Cream', 31, '../images/graphics-tee-cream.avif'),
-(85, 7, 'XL', 'Cream', 4, '../images/graphics-tee-cream.avif'),
-(86, 7, 'XS', 'Dark Grey', 29, '../images/graphics-tee-grey.avif'),
-(87, 7, 'S', 'Dark Grey', 43, '../images/graphics-tee-grey.avif'),
-(88, 7, 'M', 'Dark Grey', 16, '../images/graphics-tee-grey.avif'),
-(89, 7, 'L', 'Dark Grey', 27, '../images/graphics-tee-grey.avif'),
-(90, 7, 'XL', 'Dark Grey', 20, '../images/graphics-tee-grey.avif'),
-(91, 8, 'XS', 'Black', 30, '../images/v-neck-black.avif'),
-(92, 8, 'S', 'Black', 38, '../images/v-neck-black.avif'),
-(93, 8, 'M', 'Black', 13, '../images/v-neck-black.avif'),
-(94, 8, 'L', 'Black', 21, '../images/v-neck-black.avif'),
-(95, 8, 'XL', 'Black', 24, '../images/v-neck-black.avif'),
-(96, 8, 'XS', 'White', 34, '../images/v-neck-white.avif'),
-(97, 8, 'S', 'White', 49, '../images/v-neck-white.avif'),
-(98, 8, 'M', 'White', 10, '../images/v-neck-white.avif'),
-(99, 8, 'L', 'White', 15, '../images/v-neck-white.avif'),
-(100, 8, 'XL', 'White', 1, '../images/v-neck-white.avif');
+(1, 1, 'XS', 'Light Beige', 23, 'crew-t-beige.avif'),
+(2, 1, 'S', 'Light Beige', 12, 'crew-t-beige.avif'),
+(3, 1, 'M', 'Light Beige', 45, 'crew-t-beige.avif'),
+(4, 1, 'L', 'Light Beige', 6, 'crew-t-beige.avif'),
+(5, 1, 'XL', 'Light Beige', 37, 'crew-t-beige.avif'),
+(6, 1, 'XS', 'White', 50, 'crew-t-white.avif'),
+(7, 1, 'S', 'White', 19, 'crew-t-white.avif'),
+(8, 1, 'M', 'White', 0, 'crew-t-white.avif'),
+(9, 1, 'L', 'White', 8, 'crew-t-white.avif'),
+(10, 1, 'XL', 'White', 32, 'crew-t-white.avif'),
+(11, 1, 'XS', 'Black', 28, 'crew-t-black.avif'),
+(12, 1, 'S', 'Black', 14, 'crew-t-black.avif'),
+(13, 1, 'M', 'Black', 46, 'crew-t-black.avif'),
+(14, 1, 'L', 'Black', 41, 'crew-t-black.avif'),
+(15, 1, 'XL', 'Black', 25, 'crew-t-black.avif'),
+(16, 2, 'XS', 'Pink', 9, 'vneck-pink.avif'),
+(17, 2, 'S', 'Pink', 33, 'vneck-pink.avif'),
+(18, 2, 'M', 'Pink', 11, 'vneck-pink.avif'),
+(19, 2, 'L', 'Pink', 5, 'vneck-pink.avif'),
+(20, 2, 'XL', 'Pink', 39, 'vneck-pink.avif'),
+(21, 2, 'XS', 'Navy Blue', 26, 'vneck-navy.avif'),
+(22, 2, 'S', 'Navy Blue', 0, 'vneck-navy.avif'),
+(23, 2, 'M', 'Navy Blue', 44, 'vneck-navy.avif'),
+(24, 2, 'L', 'Navy Blue', 3, 'vneck-navy.avif'),
+(25, 2, 'XL', 'Navy Blue', 18, 'vneck-navy.avif'),
+(26, 3, 'XS', 'Dark Grey', 36, 'slim-jeans-grey.avif'),
+(27, 3, 'S', 'Dark Grey', 48, 'slim-jeans-grey.avif'),
+(28, 3, 'M', 'Dark Grey', 2, 'slim-jeans-grey.avif'),
+(29, 3, 'L', 'Dark Grey', 40, 'slim-jeans-grey.avif'),
+(30, 3, 'XL', 'Dark Grey', 7, 'slim-jeans-grey.avif'),
+(31, 3, 'XS', 'Black', 22, 'slim-jeans-black.avif'),
+(32, 3, 'S', 'Black', 0, 'slim-jeans-black.avif'),
+(33, 3, 'M', 'Black', 31, 'slim-jeans-black.avif'),
+(34, 3, 'L', 'Black', 4, 'slim-jeans-black.avif'),
+(35, 3, 'XL', 'Black', 47, 'slim-jeans-black.avif'),
+(36, 3, 'XS', 'Pale Blue', 29, 'slim-jeans-pale.avif'),
+(37, 3, 'S', 'Pale Blue', 16, 'slim-jeans-pale.avif'),
+(38, 3, 'M', 'Pale Blue', 43, 'slim-jeans-pale.avif'),
+(39, 3, 'L', 'Pale Blue', 27, 'slim-jeans-pale.avif'),
+(40, 3, 'XL', 'Pale Blue', 20, 'slim-jeans-pale.avif'),
+(41, 4, 'XS', 'Light Beige', 30, 'cargo-pants-beige.avif'),
+(42, 4, 'S', 'Light Beige', 38, 'cargo-pants-beige.avif'),
+(43, 4, 'M', 'Light Beige', 13, 'cargo-pants-beige.avif'),
+(44, 4, 'L', 'Light Beige', 21, 'cargo-pants-beige.avif'),
+(45, 4, 'XL', 'Light Beige', 24, 'cargo-pants-beige.avif'),
+(46, 4, 'XS', 'Dark Khaki Green', 34, 'cargo-pants-khaki.avif'),
+(47, 4, 'S', 'Dark Khaki Green', 49, 'cargo-pants-khaki.avif'),
+(48, 4, 'M', 'Dark Khaki Green', 10, 'cargo-pants-khaki.avif'),
+(49, 4, 'L', 'Dark Khaki Green', 15, 'cargo-pants-khaki.avif'),
+(50, 4, 'XL', 'Dark Khaki Green', 1, 'cargo-pants-khaki.avif'),
+(51, 5, 'XS', 'Black', 42, 'high-skirt-black.avif'),
+(52, 5, 'S', 'Black', 25, 'high-skirt-black.avif'),
+(53, 5, 'M', 'Black', 12, 'high-skirt-black.avif'),
+(54, 5, 'L', 'Black', 37, 'high-skirt-black.avif'),
+(55, 5, 'XL', 'Black', 19, 'high-skirt-black.avif'),
+(56, 5, 'XS', 'Dark Brown', 50, 'high-skirt-brown.avif'),
+(57, 5, 'S', 'Dark Brown', 6, 'high-skirt-brown.avif'),
+(58, 5, 'M', 'Dark Brown', 33, 'high-skirt-brown.avif'),
+(59, 5, 'L', 'Dark Brown', 0, 'high-skirt-brown.avif'),
+(60, 5, 'XL', 'Dark Brown', 5, 'high-skirt-brown.avif'),
+(61, 5, 'XS', 'White', 32, 'high-skirt-white.avif'),
+(62, 5, 'S', 'White', 8, 'high-skirt-white.avif'),
+(63, 5, 'M', 'White', 28, 'high-skirt-white.avif'),
+(64, 5, 'L', 'White', 23, 'high-skirt-white.avif'),
+(65, 5, 'XL', 'White', 46, 'high-skirt-white.avif'),
+(66, 6, 'XS', 'Pink', 41, 'jogger-pink.avif'),
+(67, 6, 'S', 'Pink', 11, 'jogger-pink.avif'),
+(68, 6, 'M', 'Pink', 45, 'jogger-pink.avif'),
+(69, 6, 'L', 'Pink', 14, 'jogger-pink.avif'),
+(70, 6, 'XL', 'Pink', 9, 'jogger-pink.avif'),
+(71, 6, 'XS', 'Light Blue', 39, 'jogger-blue.avif'),
+(72, 6, 'S', 'Light Blue', 0, 'jogger-blue.avif'),
+(73, 6, 'M', 'Light Blue', 26, 'jogger-blue.avif'),
+(74, 6, 'L', 'Light Blue', 3, 'jogger-blue.avif'),
+(75, 6, 'XL', 'Light Blue', 36, 'jogger-blue.avif'),
+(76, 6, 'XS', 'Dark Grey', 18, 'jogger-grey.avif'),
+(77, 6, 'S', 'Dark Grey', 48, 'jogger-grey.avif'),
+(78, 6, 'M', 'Dark Grey', 2, 'jogger-grey.avif'),
+(79, 6, 'L', 'Dark Grey', 40, 'jogger-grey.avif'),
+(80, 6, 'XL', 'Dark Grey', 7, 'jogger-grey.avif'),
+(81, 7, 'XS', 'Cream', 22, 'graphics-tee-cream.avif'),
+(82, 7, 'S', 'Cream', 47, 'graphics-tee-cream.avif'),
+(83, 7, 'M', 'Cream', 0, 'graphics-tee-cream.avif'),
+(84, 7, 'L', 'Cream', 31, 'graphics-tee-cream.avif'),
+(85, 7, 'XL', 'Cream', 4, 'graphics-tee-cream.avif'),
+(86, 7, 'XS', 'Dark Grey', 29, 'graphics-tee-grey.avif'),
+(87, 7, 'S', 'Dark Grey', 43, 'graphics-tee-grey.avif'),
+(88, 7, 'M', 'Dark Grey', 16, 'graphics-tee-grey.avif'),
+(89, 7, 'L', 'Dark Grey', 27, 'graphics-tee-grey.avif'),
+(90, 7, 'XL', 'Dark Grey', 20, 'graphics-tee-grey.avif'),
+(91, 8, 'XS', 'Black', 30, 'v-neck-black.avif'),
+(92, 8, 'S', 'Black', 38, 'v-neck-black.avif'),
+(93, 8, 'M', 'Black', 13, 'v-neck-black.avif'),
+(94, 8, 'L', 'Black', 21, 'v-neck-black.avif'),
+(95, 8, 'XL', 'Black', 24, 'v-neck-black.avif'),
+(96, 8, 'XS', 'White', 34, 'v-neck-white.avif'),
+(97, 8, 'S', 'White', 49, 'v-neck-white.avif'),
+(98, 8, 'M', 'White', 10, 'v-neck-white.avif'),
+(99, 8, 'L', 'White', 15, 'v-neck-white.avif'),
+(100, 8, 'XL', 'White', 1, 'v-neck-white.avif');
 
 -- --------------------------------------------------------
 
@@ -296,7 +310,7 @@ INSERT INTO `user` (`user_id`, `role`, `name`, `password`, `age`, `gender`, `pho
 (3, 'Member', 'Elaine Pang', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'F', 184012398, 'ep@gmail.com', 'ep_pfp.png'),
 (4, 'Member', 'Sum Ting Wong', '8cb2237d0679ca88db6464eac60da96345513964', 30, 'M', 175419326, 'stw@gmail.com', 'stw_pfp.png'),
 (5, 'Member', 'Ho Lee Fuk', '8cb2237d0679ca88db6464eac60da96345513964', 25, 'F', 190213092, 'hlf@gmail.com', 'hlf_pfp.png'),
-(9, 'Member', 'Ming Li Test', '8cb2237d0679ca88db6464eac60da96345513964', 18, 'M', 136926384, 'mlt@gmail.com', '680fba98bfda6.jpg');
+(6, 'Member', 'Ming Li Test', '7c4a8d09ca3762af61e59520943dc26494f8941b', 21, 'F', 123456789, 'minglilau9@gmail.com', '68113af564a0d.jpg');
 
 --
 -- Indexes for dumped tables
@@ -339,6 +353,13 @@ ALTER TABLE `order_items`
   ADD PRIMARY KEY (`order_item_id`),
   ADD KEY `order_id` (`order_id`),
   ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`token`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `product`
@@ -409,7 +430,7 @@ ALTER TABLE `product_variation`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -441,6 +462,12 @@ ALTER TABLE `order`
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`);
+
+--
+-- Constraints for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD CONSTRAINT `password_reset_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `product_variation`
