@@ -3,7 +3,17 @@ include '../../_base.php';
 auth('Member');
 
 $user_id = $_user->user_id;
-$cart = get_cart();
+$stm = $_db->prepare('
+    SELECT * FROM cart WHERE user_id = ?'
+);
+$stm->execute([$_user->user_id]);
+$user_cart = $stm->fetch();
+
+$stm = $_db->prepare('
+    SELECT * FROM cart_items WHERE cart_id = ?'
+);
+$stm->execute([$user_cart->cart_id]);
+$cart = $stm->fetchAll();
 
 if (!$cart) redirect('shopping_cart.php');
 
@@ -20,53 +30,6 @@ if (is_post()) {
     }
 
     if (!$_err) {
-        $_db->beginTransaction();
-
-        $stm = $_db->prepare('
-            INSERT INTO address (user_id, address_line1, city, state, postal_code, country)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ');
-        $stm->execute([$user_id, $address_line1, $city, $state, $postal_code, $country]);
-        $address_id = $_db->lastInsertId();
-
-        $total_amount = 0;
-        foreach ($cart as $variation_id => $item) {
-            $quantity = is_array($item) ? $item['quantity'] : $item;
-            $stm = $_db->prepare('SELECT p.price FROM product p JOIN product_variation pv ON p.product_id = pv.product_id WHERE pv.variation_id = ?');
-            $stm->execute([$variation_id]);
-            $product = $stm->fetch();
-            if ($product) {
-                $total_amount += $product->price * $quantity;
-            }
-        }
-        $total_amount += $shipping_fee;
-
-        $stm = $_db->prepare('
-            INSERT INTO `order` (user_id, created_at, status, shipping_fee, total_amount, address_id)
-            VALUES (?, NOW(), "Pending", ?, ?, ?)
-        ');
-        $stm->execute([$user_id, $shipping_fee, $total_amount, $address_id]);
-        $order_id = $_db->lastInsertId();
-
-        $stm = $_db->prepare('
-            INSERT INTO order_items (order_id, product_id, quantity)
-            VALUES (?, ?, ?)
-        ');
-        foreach ($cart as $variation_id => $item) {
-            $quantity = is_array($item) ? $item['quantity'] : $item;
-            $stmProd = $_db->prepare('
-                SELECT p.product_id FROM product p JOIN product_variation pv ON p.product_id = pv.product_id WHERE pv.variation_id = ?
-            ');
-            $stmProd->execute([$variation_id]);
-            $product = $stmProd->fetch();
-            if ($product) {
-                $stm->execute([$order_id, $product->product_id, $quantity]);
-            }
-        }
-
-        $_db->commit();
-        set_cart();
-        temp('info', 'Order placed successfully!');
         redirect("payment.php");
     }
 }
@@ -80,14 +43,14 @@ $total = 0;
 $total_items = 0;
 $shipping_fee = 10.00;
 $stm = $_db->prepare('
-    SELECT p.product_id, p.name, p.description, p.price,
-           pv.color, pv.size, pv.product_photo
+    SELECT p.product_id, p.name, p.description, p.price, pv.color, pv.size, pv.product_photo
     FROM product p
     JOIN product_variation pv ON p.product_id = pv.product_id
     WHERE pv.variation_id = ?
 ');
 foreach ($cart as $variation_id => $item) {
-    $quantity = is_array($item) ? $item['quantity'] : $item;
+    $variation_id = $item->variation_id;
+    $quantity = $item->quantity;
     $stm->execute([$variation_id]);
     $product = $stm->fetch();
     if ($product) {
@@ -113,7 +76,7 @@ include '../../_head.php';
 <link rel="stylesheet" href="/css/checkout.css">
 
 <div class="checkout-container">
-    <form action="payment.php" method="post" class="checkout-form">
+    <form method="post" class="checkout-form">
         <div class="checkout-left">
             <h2>Your Info</h2>
             <p><strong>Name:</strong> <?= $user->name ?></p>
