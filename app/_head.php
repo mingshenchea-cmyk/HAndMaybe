@@ -46,7 +46,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     </header>
 
     <?php 
-        if ($currentPage == 'shoppingCart.php' || $currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
+        if ($currentPage == 'shopping_cart.php' || $currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
     ?>
         <nav>
             <div class="menu">
