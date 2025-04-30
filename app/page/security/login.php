@@ -1,5 +1,5 @@
 <?php
-include '_base.php';
+include '../../_base.php';
 
 // ----------------------------------------------------------------------------
 
@@ -32,9 +32,9 @@ if (is_post()) {
         if ($u) {
             temp('info', 'Login successfully!');
             if ($u->role == 'Admin') {
-                login($u, 'member_maintenance.php'); 
+                login($u, '../member_maintenance.php'); 
             } else {
-                login($u, 'page/profile.php'); 
+                login($u, '/'); 
             }
         }
         else {
@@ -44,12 +44,12 @@ if (is_post()) {
 }
 
 // ----------------------------------------------------------------------------
-include '_head.php';
+include '../../_head.php';
 
 $_title = 'Login';
 ?>
 
-<link rel="stylesheet" href="/css/authorization.css">
+<link rel="stylesheet" href="/css/security.css">
 
 <div class="auth-container">
     <div class="auth-form">
@@ -68,9 +68,10 @@ $_title = 'Login';
                 <button type="submit">Login</button>
                 <button type="reset">Reset</button>
             </div>
+        <p>Forgot your password? Reset password <a href="reset.php">here!</a></p>
         </form>
     </div>
 </div>
 
 <?php
-include '_foot.php';
+include '../../_foot.php';

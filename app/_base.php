@@ -72,6 +72,10 @@ function auth(...$roles) {
     redirect('/login.php');
 }
 
+function generate_token($length = 64) {
+    return bin2hex(random_bytes($length / 2));
+}
+
 // ============================================================================
 // General Page Functions
 // ============================================================================
@@ -269,8 +273,7 @@ function err($key)
 // print_r($_product);
 
 
-// Range 1-10 shopping cart
-$_units = array_combine(range(1, 10), range(1, 10));
+
 
 // ============================================================================
 // Shopping Cart
@@ -417,4 +420,30 @@ function deleteProductVariation($product_id, $color) {
     global $_db;
     $stmt = $_db->prepare("DELETE FROM product_variation WHERE product_id = ? AND color = ?");
     return $stmt->execute([$product_id, $color]);
+}
+
+// ============================================================================
+// Email Functions
+// ============================================================================
+
+// Demo Accounts:
+// --------------
+// minglilau9@gmail.com           rdkf jgxx ynwa wzgc
+
+// Initialize and return mail object
+function get_mail() {
+    require_once 'lib/PHPMailer.php';
+    require_once 'lib/SMTP.php';
+
+    $m = new PHPMailer(true);
+    $m->isSMTP();
+    $m->SMTPAuth = true;
+    $m->Host = 'smtp.gmail.com';
+    $m->Port = 587;
+    $m->Username = 'minglilau9@gmail.com';
+    $m->Password = 'rdkf jgxx ynwa wzgc';
+    $m->CharSet = 'utf-8';
+    $m->setFrom($m->Username, 'H&Maybe Admin 🐧');
+
+    return $m;
 }
