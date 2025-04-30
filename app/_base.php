@@ -69,7 +69,7 @@ function auth(...$roles) {
         }
     }
     
-    redirect('/login.php');
+    redirect('/page/security/login.php');
 }
 
 function generate_token($length = 64) {
