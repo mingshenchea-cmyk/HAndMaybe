@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2025 at 06:40 PM
+-- Generation Time: Apr 30, 2025 at 10:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,7 +67,10 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`cart_id`, `user_id`, `created_at`) VALUES
-(1, 1, '2025-04-28 00:30:10.000000');
+(1, 1, '2025-04-28 00:30:10.000000'),
+(3, 5, '2025-05-01 01:27:46.000000'),
+(4, 6, '2025-05-01 01:34:57.000000'),
+(5, 7, '2025-05-01 03:24:30.000000');
 
 -- --------------------------------------------------------
 
@@ -89,7 +92,32 @@ CREATE TABLE `cart_items` (
 INSERT INTO `cart_items` (`cart_item_id`, `cart_id`, `variation_id`, `quantity`) VALUES
 (1, 1, 1, 2),
 (2, 1, 2, 2),
-(3, 1, 3, 2);
+(3, 1, 3, 2),
+(4, 3, 11, 1),
+(5, 3, 16, 2),
+(6, 4, 6, 1),
+(7, 5, 61, 1),
+(8, 5, 16, 1),
+(9, 5, 6, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category`
+--
+
+CREATE TABLE `category` (
+  `category_id` int(5) NOT NULL,
+  `category` char(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`category_id`, `category`) VALUES
+(1, 'Women'),
+(2, 'Men');
 
 -- --------------------------------------------------------
 
@@ -141,7 +169,7 @@ CREATE TABLE `password_reset_tokens` (
 CREATE TABLE `product` (
   `product_id` int(5) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `category` varchar(10) NOT NULL,
+  `category_id` int(5) NOT NULL,
   `description` varchar(200) NOT NULL,
   `price` float NOT NULL,
   `created_at` datetime(6) NOT NULL
@@ -151,15 +179,16 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`product_id`, `name`, `category`, `description`, `price`, `created_at`) VALUES
-(1, 'Classic Crew T-Shirt', 'Men', 'Timeless and versatile, this soft cotton crewneck tee is perfect for everyday wear.', 24.9, '2025-03-16 01:35:00.000000'),
-(2, 'V-Neck Essential Tee', 'Men', 'A sleek V-neck t-shirt made from a soft cotton blend, ideal for casual or layered looks.', 29.9, '2025-03-16 02:16:00.000000'),
-(3, 'Slim Fit Jeans', 'Men', 'Classic slim-fit jeans crafted from durable denim for everyday comfort. Available in light, medium, and dark washes.', 99.9, '2025-03-16 02:16:00.000000'),
-(4, 'Cargo Pants', 'Men', 'Stylish cargo pants featuring multiple pockets for functionality. Perfect for casual and outdoor wear.', 79.9, '2025-03-16 01:12:00.000000'),
-(5, 'High-Waisted Skirt', 'Women', 'Chic high-waisted skirt with a sleek silhouette, ideal for both office and casual looks.', 79.9, '2025-03-16 04:56:00.000000'),
-(6, 'Athletic Joggers', 'Women', 'Comfortable athletic joggers made from soft, stretchable fabric. Ideal for workouts or lounging.', 69.9, '2025-03-16 00:16:00.000000'),
-(7, 'Graphic Print Tee', 'Women', 'Stand out with a bold graphic print, crafted from breathable fabric for all-day comfort.', 54.9, '2025-03-16 01:16:00.000000'),
-(8, 'Cropped V-Neck T-Shirt', 'Women', 'Minimalist cropped V-neck T-shirt made from soft cotton, perfect for a casual, everyday look.', 27.9, '2025-03-16 00:38:00.000000');
+INSERT INTO `product` (`product_id`, `name`, `category_id`, `description`, `price`, `created_at`) VALUES
+(1, 'Classic Crew T-Shirt', 2, 'Timeless and versatile, this soft cotton crewneck tee is perfect for everyday wear.', 24.9, '2025-03-16 01:35:00.000000'),
+(2, 'V-Neck Essential Tee', 2, 'A sleek V-neck t-shirt made from a soft cotton blend, ideal for casual or layered looks.', 29.9, '2025-03-16 02:16:00.000000'),
+(3, 'Slim Fit Jeans', 2, 'Classic slim-fit jeans crafted from durable denim for everyday comfort. Available in light, medium, and dark washes.', 99.9, '2025-03-16 02:16:00.000000'),
+(4, 'Cargo Pants', 2, 'Stylish cargo pants featuring multiple pockets for functionality. Perfect for casual and outdoor wear.', 79.9, '2025-03-16 01:12:00.000000'),
+(5, 'High-Waisted Skirt', 1, 'Chic high-waisted skirt with a sleek silhouette, ideal for both office and casual looks.', 79.9, '2025-03-16 04:56:00.000000'),
+(6, 'Athletic Joggers', 1, 'Comfortable athletic joggers made from soft, stretchable fabric. Ideal for workouts or lounging.', 69.9, '2025-03-16 00:16:00.000000'),
+(7, 'Graphic Print Tee', 1, 'Stand out with a bold graphic print, crafted from breathable fabric for all-day comfort.', 54.9, '2025-03-16 01:16:00.000000'),
+(8, 'Cropped V-Neck T-Shirt', 1, 'Minimalist cropped V-neck T-shirt made from soft cotton, perfect for a casual, everyday look.', 27.9, '2025-03-16 00:38:00.000000'),
+(9, 'Long Shirt', 2, 'A long shirt.', 39.9, '2025-05-01 02:16:24.000000');
 
 -- --------------------------------------------------------
 
@@ -310,7 +339,8 @@ INSERT INTO `user` (`user_id`, `role`, `name`, `password`, `age`, `gender`, `pho
 (3, 'Member', 'Elaine Pang', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'F', 184012398, 'ep@gmail.com', 'ep_pfp.png'),
 (4, 'Member', 'Sum Ting Wong', '8cb2237d0679ca88db6464eac60da96345513964', 30, 'M', 175419326, 'stw@gmail.com', 'stw_pfp.png'),
 (5, 'Member', 'Ho Lee Fuk', '8cb2237d0679ca88db6464eac60da96345513964', 25, 'F', 190213092, 'hlf@gmail.com', 'hlf_pfp.png'),
-(6, 'Member', 'Ming Li Test', '7c4a8d09ca3762af61e59520943dc26494f8941b', 21, 'F', 123456789, 'minglilau9@gmail.com', '68113af564a0d.jpg');
+(6, 'Member', 'Ming Li Test', '7c4a8d09ca3762af61e59520943dc26494f8941b', 21, 'F', 123456789, 'minglilau9@gmail.com', '68113af564a0d.jpg'),
+(7, 'Member', 'tung', '7869a357b954e36df60655b17ef3ac09d6e600dd', 12, 'M', 123456789, 'tung@gmail.com', '68126e795d830.jpg');
 
 --
 -- Indexes for dumped tables
@@ -339,6 +369,12 @@ ALTER TABLE `cart_items`
   ADD KEY `variation_id` (`variation_id`);
 
 --
+-- Indexes for table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`category_id`);
+
+--
 -- Indexes for table `order`
 --
 ALTER TABLE `order`
@@ -365,7 +401,8 @@ ALTER TABLE `password_reset_tokens`
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
-  ADD PRIMARY KEY (`product_id`);
+  ADD PRIMARY KEY (`product_id`),
+  ADD KEY `category_id` (`category_id`);
 
 --
 -- Indexes for table `product_variation`
@@ -394,13 +431,19 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cart_item_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `category`
+--
+ALTER TABLE `category`
+  MODIFY `category_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order`
@@ -418,7 +461,7 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `product_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `product_variation`
@@ -430,7 +473,7 @@ ALTER TABLE `product_variation`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
@@ -468,6 +511,12 @@ ALTER TABLE `order_items`
 --
 ALTER TABLE `password_reset_tokens`
   ADD CONSTRAINT `password_reset_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`);
 
 --
 -- Constraints for table `product_variation`
