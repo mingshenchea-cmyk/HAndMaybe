@@ -1,5 +1,5 @@
 <?php
-include '../_base.php';
+include '../../_base.php';
 
 // ----------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ if (is_post()) {
 
         // (1) Delete and save photo --> optional
         if ($f) {
-            unlink("../photos/$profile_photo");
+            unlink("../../photos/$profile_photo");
             $profile_photo = save_photo($f, '../photos');
         }
         
@@ -121,7 +121,7 @@ if (is_post()) {
 // ----------------------------------------------------------------------------
 
 $_title = 'User | Profile';
-include '../_head.php';
+include '../../_head.php';
 ?>
 
 <link rel="stylesheet" href="/css/profile.css">
@@ -133,7 +133,7 @@ include '../_head.php';
         <label for="profile_photo">Photo</label>
         <label class="upload" tabindex="0">
             <?= html_file('profile_photo', 'image/*', 'hidden') ?>
-            <img src="../photos/<?= $profile_photo ?>" alt="Profile Photo">
+            <img src="../../photos/<?= $profile_photo ?>" alt="Profile Photo">
         </label>
         <?= err('profile_photo') ?>
 
@@ -166,10 +166,13 @@ include '../_head.php';
         <div class="form-buttons">
             <button>Update</button>
             <button type="reset">Reset</button>
-            <a href="../logout.php" class="logout-btn">Log Out</a>
+            <div class="links">
+                <a href="password.php" class="password-btn">Update password</a>
+                <a href="../security/logout.php" class="logout-btn">Log Out</a>
+            </div>
         </div>
     </div>
 </form>
 
 <?php
-include '../_foot.php';
+include '../../_foot.php';

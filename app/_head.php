@@ -23,12 +23,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
         <div class="right-nav">
             <?php if (!$_user): ?>
-                <a href="/login.php" class="nav-item">
+                <a href="/page/security/login.php" class="nav-item">
                     <img src="/images/profile-icon.webp" alt="Sign In" class="nav-icon">
                     <p class="sign_in">Sign in</p>
                 </a>
             <?php else: ?>
-                <a href="/page/profile.php" class="nav-item">
+                <a href="/page/user/profile.php" class="nav-item">
                     <img src="/images/profile-icon.webp" alt="Profile" class="nav-icon">
                     <p class="profile">Profile</p>
                 </a>
