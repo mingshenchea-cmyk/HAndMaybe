@@ -1,16 +1,16 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 //-----------------------------------------------------------------------------
 
 
 
 //-----------------------------------------------------------------------------
 // Include the header
-include '../_head.php';
+include '../../_head.php';
 ?>
 
 
 <?php
 // Include the footer
-include '../_foot.php';
+include '../../_foot.php';
 ?>
