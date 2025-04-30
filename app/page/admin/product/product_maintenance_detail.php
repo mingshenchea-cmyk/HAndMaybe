@@ -37,16 +37,40 @@ include '../../../_head.php';
                             // Check if the form is submitted to update
                             if (is_post() && isset($_POST['action']) && post('action') == 'save'):
                                 $new_name = req('product_name');
-                                $new_name = ucwords(strtolower($new_name));
 
                                 $new_price = req('product_price');
-                                $new_price = number_format((float) $new_price, 2, '.', '');
 
                                 $new_description = req('product_description');
+
+                                ?>
+
+                                <?php if ($new_name == ''):
+                                    $_err['product_name'] = "Required";
+                                    ?>
+                                <?php endif ?>
+
+                                <?php if ($new_price == ''):
+                                    $_err['product_price'] = "Required";
+                                    ?>
+                                <?php endif ?>
+
+                                <?php if (!is_numeric($new_price) || (float) $new_price < 0):
+                                    $_err['product_price'] = "Enter a valid price";
+                                    ?>
+                                <?php endif ?>
+
+                                <?php if ($new_description == ''):
+                                    $_err['product_description'] = "Required";
+                                    ?>
+                                <?php endif ?>
+
+                                <?php
+                                $new_name = ucwords(strtolower($new_name));
+                                $new_price = number_format((float) $new_price, 2, '.', '');
+
                                 // Capitalize the first letter of the first word
                                 $new_description = ucfirst(strtolower(trim($new_description)));
-                                ?>
-                                <?php
+
                                 // Ensure the sentence ends with a period
                                 if (substr($new_description, -1) !== '.'):
                                     $new_description .= '.'; ?>
@@ -57,8 +81,7 @@ include '../../../_head.php';
                                 $new_color = req('product_color');
 
                                 $photo_tmp_path = $_FILES['product_photo']['tmp_name'];
-                                $photo_name = basename($_FILES['product_photo']['name']);
-                                $photo_destination = "/images/" . $photo_name;
+                                $photo_destination = basename($_FILES['product_photo']['name']);
                                 ?>
 
                                 <?php if (isset($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK): ?>
