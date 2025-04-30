@@ -31,14 +31,15 @@ if (is_post()) {
             );
             $stm->execute([$token, $u->user_id, $expiry]);
 
-            $link = "localhost:8000/reset_password.php?token=$token";
+            $link = "http://localhost:8000/page/security/reset_password.php?token=$token";
             $m = get_mail();
             $m->addAddress($u->email);
             $m->Subject = "H&Maybe account password reset";
+            $m->isHTML(true);
             $m->Body = "Click this link to reset your password: <a href='$link'>RESET PASSWORD LINK</a>";
             $m->send();
 
-            temp('info', 'Email sent');
+            temp('sent', 'Email sent');
         }
         else {
             $_err['email'] = 'Email does not exist!';
@@ -57,6 +58,9 @@ $_title = 'Password Reset';
 <div class="auth-container">
     <div class="auth-form">
         <h2><?php echo $_title; ?></h2>
+        <?php if ($msg = temp('sent')): ?>
+            <div class="flash success"><?= $msg ?></div>
+        <?php endif; ?>
         <form method="post" class="form">
             <label for="email">Email</label>
             <?= html_text('email', 'maxlength="100"') ?>

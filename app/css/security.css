@@ -138,13 +138,22 @@
     text-decoration: underline;
 }
 
-/* Error Messages */
+/* Messages */
 .err {
     color: #dc3545;
     font-size: 12px;
     margin-top: -10px;
     margin-bottom: 10px;
     display: block;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    border: 1px solid #28a745;
+    color: #155724;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
 }
 
 /* Responsive Adjustments */
