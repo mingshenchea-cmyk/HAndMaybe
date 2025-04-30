@@ -147,3 +147,28 @@ nav input:focus {
 .index1{
     width: 100px;
 }
+
+#info {
+    position: fixed;
+    background-color: #d4edda;
+    border: 1px solid #28a745;
+    color: #155724;
+    border-radius: 5px;
+    padding: 10px 20px;
+    left: 50%;
+    translate: -50% 0;
+    z-index: 999;
+    top: -100px;
+    opacity: 0;
+}
+
+#info:not(:empty) {
+    animation: fade 5s;
+}
+
+@keyframes fade {
+    0% { top: -100px; opacity: 0; }
+    10% { top: 100px; opacity: 1; }
+    90% { top: 100px; opacity: 1; }
+    100% { top: -100px; opacity: 0; }
+}

@@ -17,6 +17,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 <body>
     <header>
+        <div id="info"><?= temp('info') ?></div>
+
         <a href="/index.php">
             <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
         </a>

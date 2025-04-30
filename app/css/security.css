@@ -147,15 +147,6 @@
     display: block;
 }
 
-.flash.success {
-    background-color: #d4edda;
-    border: 1px solid #28a745;
-    color: #155724;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-}
-
 /* Responsive Adjustments */
 @media (max-width: 480px) {
     .auth-container {

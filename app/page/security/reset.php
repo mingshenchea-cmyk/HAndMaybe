@@ -39,7 +39,7 @@ if (is_post()) {
             $m->Body = "Click this link to reset your password: <a href='$link'>RESET PASSWORD LINK</a>";
             $m->send();
 
-            temp('sent', 'Email sent');
+            temp('info', 'Email Sent');
         }
         else {
             $_err['email'] = 'Email does not exist!';
@@ -58,9 +58,6 @@ $_title = 'Password Reset';
 <div class="auth-container">
     <div class="auth-form">
         <h2><?php echo $_title; ?></h2>
-        <?php if ($msg = temp('sent')): ?>
-            <div class="flash success"><?= $msg ?></div>
-        <?php endif; ?>
         <form method="post" class="form">
             <label for="email">Email</label>
             <?= html_text('email', 'maxlength="100"') ?>
