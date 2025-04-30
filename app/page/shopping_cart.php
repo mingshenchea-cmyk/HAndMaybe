@@ -25,7 +25,7 @@ if (is_post()) {
 $_title = 'My Cart';
 include '../_head.php';
 ?>
-<link rel="stylesheet" href="../css/shoppingCart.css">
+<link rel="stylesheet" href="../css/shoppingcart.css">
 
 <div class="shopping-cart">
     <h1 class="cart-header">My Cart</h1>
