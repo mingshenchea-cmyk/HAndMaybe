@@ -130,3 +130,7 @@ nav input::placeholder {
 nav input:focus {
     outline: none;
 }
+
+.err{
+    color: red;
+}

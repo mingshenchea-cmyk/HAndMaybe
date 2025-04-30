@@ -6,7 +6,7 @@ $_product = getAllProducts();
 $_product_variation = getAllProductVariations();
 
 $category = get('category');
-$query = get('query'); 
+$query = get('query');
 $color_shown = [];
 
 //-----------------------------------------------------------------------------
@@ -14,43 +14,47 @@ $color_shown = [];
 include '../_head.php';
 ?>
 
-<div class="container">
-    <?php
-    foreach ($_product as $product) {
-        foreach ($_product_variation as $variation) {
-            // Check if searching or category filtering
-            $shouldDisplay = false;
+<link rel="stylesheet" href="/css/product.css">
 
-            if (!empty($query)) {
+<div class="container">
+    <?php foreach ($_product as $product):
+        foreach ($_product_variation as $variation): ?>
+            <!-- Check if searching or category filtering -->
+            <?= $shouldDisplay = false; ?>
+
+            <?php if (!empty($query)): ?>
+                <?php
                 // If there is a search keyword
                 if (stripos($product->name, $query) !== false) {
                     $shouldDisplay = true;
                 }
-            } elseif (!empty($category)) {
+                ?>
+            <?php elseif (!empty($category)): ?>
+                <?php
                 // If there is a category
                 if ($product->category == $category) {
                     $shouldDisplay = true;
                 }
-            }
+                ?>
+            <?php endif ?>
 
-            // If product should be displayed based on search or category
-            if ($shouldDisplay) {
-                if ($product->product_id == $variation->product_id) {
-                    if ($variation->color !== $color_shown) {
-                        $color_shown = $variation->color;
-                        echo "<div class='product'>";
-                        echo "<a href='../page/product_detail.php?variation_id=" . $variation->variation_id . "&color=" . $color_shown . "' class='product_link'>";
-                        echo "<img class='product_photo' src='" . $variation->product_photo . "' alt='" . $product->name . "'>";
-                        echo "<p class='name'>" . $product->name . "</p>";
-                        echo "<p class='price'>RM" . number_format($product->price, 2) . "</p>";
-                        echo "</a>";
-                        echo "</div>";
-                    }
-                }
-            }
-        }
-    }
-    ?>
+            <!-- If product should be displayed based on search or category -->
+            <?php if ($shouldDisplay): ?>
+                <?php if ($product->product_id == $variation->product_id): ?>
+                    <?php if ($variation->color !== $color_shown): ?>
+                        <?php $color_shown = $variation->color; ?>
+                        <div class='product'>
+                            <a href="../page/product_detail.php?variation_id=<?= $variation->variation_id ?>&color=<?=$color_shown?>" class='product_link'>
+                                <img class="product_photo" src="<?= $variation->product_photo ?>" alt="<?= $product->name ?>">
+                                <p class="name"><?= $product->name ?></p>
+                                <p class="price">RM<?= number_format($product->price, 2)?></p>
+                            </a>
+                        </div>
+                    <?php endif ?>
+                <?php endif ?>
+            <?php endif ?>
+        <?php endforeach ?>
+    <?php endforeach ?>
 </div>
 
 </html>

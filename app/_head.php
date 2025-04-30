@@ -11,7 +11,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <title>H&Maybe | Women's, Men's & Kids' Fashion | H&Maybe MY</title>
     <link rel="icon" href="/images/HAndMaybe.png">
     <link rel="stylesheet" href="/css/handmaybe.css">
-    <link rel="stylesheet" href="/css/product.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/handmaybe.js"></script>
 </head>
@@ -77,14 +76,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <a href="../page/order_maintenance.php">Order Maintenance</a>
             </div>
 
-            <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):
-            echo '<div class="search">';
-                echo '<form action="product_maintenance.php" method="GET" class="search_product">';
-                    echo '<img src="/images/search.jpg" class="search_icon">';
-                    echo '<input type="text" name="query" placeholder="Search" id="searchInput">';
-                echo '</form>';
-            echo '</div>';
-            ?>
+            <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):?>
+            <div class="search">
+                <form action="product_maintenance.php" method="GET" class="search_product">
+                    <img src="/images/search.jpg" class="search_icon">
+                    <input type="text" name="query" placeholder="Search" id="searchInput">
+                </form>
+            </div>
             <?php endif; ?>
         </nav>
     <?php endif; ?>

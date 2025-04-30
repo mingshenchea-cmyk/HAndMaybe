@@ -2,7 +2,7 @@
 require '_base.php';
 //-----------------------------------------------------------------------------
 
-$user_id = $_SESSION['user_id'] ?? 1;
+$user_id = $_SESSION['user_id'];
 $cart_id = null;
 $variation_id = post('variation_id');
 $quantity = 1;
