@@ -1,11 +1,10 @@
 <?php
-include '.././_base.php';
+include '../../_base.php';
 auth('Member');
 
 $user_id = $_user->user_id;
 $cart = get_cart();
 
-// Redirect if cart is empty
 if (!$cart) redirect('shopping_cart.php');
 
 if (is_post()) {
@@ -16,16 +15,13 @@ if (is_post()) {
     $country = req('country');
     $shipping_fee = 10.00;
 
-    // Basic validation (optional: improve later)
     if (!$address_line1 || !$city || !$state || !$postal_code || !$country) {
         $_err['address'] = 'All address fields are required.';
     }
 
     if (!$_err) {
-        // Start transaction
         $_db->beginTransaction();
 
-        // 1. Insert address
         $stm = $_db->prepare('
             INSERT INTO address (user_id, address_line1, city, state, postal_code, country)
             VALUES (?, ?, ?, ?, ?, ?)
@@ -33,7 +29,6 @@ if (is_post()) {
         $stm->execute([$user_id, $address_line1, $city, $state, $postal_code, $country]);
         $address_id = $_db->lastInsertId();
 
-        // 2. Insert order
         $total_amount = 0;
         foreach ($cart as $variation_id => $item) {
             $quantity = is_array($item) ? $item['quantity'] : $item;
@@ -53,38 +48,33 @@ if (is_post()) {
         $stm->execute([$user_id, $shipping_fee, $total_amount, $address_id]);
         $order_id = $_db->lastInsertId();
 
-        // 3. Insert order_items
         $stm = $_db->prepare('
             INSERT INTO order_items (order_id, product_id, quantity)
             VALUES (?, ?, ?)
         ');
         foreach ($cart as $variation_id => $item) {
             $quantity = is_array($item) ? $item['quantity'] : $item;
-
             $stmProd = $_db->prepare('
                 SELECT p.product_id FROM product p JOIN product_variation pv ON p.product_id = pv.product_id WHERE pv.variation_id = ?
             ');
             $stmProd->execute([$variation_id]);
             $product = $stmProd->fetch();
-
             if ($product) {
                 $stm->execute([$order_id, $product->product_id, $quantity]);
             }
         }
 
         $_db->commit();
-        set_cart(); // clear cart
+        set_cart();
         temp('info', 'Order placed successfully!');
         redirect("order_detail.php?id=$order_id");
     }
 }
 
-// Fetch current user info
 $stm = $_db->prepare('SELECT name, email, phone_no FROM user WHERE user_id = ?');
 $stm->execute([$user_id]);
 $user = $stm->fetch();
 
-// Prepare cart details
 $cart_items = [];
 $total = 0;
 $shipping_fee = 10.00;
@@ -118,7 +108,7 @@ foreach ($cart as $variation_id => $item) {
 $_title = 'Checkout';
 include '../../_head.php';
 ?>
-<link rel="stylesheet" href="../css/checkout.css">
+<link rel="stylesheet" href="/css/checkout.css">
 
 <div class="checkout-container">
     <form method="post" class="checkout-form">
@@ -138,10 +128,14 @@ include '../../_head.php';
         </div>
 
         <div class="checkout-right">
-            <h2>Cart Summary</h2>
+            <div class="summary-header">
+                <h2>Cart Summary</h2>
+                <a href="shopping_cart.php" class="edit-cart-btn">Edit Cart</a>
+            </div>
+
             <?php foreach ($cart_items as $item): ?>
                 <div class="checkout-item">
-                    <img src="<?= $item['photo'] ?>" class="checkout-item-photo">
+                    <img src="/images/<?= $item['photo'] ?>" class="checkout-item-photo">
                     <div class="checkout-item-info">
                         <h4><?= $item['name'] ?></h4>
                         <p><?= $item['description'] ?></p>
@@ -158,7 +152,6 @@ include '../../_head.php';
                 <p>Shipping Fee: RM<?= number_format($shipping_fee, 2) ?></p>
                 <h3>Total: RM<?= number_format($total + $shipping_fee, 2) ?></h3>
                 <button type="submit" class="pay-btn">Pay Now</button>
-                <a href="shopping_cart.php" class="edit-cart-btn">Edit Cart</a>
             </div>
         </div>
     </form>
