@@ -1,5 +1,5 @@
 <?php
-include '_base.php';
+include '../../_base.php';
 
 // ----------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ if (is_post()) {
 
 // ----------------------------------------------------------------------------
 
-include '_head.php';
+include '../../_head.php';
 
 $_title = 'User | Register Member';
 ?>
@@ -176,4 +176,4 @@ $_title = 'User | Register Member';
 </div>
 
 <?php
-include '_foot.php';
+include '../../_foot.php';

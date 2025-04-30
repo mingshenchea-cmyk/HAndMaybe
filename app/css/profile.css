@@ -95,14 +95,46 @@
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
+    height: 40px; 
+    margin-top: 10px;
 }
 
 .profile-container button[type="reset"] {
     background-color: #6c757d;
 }
 
-.profile-container .logout-btn {
-    color: #e74c3c;
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end; 
+}
+
+.links a {
+    text-decoration: none;
+    padding: 5px 10px;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.links .password-btn:hover {
+    background-color: #2980b9;
+}
+
+.links .logout-btn:hover {
+    background-color: #b92929;
+}
+
+.links .password-btn {
+    background-color: #5a86ff;
+}
+
+.links .logout-btn {
+    background-color: #ff1900;
 }
 
 .profile-container button:hover {
