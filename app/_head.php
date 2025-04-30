@@ -33,7 +33,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <p class="profile">Profile</p>
                 </a>
             <?php endif ?>
-            <a href="../page/shoppingCart.php" class="nav-item">
+            <a href="/page/shoppingCart.php" class="nav-item">
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
                 <?php
