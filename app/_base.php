@@ -270,8 +270,8 @@ function getAllProductVariations() {
 // ============================================================================
 // Add to cart function
 // ============================================================================
-function add_to_cart($variation_id, $quantity = 1){
-    $user_id = $_SESSION['user_id'];
+function add_to_cart($variation_id, $quantity = 1, $category){
+    $user_id = $_SESSION['user_id'] ?? 1;
     $cart_id = null;
     $variation_id = post('variation_id');
     $quantity = 1;
@@ -279,7 +279,7 @@ function add_to_cart($variation_id, $quantity = 1){
     if (!$user_id) {
         // If not logged in, redirect to login page
         header('Location: ../page/login.php');
-        exit;
+        exit();
     }
 
     // Check if user already has a cart
@@ -321,8 +321,8 @@ function add_to_cart($variation_id, $quantity = 1){
     }
 
     // Redirect back to product page or cart page
-    header('Location: ../page/product_detail.php');
-    exit;
+    header("Location: ../page/product.php?category=$category");
+    exit();
 }
 // ============================================================================
 // Product Maintenance function
