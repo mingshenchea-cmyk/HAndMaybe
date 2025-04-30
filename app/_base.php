@@ -336,27 +336,27 @@ function getAllProductVariations() {
 // ============================================================================
 // Add to cart function
 // ============================================================================
-function add_to_cart($variation_id, $quantity = 1){
-    $user_id = $_SESSION['user_id'];
-    $cart_id = null;
+function add_to_cart($variation_id, $quantity = 1, $category){
+    global $_user;
+    //$user_id = $_SESSION['user_id'] ?? 1;
+    //$cart_id = null;
     $variation_id = post('variation_id');
     $quantity = 1;
 
-    if (!$user_id) {
+    if (!$_user) {
         // If not logged in, redirect to login page
-        header('Location: ../page/login.php');
-        exit;
+        redirect('../login.php');
     }
 
     // Check if user already has a cart
     global $_db;
     $stmt = $_db->prepare("SELECT * FROM cart WHERE user_id = ?");
-    $stmt->execute([$user_id]);  // Bind $user_id to the query
+    $stmt->execute([$_user->user_id]);  // Bind user id to the query
     $cart = $stmt->fetch();  // Fetch the result
 
     if (!$cart) {
         $stmt = $_db->prepare("INSERT INTO cart (user_id, created_at) VALUES (?, NOW())");
-        $stmt->execute([$user_id]);
+        $stmt->execute([$_user->user_id]);
 
         // Get the last inserted cart_id
         $cart_id = $_db->lastInsertId();
@@ -375,7 +375,7 @@ function add_to_cart($variation_id, $quantity = 1){
         $stmt->execute([$quantity, $cart_item->cart_item_id]);
 
         // Set success message for updating quantity
-        $_SESSION['cart_message'] = "Item quantity updated in your cart.";
+        //$_SESSION['cart_message'] = "Item quantity updated in your cart.";
     } else {
         // If item not exists, insert new item
         $stmt = $_db->prepare("INSERT INTO cart_items (cart_id, variation_id, quantity) VALUES (?, ?, ?)");
@@ -383,12 +383,12 @@ function add_to_cart($variation_id, $quantity = 1){
 
         
         // Set success message for adding new item
-        $_SESSION['cart_message'] = "Item added to your cart.";
+        //$_SESSION['cart_message'] = "Item added to your cart.";
     }
 
     // Redirect back to product page or cart page
-    header('Location: ../page/product_detail.php');
-    exit;
+    header("Location: ../page/product.php?category=$category");
+    exit();
 }
 // ============================================================================
 // Product Maintenance function

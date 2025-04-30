@@ -11,21 +11,29 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <title>H&Maybe | Women's, Men's & Kids' Fashion | H&Maybe MY</title>
     <link rel="icon" href="/images/HAndMaybe.png">
     <link rel="stylesheet" href="/css/handmaybe.css">
-    <link rel="stylesheet" href="/css/product.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/handmaybe.js"></script>
 </head>
 
 <body>
     <header>
-        <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
+        <a href="/index.php">
+            <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
+        </a>
 
         <div class="right-nav">
-            <a href="/login.php" class="nav-item">
-                <img src="/images/profile-icon.webp" alt="Sign In" class="nav-icon">
-                <p class="sign_in">Sign in</p>
-            </a>
-            <a href="../page/shopping_cart.php" class="nav-item">
+            <?php if (!$_user): ?>
+                <a href="/page/security/login.php" class="nav-item">
+                    <img src="/images/profile-icon.webp" alt="Sign In" class="nav-icon">
+                    <p class="sign_in">Sign in</p>
+                </a>
+            <?php else: ?>
+                <a href="/page/user/profile.php" class="nav-item">
+                    <img src="/images/profile-icon.webp" alt="Profile" class="nav-icon">
+                    <p class="profile">Profile</p>
+                </a>
+            <?php endif ?>
+            <a href="../page/shoppingCart.php" class="nav-item">
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
                 <?php
@@ -38,7 +46,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     </header>
 
     <?php 
-        if ($currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
+        if ($currentPage == 'shoppingCart.php' || $currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
     ?>
         <nav>
             <div class="menu">
@@ -68,14 +76,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <a href="../page/order_maintenance.php">Order Maintenance</a>
             </div>
 
-            <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):
-            echo '<div class="search">';
-                echo '<form action="product_maintenance.php" method="GET" class="search_product">';
-                    echo '<img src="/images/search.jpg" class="search_icon">';
-                    echo '<input type="text" name="query" placeholder="Search" id="searchInput">';
-                echo '</form>';
-            echo '</div>';
-            ?>
+            <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):?>
+            <div class="search">
+                <form action="product_maintenance.php" method="GET" class="search_product">
+                    <img src="/images/search.jpg" class="search_icon">
+                    <input type="text" name="query" placeholder="Search" id="searchInput">
+                </form>
+            </div>
             <?php endif; ?>
         </nav>
     <?php endif; ?>

@@ -1,5 +1,5 @@
 <?php
-include '_base.php';
+include '../../_base.php';
 
 // ----------------------------------------------------------------------------
 
@@ -32,9 +32,9 @@ if (is_post()) {
         if ($u) {
             temp('info', 'Login successfully!');
             if ($u->role == 'Admin') {
-                login($u, 'member_maintenance.php'); 
+                login($u, '../member_maintenance.php'); 
             } else {
-                login($u, 'page/profile.php'); 
+                login($u, '/'); 
             }
         }
         else {
@@ -44,7 +44,7 @@ if (is_post()) {
 }
 
 // ----------------------------------------------------------------------------
-include '_head.php';
+include '../../_head.php';
 
 $_title = 'Login';
 ?>
@@ -73,4 +73,4 @@ $_title = 'Login';
 </div>
 
 <?php
-include '_foot.php';
+include '../../_foot.php';
