@@ -67,7 +67,7 @@ if (is_post()) {
         $_db->commit();
         set_cart();
         temp('info', 'Order placed successfully!');
-        redirect("order_detail.php?id=$order_id");
+        redirect("payment.php");
     }
 }
 
@@ -113,7 +113,7 @@ include '../../_head.php';
 <link rel="stylesheet" href="/css/checkout.css">
 
 <div class="checkout-container">
-    <form method="post" class="checkout-form">
+    <form action="payment.php" method="post" class="checkout-form">
         <div class="checkout-left">
             <h2>Your Info</h2>
             <p><strong>Name:</strong> <?= $user->name ?></p>

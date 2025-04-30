@@ -31,7 +31,7 @@ if (is_post()) {
             );
             $stm->execute([$token, $u->user_id, $expiry]);
 
-            $link = "http://localhost:8000/page/security/reset_password.php?token=$token";
+            $link = "http://" . $_SERVER['HTTP_HOST'] . "/page/security/reset_password.php?token=$token";
             $m = get_mail();
             $m->addAddress($u->email);
             $m->Subject = "H&Maybe account password reset";
