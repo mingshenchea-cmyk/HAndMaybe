@@ -331,6 +331,27 @@ function add_to_cart($variation_id, $quantity = 1, $category_num){
 }
 
 // ============================================================================
+// Shopping Cart
+// ============================================================================
+
+function count_cart_items() {
+    global $_db, $_user;
+    $stm = $_db->prepare('
+    SELECT * FROM cart WHERE user_id = ?'
+    );
+    $stm->execute([$_user->user_id]);
+    $user_cart = $stm->fetch();
+
+    $stm = $_db->prepare('
+        SELECT * FROM cart_items WHERE cart_id = ?'
+    );
+    $stm->execute([$user_cart->cart_id]);
+    $cart = $stm->fetchAll();
+
+    return count($cart);
+}
+
+// ============================================================================
 // Database Setups and Functions
 // ============================================================================
 
