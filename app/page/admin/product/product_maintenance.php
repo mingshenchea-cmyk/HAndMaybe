@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../../_base.php';
 //-----------------------------------------------------------------------------
 
 $_product = getAllProducts();
@@ -11,7 +11,7 @@ $k=0;
 
 //-----------------------------------------------------------------------------
 // Include the header
-include '../_head.php';
+include '../../../_head.php';
 ?>
 
 <link rel="stylesheet" href="/css/product.css">
@@ -47,17 +47,17 @@ include '../_head.php';
                     ?>
                         <?php if($k == 0): ?>
                             <div class='product'>
-                            <a href='../page/product_add.php' class='product_link'>
+                            <a href='/page/admin/product/product_add.php' class='product_link'>
                             <div class="add_item">
-                            <img class='add_icon' src='../images/add_circle.png' alt='add_circle'>
+                            <img class='add_icon' src='/images/add_circle.png' alt='add_circle'>
                             </div>
                             <p class='name'>Add New Product</p>
                             </div>
 
                             <div class='product'>
-                            <a href='../page/product_add_variation.php' class='product_link'>
+                            <a href='/page/admin/product/product_add_variation.php' class='product_link'>
                             <div class="add_item">
-                            <img class='add_icon' src='../images/add_circle.png' alt='add_circle'>
+                            <img class='add_icon' src='/images/add_circle.png' alt='add_circle'>
                             </div>
                             <p class='name'>Add New Variation</p>
                             </div>
@@ -65,7 +65,7 @@ include '../_head.php';
                         <?php endif ?>
 
                         <div class='product'>
-                        <a href='../page/product_maintenance_detail.php?variation_id=<?=$variation->variation_id?>&color=<?=$color_shown?>' class='product_link'>
+                        <a href='/page/admin/product/product_maintenance_detail.php?variation_id=<?=$variation->variation_id?>&color=<?=$color_shown?>' class='product_link'>
                         <img class='product_photo' src='<?=$variation->product_photo?>' alt='<?=$product->name?>'>
                         <p class='name'><?= $product->name?></p>
                         <p class='price'>RM<?=number_format($product->price, 2)?></p>
@@ -82,5 +82,5 @@ include '../_head.php';
 
 <?php
 // Include the footer
-include '../_foot.php';
+include '../../../_foot.php';
 ?>

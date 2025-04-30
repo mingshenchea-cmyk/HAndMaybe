@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../../_base.php';
 //-----------------------------------------------------------------------------
 
 // Get product and variation data
@@ -13,7 +13,7 @@ $_category = $_db->query('SELECT DISTINCT category FROM product')->fetchAll();
 
 //-----------------------------------------------------------------------------
 // Include the header
-include '../_head.php';
+include '../../../_head.php';
 ?>
 
 <link rel="stylesheet" href="/css/product.css">
@@ -58,7 +58,7 @@ include '../_head.php';
 
                                 $photo_tmp_path = $_FILES['product_photo']['tmp_name'];
                                 $photo_name = basename($_FILES['product_photo']['name']);
-                                $photo_destination = '../images/' . $photo_name;
+                                $photo_destination = "/images/" . $photo_name;
                                 ?>
 
                                 <?php if (isset($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK): ?>
@@ -87,7 +87,7 @@ include '../_head.php';
                             <?php if (is_post() && isset($_POST['action']) && post('action') == 'delete'):
                                 deleteProductVariation($product_id, $variation->color);
 
-                                redirect('Location: ../page/product_maintenance.php');
+                                redirect('Location: /page/admin/product/product_maintenance.php');
                                 ?>
                             <?php endif ?>
 
@@ -161,5 +161,5 @@ include '../_head.php';
 
     <?php
     // Include the footer
-    include '../_foot.php';
+    include '../../../_foot.php';
     ?>

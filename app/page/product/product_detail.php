@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 //-----------------------------------------------------------------------------
 
 $_product = getAllProducts();
@@ -12,7 +12,7 @@ $size = null;
 
 //-----------------------------------------------------------------------------
 // Include the header
-include '../_head.php';
+include '../../_head.php';
 ?>
 
 <link rel="stylesheet" href="/css/product.css">
@@ -93,5 +93,5 @@ if (is_post()): ?>
 
 <?php
 // Include the footer
-include '../_foot.php';
+include '../../_foot.php';
 ?>

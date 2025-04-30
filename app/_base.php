@@ -333,6 +333,13 @@ function getAllProductVariations() {
     global $_db;
     return $_db->query('SELECT * FROM product_variation')->fetchAll();
 }
+// ============================================================================
+// Get User function
+// ============================================================================
+function getAllUser() {
+    global $_db;
+    return $_db->query('SELECT * FROM user')->fetchAll();
+}
 
 // ============================================================================
 // Add to cart function

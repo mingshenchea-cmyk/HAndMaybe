@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../../_base.php';
 //-----------------------------------------------------------------------------
 
 // Get data
@@ -7,7 +7,7 @@ $_category = $_db->query('SELECT DISTINCT category FROM product')->fetchAll();
 
 //-----------------------------------------------------------------------------
 // Include the header
-include '../_head.php';
+include '../../../_head.php';
 ?>
 
 <link rel="stylesheet" href="/css/product.css">
@@ -61,7 +61,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
             $stmt = $_db->prepare("INSERT INTO product (name, category, description, price, created_at) VALUES (?,?,?,?,NOW())");
             $stmt->execute([$new_name, $new_category, $new_description, $new_price]);
 
-            redirect("../page/product_maintenance.php");
+            redirect("/page/admin/prodcut/product_maintenance.php");
         ?>
         <?php endif ?>
     <?php endif ?>
@@ -71,7 +71,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
 <div class="container">
     <div class='product_box'>
         <div class="add_item">
-            <img class='add_icon' src='../images/add_circle.png' alt='add_circle'>
+            <img class='add_icon' src='/images/add_circle.png' alt='add_circle'>
         </div>
         <div class='detail'>
 
@@ -111,5 +111,5 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
 
     <?php
     // Include the footer
-    include '../_foot.php';
+    include '../../../_foot.php';
     ?>

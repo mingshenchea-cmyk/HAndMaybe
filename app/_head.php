@@ -33,7 +33,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <p class="profile">Profile</p>
                 </a>
             <?php endif ?>
-            <a href="../page/shoppingCart.php" class="nav-item">
+            <a href="/page/cart/shoppingCart.php" class="nav-item">
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
                 <?php
@@ -50,8 +50,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     ?>
         <nav>
             <div class="menu">
-                <a href="../page/product.php?category=Women">Women</a>
-                <a href="../page/product.php?category=Men">Men</a>
+                <a href="/page/product/product.php?category=Women">Women</a>
+                <a href="/page/product/product.php?category=Men">Men</a>
                 <!-- <a href="/">Baby</a>
             <a href="/">Kids</a>
             <a href="/">Sale</a> -->
@@ -67,18 +67,27 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <?php endif; ?>
 
     <?php 
-        if ($currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
+        if ($currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' ||  $currentPage == 'member_detail.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
     ?>
         <nav>
             <div class="admin_menu">
-                <a href="../page/member_maintenance.php">Member Maintenance</a>
-                <a href="../page/product_maintenance.php">Product Maintenance</a>
-                <a href="../page/order_maintenance.php">Order Maintenance</a>
+                <a href="/page/admin/member/member_maintenance.php">Member Maintenance</a>
+                <a href="/page/admin/product/product_maintenance.php">Product Maintenance</a>
+                <a href="/page/admin/order/order_maintenance.php">Order Maintenance</a>
             </div>
 
             <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):?>
             <div class="search">
                 <form action="product_maintenance.php" method="GET" class="search_product">
+                    <img src="/images/search.jpg" class="search_icon">
+                    <input type="text" name="query" placeholder="Search" id="searchInput">
+                </form>
+            </div>
+            <?php endif; ?>
+
+            <?php if ($currentPage == 'member_maintenance.php' || $currentPage == 'member_detail.php'):?>
+            <div class="search">
+                <form action="member_maintenance.php" method="GET" class="search_product">
                     <img src="/images/search.jpg" class="search_icon">
                     <input type="text" name="query" placeholder="Search" id="searchInput">
                 </form>

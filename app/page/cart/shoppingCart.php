@@ -1,5 +1,5 @@
 <?php
-require '../_base.php';
+require '../../_base.php';
 
 // ----------------------------------------------------------------------------
 // Handle Cart Updates
@@ -29,12 +29,12 @@ if (is_post()) {
 // ----------------------------------------------------------------------------
 
 $_title = 'My Cart';
-include '../_head.php';
+include '../../_head.php';
 
 // Check if user is logged in
 $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
 ?>
-<link rel="stylesheet" href="../css/shoppingCart.css">
+<link rel="stylesheet" href="/css/shoppingCart.css">
 
 <div class="shopping-cart"> 
     <h1 class="cart-header">My Cart</h1>
@@ -56,7 +56,7 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
     if (empty($cart)): ?>
         <p class="empty-cart">Your cart is empty.</p>
         <div class="browse-link-wrapper">
-            <a href="../page/product.php" class="browse-link-btn">Browse Products</a>
+            <a href="/page/product/product.php" class="browse-link-btn">Browse Products</a>
         </div>
     <?php else: ?>
         <?php foreach ($cart as $variation_id => $item):
@@ -153,4 +153,4 @@ $is_member = isset($_SESSION['user_id']) && $_SESSION['role'] == 'Member';
     });
 </script>
 
-<?php include '../_foot.php'; ?>
+<?php include '../../_foot.php'; ?>
