@@ -437,6 +437,18 @@ function getAllCategory() {
 // ============================================================================
 // Product Maintenance function
 // ============================================================================
+
+function insertProduct($new_name, $new_category_id, $new_description, $new_price){
+    global $_db;
+    $stmt = $_db->prepare("INSERT INTO product (name, category_id, description, price, created_at) VALUES (?,?,?,?,NOW())");
+    return $stmt->execute([$new_name, $new_category_id, $new_description, $new_price]);
+}
+
+function insertVariation($new_product_id, $new_size, $new_color, $new_quantity, $new_photo){
+    global $_db;
+    $stmt = $_db->prepare("INSERT INTO product_variation (product_id,size,color,stock_quantity,product_photo) VALUES (?,?,?,?,?)");
+    return $stmt->execute([$new_product_id, $new_size, $new_color, $new_quantity, $new_photo]);
+}
 function updateProduct($product_id, $name, $price, $description, $category_id) {
     global $_db;
     $stmt = $_db->prepare("UPDATE product SET name = ?, price = ?, description = ?, category_id = ? WHERE product_id = ?");

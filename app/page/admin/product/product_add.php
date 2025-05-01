@@ -22,10 +22,18 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
     $new_description = post('product_description');
     $new_category = post('product_category');
 
-    // Check if same name and same category already exist
-    $check_stmt = $_db->prepare("SELECT COUNT(*) FROM product WHERE name = ? AND category = ?");
-    $check_stmt->execute([$new_name, $new_category]);
-    $count = $check_stmt->fetchColumn();
+    foreach($_category as $cat){
+        if($cat->category == $new_category){
+            $new_category_id = $cat->category_id;
+        }
+    }
+
+    if ($new_name && $new_price && $new_description && $new_category) {
+        // Check if same name and same category already exist
+        $check_stmt = $_db->prepare("SELECT COUNT(*) FROM product WHERE name = ? AND category_id = ?");
+        $check_stmt->execute([$new_name, $new_category_id]);
+        $count = $check_stmt->fetchColumn();
+    }
     ?>
 
     <?php if ($new_name == ''):
@@ -58,9 +66,8 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
     <?php if (!$_err): ?>
         <?php if ($count == 0): ?>
             <?php
-            $stmt = $_db->prepare("INSERT INTO product (name, category, description, price, created_at) VALUES (?,?,?,?,NOW())");
-            $stmt->execute([$new_name, $new_category, $new_description, $new_price]);
-
+            insertProduct($new_name, $new_category_id, $new_description, $new_price);
+            temp('info', 'New Product Added!');
             redirect("/page/admin/product/product_maintenance.php");
         ?>
         <?php endif ?>
@@ -80,11 +87,11 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
                 <input type="hidden" name="action" value="add">
 
                 <div class="name_div">
-                    <input type='text' name='product_name' placeholder='Product Name'>
+                    <input class="add_product" type='text' name='product_name' placeholder='Product Name'>
                     <?= err('product_name') ?>
-                    <input type='number' name='product_price' placeholder='Product Price' step='0.1' min='0'>
+                    <input class="add_product" type='number' name='product_price' placeholder='Product Price' step='0.1' min='0'>
                     <?= err('product_price') ?>
-                    <textarea name='product_description' placeholder='Product Description' cols='90'
+                    <textarea class="add_product" name='product_description' placeholder='Product Description' cols='90'
                         rows='5'></textarea>
                     <?= err('product_description') ?>
                 </div>
