@@ -3,6 +3,26 @@ include '../../_base.php';
 
 // ----------------------------------------------------------------------------
 
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+    $_SESSION['last_attempt_time'] = null;
+}
+
+$max_attempts = 3;
+$lockout_time = 300; // seconds (5 minutes)
+
+// Check if user is locked out
+if ($_SESSION['login_attempts'] >= $max_attempts) {
+    $remaining = $lockout_time - (time() - $_SESSION['last_attempt_time']);
+    if ($remaining > 0) {
+        $_err['general'] = 'Too many failed attempts. Try again in ' . ceil($remaining / 60) . ' minute(s).';
+    } else {
+        // Reset after lockout period
+        $_SESSION['login_attempts'] = 0;
+        $_SESSION['last_attempt_time'] = null;
+    }
+}
+
 if (is_post()) {
     $email    = req('email');
     $password = req('password');

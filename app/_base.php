@@ -350,7 +350,7 @@ function count_cart_items() {
         $cart = $stm->fetchAll();
     }
 
-    return count($cart);
+    return count($cart ?? []);
 }
 
 // ============================================================================

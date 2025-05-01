@@ -9,11 +9,13 @@ $stm = $_db->prepare('
 $stm->execute([$_user->user_id]);
 $user_cart = $stm->fetch();
 
-$stm = $_db->prepare('
-    SELECT * FROM cart_items WHERE cart_id = ?'
-);
-$stm->execute([$user_cart->cart_id]);
-$cart = $stm->fetchAll();
+if ($user_cart) {
+    $stm = $_db->prepare('
+        SELECT * FROM cart_items WHERE cart_id = ?'
+    );
+    $stm->execute([$user_cart->cart_id]);
+    $cart = $stm->fetchAll();
+}
 
 if (is_post()) {
     if (req('btn') === 'remove') {
