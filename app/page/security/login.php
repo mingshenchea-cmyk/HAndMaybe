@@ -9,15 +9,13 @@ if (!isset($_SESSION['login_attempts'])) {
 }
 
 $max_attempts = 3;
-$lockout_time = 300; // seconds (5 minutes)
+$lockout_time = 300;
 
-// Check if user is locked out
 if ($_SESSION['login_attempts'] >= $max_attempts) {
     $remaining = $lockout_time - (time() - $_SESSION['last_attempt_time']);
     if ($remaining > 0) {
         $_err['general'] = 'Too many failed attempts. Try again in ' . ceil($remaining / 60) . ' minute(s).';
     } else {
-        // Reset after lockout period
         $_SESSION['login_attempts'] = 0;
         $_SESSION['last_attempt_time'] = null;
     }
@@ -50,6 +48,9 @@ if (is_post()) {
         $u = $stm->fetch();
 
         if ($u) {
+            $_SESSION['login_attempts'] = 0;
+            $_SESSION['last_attempt_time'] = null;
+
             temp('info', 'Login successfully!');
             if ($u->role == 'Admin') {
                 login($u, '/page/admin/member/member_maintenance.php'); 
@@ -58,6 +59,8 @@ if (is_post()) {
             }
         }
         else {
+            $_SESSION['login_attempts'] += 1;
+            $_SESSION['last_attempt_time'] = time();
             $_err['password'] = 'Incorrect password!';
         }
     }
@@ -83,6 +86,7 @@ $_title = 'Login';
             <label for="password">Password</label>
             <?= html_password('password', 'maxlength="100"') ?>
             <?= err('password') ?>
+            <?= err('general') ?>
 
             <div class="form-buttons">
                 <button type="submit">Login</button>

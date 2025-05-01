@@ -79,6 +79,11 @@
     cursor: pointer;
 }
 
+.upload.highlight {
+    background-color: #eef7ff;
+    border: 2px dashed #69c;
+}
+
 /* Form Buttons */
 .form-buttons {
     display: flex;
