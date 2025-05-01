@@ -22,7 +22,6 @@ h1 {
     background-color: #fff;
 }
 
-/* Left: Items */
 .order-items {
     flex: 2;
     min-width: 300px;
@@ -60,7 +59,6 @@ h1 {
     color: #000;
 }
 
-/* Middle: Shipping */
 .order-shipping {
     flex: 1.5;
     min-width: 220px;
@@ -74,7 +72,6 @@ h1 {
     margin-bottom: 0.5rem;
 }
 
-/* Right: Status */
 .order-status {
     flex: 1;
     min-width: 180px;
@@ -119,7 +116,6 @@ h1 {
     background-color: #c62828;
 }
 
-/* Empty state */
 .browse-link-wrapper {
     text-align: center;
     margin-top: 20px;
@@ -142,7 +138,6 @@ h1 {
     background-color: #333;
 }
 
-/* Responsive Layout */
 @media (max-width: 768px) {
     .order-card {
         flex-direction: column;
@@ -153,4 +148,49 @@ h1 {
         text-align: left;
         margin-top: 1rem;
     }
+}
+
+/* Admin*/
+/* Admin */
+.admin-user-info {
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #222;
+}
+
+.order-status form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.status-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.status-options label {
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.update-status-btn {
+    background-color: #1976d2;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.update-status-btn:hover {
+    background-color: #125aa3;
 }
