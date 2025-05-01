@@ -17,6 +17,18 @@ $cart = $stm->fetchAll();
 
 if (!$cart) redirect('shopping_cart.php');
 
+if(is_get()) {
+$stm = $_db->prepare('
+    SELECT * FROM address WHERE user_id = ?'
+    );
+    $stm->execute([$_user->user_id]);
+    $address = $stm->fetch();
+
+    if ($address) {
+        extract((array)$address);
+    } 
+}
+
 if (is_post()) {
     $address_line1 = req('address_line1');
     $city = req('city');
@@ -30,6 +42,31 @@ if (is_post()) {
     }
 
     if (!$_err) {
+        $_SESSION['checkout'] = [
+            'address' => [
+                'address_line1' => $address_line1,
+                'city' => $city,
+                'state' => $state,
+                'postal_code' => $postal_code,
+                'country' => $country
+            ]
+        ];
+
+        if (!$address) {
+            $stm = $_db->prepare('
+                INSERT INTO address (user_id, address_line1, city, state, postal_code, country)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ');
+            $stm->execute([$user_id, $address_line1, $city, $state, $postal_code, $country]);
+        } else {
+            $stm = $_db->prepare('
+                UPDATE address 
+                SET address_line1 = ?, city = ?, state = ?, postal_code = ?, country = ?
+                WHERE user_id = ? 
+            ');
+            $stm->execute([$address_line1, $city, $state, $postal_code, $country, $user_id]);
+        }
+
         redirect("payment.php");
     }
 }
@@ -86,11 +123,16 @@ include '../../_head.php';
             <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
 
             <h3>Shipping Address</h3>
-            <label>Address Line 1: <input name="address_line1" required></label>
-            <label>City: <input name="city" required></label>
-            <label>State: <input name="state" required></label>
-            <label>Postal Code: <input name="postal_code" required></label>
-            <label>Country: <input name="country" required></label>
+            <label>Address Line 1:</label>
+            <?= html_text('address_line1', 'required') ?>
+            <label>City:</label>
+            <?= html_text('city', 'required') ?>
+            <label>State:</label>
+            <?= html_text('state', 'required') ?>
+            <label>Postal Code:</label>
+            <?= html_text('postal_code', 'required') ?>
+            <label>Country:</label>
+            <?= html_text('country', 'required') ?>
             <?= err('address') ?>
         </div>
 

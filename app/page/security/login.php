@@ -32,7 +32,7 @@ if (is_post()) {
         if ($u) {
             temp('info', 'Login successfully!');
             if ($u->role == 'Admin') {
-                login($u, '../member_maintenance.php'); 
+                login($u, '/page/admin/member/member_maintenance.php'); 
             } else {
                 login($u, '/'); 
             }

@@ -66,7 +66,7 @@ try {
         'payment_method_types' => ['card'],
         'line_items' => $products,
         'mode' => 'payment',
-        'success_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/page/user/profile.php',
+        'success_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/page/cart/payment_success.php?session_id={CHECKOUT_SESSION_ID}',
         'cancel_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/page/cart/checkout.php',
         'metadata' => [
             'user_id' => $_user->user_id,

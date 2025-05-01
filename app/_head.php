@@ -18,6 +18,7 @@ $_category = getAllCategory();
 
 <body>
     <header>
+        <div id="error"><?= temp('error') ?></div>
         <div id="info"><?= temp('info') ?></div>
 
         <a href="/index.php">
@@ -40,8 +41,10 @@ $_category = getAllCategory();
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
                 <?php
-                    $count = count_cart_items();
-                    if ($count) echo "($count)";
+                    if($_user) {
+                        $count = count_cart_items();
+                        if ($count) echo "($count)";
+                    }
                 ?>
             </a>
         </div>

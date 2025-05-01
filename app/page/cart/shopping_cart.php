@@ -148,7 +148,7 @@ include '../../_head.php';
 
             <div class="cart-actions">
                 <button data-post="?btn=clear" class="clear-btn">Clear Cart</button>
-                <button data-post="checkout.php" class="checkout-btn">Proceed to Checkout</button>
+                <button data-get="checkout.php" class="checkout-btn">Proceed to Checkout</button>
             </div>
         </div>
     <?php endif; ?>
