@@ -24,22 +24,16 @@ try {
     $address = $_SESSION['checkout']['address'];
     $user_id = $_user->user_id;
 
-    $stm = $_db->prepare('
-        SELECT * FROM cart WHERE user_id = ?'
-    );
-    $stm->execute([$_user->user_id]);
+    $stm = $_db->prepare('SELECT * FROM cart WHERE user_id = ?');
+    $stm->execute([$user_id]);
     $user_cart = $stm->fetch();
 
-    $stm = $_db->prepare('
-        SELECT * FROM cart_items WHERE cart_id = ?'
-    );
+    $stm = $_db->prepare('SELECT * FROM cart_items WHERE cart_id = ?');
     $stm->execute([$user_cart->cart_id]);
     $cart = $stm->fetchAll();
 
-    $stm = $_db->prepare('
-        SELECT * FROM address WHERE user_id = ?'
-    );
-    $stm->execute([$_user->user_id]);
+    $stm = $_db->prepare('SELECT * FROM address WHERE user_id = ?');
+    $stm->execute([$user_id]);
     $address = $stm->fetch();
     $address_id = $address->address_id;
 
@@ -87,26 +81,76 @@ try {
         $stmProd->execute([$variation_id]);
         $product = $stmProd->fetch();
         if ($product) {
-            $stm->execute([$order_id, $item->variation_id, $quantity]);
+            $stm->execute([$order_id, $variation_id, $quantity]);
         }
     }
 
-    $deleteCartItems = $_db->prepare('
-        DELETE FROM cart_items WHERE cart_id = ?'
-    );
+    // Send E-Receipt Email
+    $mail = get_mail();
+    $mail->addAddress($_user->email, $_user->name);
+    $mail->Subject = "Your H&Maybe Receipt - Order #$order_id";
+    $mail->isHTML(true);
+
+    // Fetch item details
+        $stm = $_db->prepare('
+        SELECT p.name, pv.color, oi.quantity, p.price
+        FROM order_items oi
+        JOIN product_variation pv ON oi.variation_id = pv.variation_id
+        JOIN product p ON pv.product_id = p.product_id
+        WHERE oi.order_id = ?
+    ');
+
+    $stm->execute([$order_id]);
+    $items = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+    $item_rows = '';
+    foreach ($items as $item) {
+        $item_rows .= "<tr>
+            <td>{$item['name']}</td>
+            <td>{$item['color']}</td>
+            <td>{$item['quantity']}</td>
+            <td>RM " . number_format($item['price'], 2) . "</td>
+        </tr>";
+    }
+
+    $mail->Body = "
+        <h2>Thank you for your order, {$_user->name}!</h2>
+        <p>Here’s your receipt for Order <strong>#$order_id</strong> placed on <strong>" . date('Y-m-d H:i') . "</strong>.</p>
+        <table border='1' cellpadding='6' cellspacing='0'>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Color</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                $item_rows
+            </tbody>
+        </table>
+        <p><strong>Shipping Fee:</strong> RM " . number_format($shipping_fee, 2) . "</p>
+        <h3>Total Paid: RM " . number_format($total_amount, 2) . "</h3>
+        <p>We appreciate your support.<br>- H&Maybe Team</p>
+    ";
+
+    try {
+        $mail->send();
+    } catch (Exception $e) {
+        error_log("E-Receipt failed: " . $mail->ErrorInfo);
+    }
+
+    $deleteCartItems = $_db->prepare('DELETE FROM cart_items WHERE cart_id = ?');
     $deleteCartItems->execute([$user_cart->cart_id]);
 
-    $deleteCart = $_db->prepare('
-        DELETE FROM cart WHERE cart_id = ?'
-    );
+    $deleteCart = $_db->prepare('DELETE FROM cart WHERE cart_id = ?');
     $deleteCart->execute([$user_cart->cart_id]);
 
     temp('info', 'Order Success');
     redirect('/');
 
 } catch (\Exception $e) {
-    // Log the exception for debugging
-    error_log("Stripe API Error: " . $e->getMessage()); // Log it to the server's error log
+    error_log("Stripe API Error: " . $e->getMessage());
     temp('error', 'Could not verify payment: ' . $e->getMessage());
     redirect('/');
 }
