@@ -89,6 +89,7 @@ include '../../../_head.php';
             <?php if (!$_err): ?>
                 <?php if ($count == 0): ?>
                     <?php
+                    temp('info','Category Added Successfully!');
                     addCategory($new_category);
                     redirect("/page/admin/category/category_maintenance.php");
                     ?>
@@ -130,6 +131,7 @@ include '../../../_head.php';
             $category_id = post('category_id');
 
             if ($category_id) {
+                temp('info','Category Deleted Successfully!');
                 deleteCategory($category_id);
             }
 
@@ -142,6 +144,7 @@ include '../../../_head.php';
             $edit_category = ucfirst(strtolower(trim($edit_category)));
 
             if ($edit_category) {
+                temp('info','Category Updated Successfully!');
                 updateCategory($edit_category, $edit_category_id);
             }
 

@@ -97,8 +97,9 @@ include '../../../_head.php';
                                 <?php if (isset($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK): ?>
                                     <?php
                                     // Move uploaded file to the uploads folder
-                                    if (move_uploaded_file($photo_tmp_path, $photo_destination)):
+                                    if (move_uploaded_file($photo_tmp_path,  "../../../images/".$photo_destination)):
                                         // Save the new photo path to the database, as well as other details
+                                        temp('info','Product Update Successfully!');
                                         updateProduct($product_id, $new_name, $new_price, $new_description, $new_category_id);
                                         updateProductVariation($product_id, $variation->color, $new_color, $photo_destination);
                                         ?>
@@ -107,6 +108,7 @@ include '../../../_head.php';
                                     <?php endif ?>
                                 <?php else:
                                     // If no new photo, update other details
+                                    temp('info','Product Update Successfully!');
                                     updateProduct($product_id, $new_name, $new_price, $new_description, $new_category_id);
                                     updateProductVariation($product_id, $variation->color, $new_color, $variation->product_photo);
                                     ?>
@@ -118,6 +120,7 @@ include '../../../_head.php';
                             <?php endif ?>
 
                             <?php if (is_post() && isset($_POST['action']) && post('action') == 'delete'):
+                                temp('info','Product Delete Successfully!');
                                 deleteProductVariation($product_id, $variation->color);
 
                                 redirect('/page/admin/product/product_maintenance.php');
