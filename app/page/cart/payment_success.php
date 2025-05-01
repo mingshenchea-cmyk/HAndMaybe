@@ -96,6 +96,11 @@ try {
     );
     $deleteCartItems->execute([$user_cart->cart_id]);
 
+    $deleteCart = $_db->prepare('
+        DELETE FROM cart WHERE cart_id = ?'
+    );
+    $deleteCart->execute([$user_cart->cart_id]);
+
     temp('info', 'Order Success');
     redirect('/');
 
