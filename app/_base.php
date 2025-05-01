@@ -72,8 +72,43 @@ function auth(...$roles) {
     redirect('/page/security/login.php');
 }
 
+// Token generation
 function generate_token($length = 64) {
     return bin2hex(random_bytes($length / 2));
+}
+
+// Login Remember Me
+if (!$_user && isset($_COOKIE['remember_me'])) {
+    $_db->prepare('DELETE FROM remember_tokens WHERE expires_at < NOW()')->execute();
+
+    $token = $_COOKIE['remember_me'];
+    $token_hash = hash('sha256', $token);
+
+    $stm = $_db->prepare('
+        SELECT * FROM remember_tokens
+        WHERE token_hash = ? AND expires_at > NOW()
+    ');
+    $stm->execute([$token_hash]);
+    $row = $stm->fetch();
+
+    if ($row) {
+        $user_id = $row->user_id;
+
+        $user_stm = $_db->prepare('
+            SELECT * 
+            FROM user 
+            WHERE user_id = ?
+        ');
+        $user_stm->execute([$user_id]);
+        $user = $user_stm->fetch();
+
+        temp('info', 'Login Remembered');
+        if ($user->role == 'Admin') {
+            login($user, '/page/admin/member/member_maintenance.php'); 
+        } else {
+            login($user, '/'); 
+        }
+    }
 }
 
 // ============================================================================

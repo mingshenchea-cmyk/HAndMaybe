@@ -38,6 +38,8 @@ if (is_post()) {
             $m->isHTML(true);
             $m->Body = "Click this link to reset your password: <a href='$link'>RESET PASSWORD LINK</a>";
             $m->send();
+            
+            $_db->prepare('DELETE FROM password_reset_tokens WHERE expiry < NOW()')->execute();
 
             temp('info', 'Email Sent');
         }

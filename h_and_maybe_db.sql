@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2025 at 10:00 PM
+-- Generation Time: May 01, 2025 at 12:26 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,10 +67,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`cart_id`, `user_id`, `created_at`) VALUES
-(1, 1, '2025-04-28 00:30:10.000000'),
-(3, 5, '2025-05-01 01:27:46.000000'),
-(4, 6, '2025-05-01 01:34:57.000000'),
-(5, 7, '2025-05-01 03:24:30.000000');
+(6, 6, '2025-05-01 15:37:05.000000');
 
 -- --------------------------------------------------------
 
@@ -84,21 +81,6 @@ CREATE TABLE `cart_items` (
   `variation_id` int(5) NOT NULL,
   `quantity` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart_items`
---
-
-INSERT INTO `cart_items` (`cart_item_id`, `cart_id`, `variation_id`, `quantity`) VALUES
-(1, 1, 1, 2),
-(2, 1, 2, 2),
-(3, 1, 3, 2),
-(4, 3, 11, 1),
-(5, 3, 16, 2),
-(6, 4, 6, 1),
-(7, 5, 61, 1),
-(8, 5, 16, 1),
-(9, 5, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -144,7 +126,7 @@ CREATE TABLE `order` (
 CREATE TABLE `order_items` (
   `order_item_id` int(5) NOT NULL,
   `order_id` int(5) NOT NULL,
-  `product_id` int(5) NOT NULL,
+  `variation_id` int(5) NOT NULL,
   `quantity` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -210,7 +192,7 @@ CREATE TABLE `product_variation` (
 --
 
 INSERT INTO `product_variation` (`variation_id`, `product_id`, `size`, `color`, `stock_quantity`, `product_photo`) VALUES
-(1, 1, 'XS', 'Light Beige', 23, 'crew-t-beige.avif'),
+(1, 1, 'XS', 'Light Beige', 20, 'crew-t-beige.avif'),
 (2, 1, 'S', 'Light Beige', 12, 'crew-t-beige.avif'),
 (3, 1, 'M', 'Light Beige', 45, 'crew-t-beige.avif'),
 (4, 1, 'L', 'Light Beige', 6, 'crew-t-beige.avif'),
@@ -314,6 +296,18 @@ INSERT INTO `product_variation` (`variation_id`, `product_id`, `size`, `color`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `remember_tokens`
+--
+
+CREATE TABLE `remember_tokens` (
+  `user_id` int(11) NOT NULL,
+  `token_hash` varchar(64) NOT NULL,
+  `expires_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -339,7 +333,7 @@ INSERT INTO `user` (`user_id`, `role`, `name`, `password`, `age`, `gender`, `pho
 (3, 'Member', 'Elaine Pang', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'F', 184012398, 'ep@gmail.com', 'ep_pfp.png'),
 (4, 'Member', 'Sum Ting Wong', '8cb2237d0679ca88db6464eac60da96345513964', 30, 'M', 175419326, 'stw@gmail.com', 'stw_pfp.png'),
 (5, 'Member', 'Ho Lee Fuk', '8cb2237d0679ca88db6464eac60da96345513964', 25, 'F', 190213092, 'hlf@gmail.com', 'hlf_pfp.png'),
-(6, 'Member', 'Ming Li Test', '7c4a8d09ca3762af61e59520943dc26494f8941b', 21, 'F', 123456789, 'minglilau9@gmail.com', '68113af564a0d.jpg'),
+(6, 'Member', 'Ming Li Test', '7c4a8d09ca3762af61e59520943dc26494f8941b', 21, 'F', 123456789, 'minglilau9@gmail.com', '68132d3842f3d.jpg'),
 (7, 'Member', 'tung', '7869a357b954e36df60655b17ef3ac09d6e600dd', 12, 'M', 123456789, 'tung@gmail.com', '68126e795d830.jpg');
 
 --
@@ -388,7 +382,7 @@ ALTER TABLE `order`
 ALTER TABLE `order_items`
   ADD PRIMARY KEY (`order_item_id`),
   ADD KEY `order_id` (`order_id`),
-  ADD KEY `product_id` (`product_id`);
+  ADD KEY `variation_id` (`variation_id`);
 
 --
 -- Indexes for table `password_reset_tokens`
@@ -412,6 +406,12 @@ ALTER TABLE `product_variation`
   ADD KEY `product_id` (`product_id`);
 
 --
+-- Indexes for table `remember_tokens`
+--
+ALTER TABLE `remember_tokens`
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -431,13 +431,13 @@ ALTER TABLE `address`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `cart_item_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -504,7 +504,7 @@ ALTER TABLE `order`
 --
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
-  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`);
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`variation_id`) REFERENCES `product_variation` (`variation_id`);
 
 --
 -- Constraints for table `password_reset_tokens`
@@ -523,6 +523,12 @@ ALTER TABLE `product`
 --
 ALTER TABLE `product_variation`
   ADD CONSTRAINT `product_variation_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`);
+
+--
+-- Constraints for table `remember_tokens`
+--
+ALTER TABLE `remember_tokens`
+  ADD CONSTRAINT `remember_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
