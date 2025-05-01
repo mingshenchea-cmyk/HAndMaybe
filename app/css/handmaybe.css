@@ -13,11 +13,14 @@ header {
     border-bottom: 1px solid #eee;
     padding: 0 30px;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .logo {
     height: 50px;
-    margin: 0 auto;
+    left: 50%;
+    display: flex;
+    gap: 20px;
 }
 
 .right-nav {
@@ -46,49 +49,33 @@ header {
     color: black;
 }
 
-footer {
-    height: 200px;
-    background-color: #EEEEEE;
-    /* justify-content: center; */
-}
-
-.footer {
-    width: fit-content;
-    height: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 50px;
-}
-
-.footer_text {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-}
-
-.footer_image {
-    height: 30px;
-    display: block;
-    margin: auto;
-    margin-top: 20px;
-}
-
 nav {
-    height: 30px;
+    position: relative;
+    height: 40px;
     display: flex;
     align-items: center;
-    justify-content: end;
 }
 
-nav .menu .admin_menu{
+.nav-wrapper {
+    margin-bottom: 10px;
+}
+
+.menu, .admin_menu {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    width: 100%;
-    margin-left: 240px;
-    justify-content: center;
-    margin-top: 5px;
+    gap: 20px;
 }
 
-nav a {
+.search {
+    position: absolute;
+    right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-wrapper a {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 15px;
     font-weight: 500;
@@ -98,7 +85,7 @@ nav a {
     margin-right: 15px;
 }
 
-nav a:hover {
+.nav-wrapper a:hover {
     text-decoration: underline;
 }
 
@@ -106,9 +93,8 @@ div .search_product{
     display: flex;
 }
 
-nav .search {
+.nav-wrapper .search {
     border-bottom: 1px solid;
-    margin-top: 10px;
     margin-right: 20px;
 }
 
@@ -118,17 +104,17 @@ nav .search {
     margin-bottom: 5px;
 }
 
-nav input {
+.nav-wrapper input {
     border-style: none;
     margin-bottom: 3px;
     margin-left: 5px;
 }
 
-nav input::placeholder {
+.nav-wrapper input::placeholder {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-nav input:focus {
+.nav-wrapper input:focus {
     outline: none;
 }
 
@@ -159,6 +145,34 @@ nav input:focus {
     max-width: 50%;
 }
 
+footer {
+    height: 200px;
+    background-color: #EEEEEE;
+    /* justify-content: center; */
+}
+
+.footer {
+    width: fit-content;
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 50px;
+}
+
+.footer_text {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.footer_image {
+    height: 30px;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+}
+
+/* Flash Messages */
 #info {
     position: fixed;
     background-color: #d4edda;

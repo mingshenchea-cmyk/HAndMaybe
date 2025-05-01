@@ -102,10 +102,11 @@ if (!$_user && isset($_COOKIE['remember_me'])) {
         $user_stm->execute([$user_id]);
         $user = $user_stm->fetch();
 
-        temp('info', 'Login Remembered');
         if ($user->role == 'Admin') {
+            temp('info', 'Logged in as Admin');
             login($user, '/page/admin/member/member_maintenance.php'); 
         } else {
+            temp('info', 'Logged in as Member');
             login($user, '/'); 
         }
     }
@@ -349,6 +350,9 @@ function add_to_cart($variation_id, $quantity = 1, $category_num){
         $stmt = $_db->prepare("UPDATE cart_items SET quantity = quantity + ? WHERE cart_item_id = ?");
         $stmt->execute([$quantity, $cart_item->cart_item_id]);
 
+        $stmt = $_db->prepare("UPDATE product_variation SET stock_quantity = stock_quantity - ? WHERE variation_id = ?");
+        $stmt->execute([$quantity, $variation_id]);
+
         // Set success message for updating quantity
         //$_SESSION['cart_message'] = "Item quantity updated in your cart.";
     } else {
@@ -356,6 +360,8 @@ function add_to_cart($variation_id, $quantity = 1, $category_num){
         $stmt = $_db->prepare("INSERT INTO cart_items (cart_id, variation_id, quantity) VALUES (?, ?, ?)");
         $stmt->execute([$cart_id, $variation_id, $quantity]);
 
+        $stmt = $_db->prepare("UPDATE product_variation SET stock_quantity = stock_quantity - ? WHERE variation_id = ?");
+        $stmt->execute([$quantity, $variation_id]);
         
         // Set success message for adding new item
         //$_SESSION['cart_message'] = "Item added to your cart.";
@@ -431,10 +437,10 @@ function getAllCategory() {
 // ============================================================================
 // Product Maintenance function
 // ============================================================================
-function updateProduct($product_id, $name, $price, $description, $category) {
+function updateProduct($product_id, $name, $price, $description, $category_id) {
     global $_db;
-    $stmt = $_db->prepare("UPDATE product SET name = ?, price = ?, description = ?, category = ? WHERE product_id = ?");
-    return $stmt->execute([$name, $price, $description, $category, $product_id]);
+    $stmt = $_db->prepare("UPDATE product SET name = ?, price = ?, description = ?, category_id = ? WHERE product_id = ?");
+    return $stmt->execute([$name, $price, $description, $category_id, $product_id]);
 }
 
 function updateProductVariation($product_id, $old_color, $new_color, $new_photo_path) {
@@ -473,4 +479,25 @@ function get_mail() {
     $m->setFrom($m->Username, 'H&Maybe Admin 🐧');
 
     return $m;
+}
+
+// ============================================================================
+// Category Functions
+// ============================================================================
+function addCategory($new_category){
+    global $_db;
+    $stmt = $_db->prepare("INSERT INTO category (category) VALUES (?)");
+    return $stmt->execute([$new_category]);
+}
+
+function deleteCategory($category_id){
+    global $_db;
+    $stmt = $_db->prepare("DELETE FROM category WHERE category_id = ?");
+    return $stmt->execute([$category_id]);
+}
+
+function updateCategory($edit_category, $edit_category_id){
+    global $_db;
+    $stmt = $_db->prepare("UPDATE category SET category = ? WHERE category_id = ?");
+    return $stmt->execute([$edit_category, $edit_category_id]);
 }

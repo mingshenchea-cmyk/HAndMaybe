@@ -9,7 +9,10 @@ $_product_variation = getAllProductVariations();
 $variation_id = get('variation_id');
 $color = get('color');
 $size = null;
-$_category = $_db->query('SELECT DISTINCT category FROM product')->fetchAll();
+$_category = getAllCategory();
+$category = null;
+$selected_category = null;
+$new_category_id = null;
 
 //-----------------------------------------------------------------------------
 // Include the header
@@ -32,6 +35,12 @@ include '../../../_head.php';
                             $product_id = $product->product_id;  // Get product ID
                             $product_name = $product->name;
                             ?>
+
+                            <?php foreach ($_category as $categorys): ?>
+                                <?php if ($categorys->category_id == $product->category_id): ?>
+                                    <?php $category = $categorys->category ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
 
                             <?php
                             // Check if the form is submitted to update
@@ -77,7 +86,8 @@ include '../../../_head.php';
                                 <?php endif ?>
 
                                 <?php
-                                $new_category = req('product_category');
+                                $new_category_id = (int) req('product_category');
+
                                 $new_color = req('product_color');
 
                                 $photo_tmp_path = $_FILES['product_photo']['tmp_name'];
@@ -89,7 +99,7 @@ include '../../../_head.php';
                                     // Move uploaded file to the uploads folder
                                     if (move_uploaded_file($photo_tmp_path, $photo_destination)):
                                         // Save the new photo path to the database, as well as other details
-                                        updateProduct($product_id, $new_name, $new_price, $new_description, $new_category);
+                                        updateProduct($product_id, $new_name, $new_price, $new_description, $new_category_id);
                                         updateProductVariation($product_id, $variation->color, $new_color, $photo_destination);
                                         ?>
                                     <?php else:
@@ -97,7 +107,7 @@ include '../../../_head.php';
                                     <?php endif ?>
                                 <?php else:
                                     // If no new photo, update other details
-                                    updateProduct($product_id, $new_name, $new_price, $new_description, $new_category);
+                                    updateProduct($product_id, $new_name, $new_price, $new_description, $new_category_id);
                                     updateProductVariation($product_id, $variation->color, $new_color, $variation->product_photo);
                                     ?>
                                 <?php endif ?>
@@ -110,7 +120,7 @@ include '../../../_head.php';
                             <?php if (is_post() && isset($_POST['action']) && post('action') == 'delete'):
                                 deleteProductVariation($product_id, $variation->color);
 
-                                redirect('Location: /page/admin/product/product_maintenance.php');
+                                redirect('/page/admin/product/product_maintenance.php');
                                 ?>
                             <?php endif ?>
 
@@ -120,7 +130,7 @@ include '../../../_head.php';
                                 <p class='detail_name'><?= $product_name ?></p>
                                 <p class='detail_price'>RM<?= number_format($product->price, 2) ?></p>
                                 <p class='description'><?= $product->description ?></p>
-                                <p class='color'>Category:<?= $product->category ?></p>
+                                <p class='color'>Category:<?= $category ?></p>
                                 <p class='color'>Color:<?= $variation->color ?></p>
 
                                 <form action='' method='POST'>
@@ -156,9 +166,9 @@ include '../../../_head.php';
                                     <div class="category_div">
                                         <p class='color'>Category: </p>
                                         <select name='product_category'>
-                                            <?php
-                                            foreach ($_category as $cat): ?>
-                                                <option value='<?= $product->category ?>'><?= $cat->category ?></option>
+                                            <?php foreach ($_category as $cat): ?>
+                                                <option value='<?= $cat->category_id ?>' <?= $cat->category_id == $product->category_id ? 'selected' : '' ?>><?= $cat->category ?>
+                                                </option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
