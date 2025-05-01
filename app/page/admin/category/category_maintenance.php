@@ -65,6 +65,7 @@ include '../../../_head.php';
                     </td>
                     <td>
                         <input type='text' name='new_category' value=''>
+                        <?= err('new_category') ?>
                     </td>
                 </tr>
                 </table>
@@ -77,13 +78,6 @@ include '../../../_head.php';
             </form>
         <?php elseif (is_post() && isset($_POST['action']) && post('action') == 'save_add'): ?>
             <?php $new_category = post('new_category'); ?>
-
-            <?php global $_err; ?>
-
-            <?php if ($new_category == ''):
-                $_err['new_category'] = "Required";
-                ?>
-            <?php endif ?>
 
             <?php
             $new_category = ucfirst(strtolower(trim($new_category)));
@@ -108,25 +102,25 @@ include '../../../_head.php';
                         <input type="hidden" name="category_id" value="<?= $categorys->category_id ?>">
                     </td>
                     <form action="" method="POST">
-                            <input type="hidden" name="action" value="save_edit">
-                    <td>
-                        <input type='text' name='edit_category' value='<?= $categorys->category ?>'>
-                    </td>
-                    <td class="delete_box">
+                        <input type="hidden" name="action" value="save_edit">
+                        <td>
+                            <input type='text' name='edit_category' value='<?= $categorys->category ?>'>
+                        </td>
+                        <td class="delete_box">
                             <input type="hidden" name="edit_category_id" value="<?= $categorys->category_id ?>">
                             <button class="save_button">
                                 <img class='button_icon' src='/images/save.png'>
                                 <p class="add">Save</p>
                             </button>
-                        </form>
-                        <form action="" method="POST">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="category_id" value="<?= $categorys->category_id ?>">
-                            <button class="delete_button">
-                                <img class='button_icon' src='/images/delete.png'>
-                                <p class="add">Delete</p>
-                            </button>
-                        </form>
+                    </form>
+                    <form action="" method="POST">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="category_id" value="<?= $categorys->category_id ?>">
+                        <button class="delete_button">
+                            <img class='button_icon' src='/images/delete.png'>
+                            <p class="add">Delete</p>
+                        </button>
+                    </form>
                     </td>
                 </tr>
             <?php endforeach ?>

@@ -1,5 +1,9 @@
 <?php
 require '../../../_base.php';
+<<<<<<< Updated upstream
+=======
+// ----------------------------------------------------------------------------
+>>>>>>> Stashed changes
 auth('Admin');
 
 //-----------------------------------------------------------------------------
@@ -52,7 +56,12 @@ $item_query = $_db->prepare('
     WHERE oi.order_id = ?
 ');
 
+<<<<<<< Updated upstream
 $_title = 'Admin Order Maintenance';
+=======
+//-----------------------------------------------------------------------------
+$_title = 'Admin - Order Maintenance';
+>>>>>>> Stashed changes
 include '../../../_head.php';
 ?>
 <link rel="stylesheet" href="/css/orderhistory.css">

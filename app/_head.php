@@ -82,7 +82,7 @@ $_category = getAllCategory();
     <?php endif; ?>
 
     <?php 
-        if ($currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' ||  $currentPage == 'member_detail.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
+        if ($currentPage == 'category_maintenance.php' || $currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' ||  $currentPage == 'member_detail.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
     ?>
         <nav>
             <div class="nav-wrapper">

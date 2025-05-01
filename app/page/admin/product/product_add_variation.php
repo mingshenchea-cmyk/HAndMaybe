@@ -40,7 +40,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
     <?php endif ?>
 
     <?php if ($new_color == ''):
-        $_err['product_size'] = "Required";
+        $_err['product_color'] = "Required";
     ?>
     <?php endif ?>
 
@@ -49,16 +49,11 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
     ?>
     <?php endif ?>
 
-    <?php if (!is_numeric($new_quantity) || (int)$new_quantity < 0):
-        $_err['product_quantity'] = "Enter a valid quantity";
-    ?>
-    <?php endif ?>
-
     <?php $new_color = ucfirst(strtolower($new_color)); ?>
 
     <?php
     if (!empty($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK): ?>
-        <?php move_uploaded_file($photo_tmp_path, $new_photo); ?>
+        <?php move_uploaded_file($photo_tmp_path, to: "../../../images/".$new_photo); ?>
     <?php endif ?>
 
     <?php
@@ -71,17 +66,15 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
 
     <?php
     // CHECK if variation already exists
-    $check_stmt = $_db->prepare("SELECT COUNT(*) FROM product_variation WHERE product_id = ? AND size = ? AND color = ? AND product_photo = ?");
-    $check_stmt->execute([$new_product_id, $new_size, $new_color, $new_photo]);
+    $check_stmt = $_db->prepare("SELECT COUNT(*) FROM product_variation WHERE product_id = ? AND size = ? AND color = ?");
+    $check_stmt->execute([$new_product_id, $new_size, $new_color]);
     $count = $check_stmt->fetchColumn(); ?>
 
     <?php if (!$_err): ?>
         <?php
-        //if (isset($photo_tmp_path) && $_FILES['product_photo']['error'] == UPLOAD_ERR_OK) {
         if ($count == 0): ?>
-            <?php $stmt = $_db->prepare("INSERT INTO product_variation (product_id,size,color,stock_quantity,product_photo) VALUES (?,?,?,?,?)"); ?>
-            <?php $stmt->execute([$new_product_id, $new_size, $new_color, $new_quantity, $new_photo]); ?>
-
+            <?php insertVariation($new_product_id, $new_size, $new_color, $new_quantity, $new_photo); ?>
+            <?php temp('info', 'New Product Variation Added!'); ?>
             <?php redirect("/page/admin/product/product_maintenance.php"); ?>
         <?php endif ?>
     <?php endif ?>
@@ -101,7 +94,7 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
                 <div class="category_div">
                     <p class='color'>Photo: </p>
                     <?= html_file('product_photo', 'image/*') ?>
-                    <!--<input type='file' name='product_photo'>-->
+                    <?= err('product_photo') ?>
                 </div>
 
                 <div class="category_div">
@@ -122,10 +115,12 @@ if (is_post() && isset($_POST['action']) && post('action') == 'add'): ?>
                 </div>
                 <div class="category_div">
                     <p class='color'>Color: </p>
-                    <input type='text' name='product_color'>
+                    <input class="add_variation" type='text' name='product_color'>
+                    <?= err('product_color') ?>
                 </div>
                 <div class="name_div">
-                    <input type='number' name='product_quantity' placeholder='Product Quantity' step='1' min='0'>
+                    <input class="add_variation" type='number' name='product_quantity' placeholder='Product Quantity' step='1' min='0'>
+                    <?= err('product_quantity') ?>
                 </div>
 
                 <button type="submit" class="save_button">
