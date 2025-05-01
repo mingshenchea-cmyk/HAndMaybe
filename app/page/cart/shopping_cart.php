@@ -37,6 +37,12 @@ if (is_post()) {
             ');
             $stm->execute([$quantity, $user_cart->cart_id, $variation_id]);
         }
+    } elseif (req('btn') === 'update') {
+        $stm = $_db->prepare('
+            DELETE FROM cart_items 
+            WHERE cart_id = ?
+        ');
+        $stm->execute([$user_cart->cart_id]);
     }
     $stm = $_db->prepare('SELECT * FROM cart_items WHERE cart_id = ?');
     $stm->execute([$user_cart->cart_id]);
