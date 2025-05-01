@@ -50,8 +50,6 @@ if (is_post()) {
         if ($u) {
             $_SESSION['login_attempts'] = 0;
             $_SESSION['last_attempt_time'] = null;
-
-            temp('info', 'Login successfully!');
             
             if (isset($_POST['remember_me'])) {
                 $token = generate_token();
@@ -72,8 +70,10 @@ if (is_post()) {
             }
 
             if ($u->role == 'Admin') {
+                temp('info', 'Logged in as Admin');
                 login($u, '/page/admin/member/member_maintenance.php'); 
             } else {
+                temp('info', 'Logged in as Member');
                 login($u, '/'); 
             }
         }

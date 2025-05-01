@@ -21,7 +21,7 @@ $_category = getAllCategory();
         <div id="error"><?= temp('error') ?></div>
         <div id="info"><?= temp('info') ?></div>
 
-        <a href="/index.php">
+        <a href="<?php if($_user?->role == "Admin")echo"/page/admin/member/member_maintenance.php"; else echo"/";?>">
             <img src="/images/HAndMaybe.png" class="logo" alt="H&Maybe Logo">
         </a>
 
@@ -60,53 +60,54 @@ $_category = getAllCategory();
     <?php 
         if ($currentPage == 'shopping_cart.php' || $currentPage == 'product.php' || $currentPage == 'index.php' || $currentPage == 'product_detail.php'): 
     ?>
-        <nav>
+        <div class="nav-wrapper">
             <div class="menu">
                 <a href="/page/product/product.php">View All</a>
                 <?php foreach($_category as $categorys): ?>
                     <a href="/page/product/product.php?category=<?=$categorys->category_id?>"><?=$categorys->category?></a>
                 <?php endforeach ?>
-                <!-- <a href="/">Baby</a>
-            <a href="/">Kids</a>
-            <a href="/">Sale</a> -->
             </div>
 
+            <?php if (in_array($currentPage, ['product.php', 'index.php', 'product_detail.php'])): ?>
             <div class="search">
-                <form action="product.php" method="GET" class="search_product">
+                <form action="/page/product/product.php" method="GET" class="search_product">
                     <img src="/images/search.jpg" class="search_icon">
                     <input type="text" name="query" placeholder="Search" id="searchInput">
                 </form>
             </div>
-        </nav>
+            <?php endif; ?>
+        </div>
     <?php endif; ?>
 
     <?php 
         if ($currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' ||  $currentPage == 'member_detail.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
     ?>
         <nav>
-            <div class="admin_menu">
-                <a href="/page/admin/member/member_maintenance.php">Member Maintenance</a>
-                <a href="/page/admin/product/product_maintenance.php">Product Maintenance</a>
-                <a href="/page/admin/order/order_maintenance.php">Order Maintenance</a>
-            </div>
+            <div class="nav-wrapper">
+                <div class="admin_menu">
+                    <a href="/page/admin/member/member_maintenance.php">Member Maintenance</a>
+                    <a href="/page/admin/product/product_maintenance.php">Product Maintenance</a>
+                    <a href="/page/admin/order/order_maintenance.php">Order Maintenance</a>
+                </div>
 
-            <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):?>
-            <div class="search">
-                <form action="product_maintenance.php" method="GET" class="search_product">
-                    <img src="/images/search.jpg" class="search_icon">
-                    <input type="text" name="query" placeholder="Search" id="searchInput">
-                </form>
-            </div>
-            <?php endif; ?>
+                <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):?>
+                <div class="search">
+                    <form action="product_maintenance.php" method="GET" class="search_product">
+                        <img src="/images/search.jpg" class="search_icon">
+                        <input type="text" name="query" placeholder="Search" id="searchInput">
+                    </form>
+                </div>
+                <?php endif; ?>
 
-            <?php if ($currentPage == 'member_maintenance.php' || $currentPage == 'member_detail.php'):?>
-            <div class="search">
-                <form action="member_maintenance.php" method="GET" class="search_product">
-                    <img src="/images/search.jpg" class="search_icon">
-                    <input type="text" name="query" placeholder="Search" id="searchInput">
-                </form>
+                <?php if ($currentPage == 'member_maintenance.php' || $currentPage == 'member_detail.php'):?>
+                <div class="search">
+                    <form action="member_maintenance.php" method="GET" class="search_product">
+                        <img src="/images/search.jpg" class="search_icon">
+                        <input type="text" name="query" placeholder="Search" id="searchInput">
+                    </form>
+                </div>
+                <?php endif; ?>
             </div>
-            <?php endif; ?>
         </nav>
     <?php endif; ?>
 

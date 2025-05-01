@@ -102,10 +102,11 @@ if (!$_user && isset($_COOKIE['remember_me'])) {
         $user_stm->execute([$user_id]);
         $user = $user_stm->fetch();
 
-        temp('info', 'Login Remembered');
         if ($user->role == 'Admin') {
+            temp('info', 'Logged in as Admin');
             login($user, '/page/admin/member/member_maintenance.php'); 
         } else {
+            temp('info', 'Logged in as Member');
             login($user, '/'); 
         }
     }
