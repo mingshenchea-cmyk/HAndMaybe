@@ -4,8 +4,8 @@ require '../../_base.php';
 auth('Member');
 
 // Handle cancel request
-if (is_post() && isset($_POST['cancel_order_id'])) {
-    $order_id = $_POST['cancel_order_id'];
+if (is_post() && post('cancel_order_id')) {
+    $order_id = post('cancel_order_id');
 
     $cancel_stm = $_db->prepare('
         UPDATE `order`
@@ -16,6 +16,7 @@ if (is_post() && isset($_POST['cancel_order_id'])) {
 
     redirect("order_history.php");
 }
+
 
 $stm = $_db->prepare('
     SELECT o.*, 
@@ -61,10 +62,11 @@ include '../../_head.php';
             $items = $item_query->fetchAll();
             $created_at = new DateTime($order->created_at);
             $estimated = clone $created_at;
-            $estimated->modify('+7 days'); // Estimated delivery is always 7 days after order date
+            $estimated->modify('+7 days');
+            $status = strtolower($order->status);
             ?>
             <div class="order-card">
-                <!-- product details-->
+                <!-- product details -->
                 <div class="order-items">
                     <h3>Items</h3>
                     <?php foreach ($items as $item): ?>
@@ -89,19 +91,22 @@ include '../../_head.php';
                     <p><?= $order->postal_code ?>, <?= $order->country ?></p>
                 </div>
 
-                <!--Status -->
+                <!-- Status -->
                 <div class="order-status">
-                    <div class="status <?= $order->status === 'cancelled' ? 'cancelled' : '' ?>">
-                        <?= ucfirst($order->status) ?>
+                    <div class="status-group">
+                        <div class="status <?= $status === 'cancelled' ? 'cancelled' : ($status === 'delivered' ? 'delivered' : '') ?>">
+                            <?= ucfirst($order->status) ?>
+                        </div>
+
+                        <?php if (!in_array($status, ['cancelled', 'delivered'])): ?>
+                            <div class="estimated">
+                                <span>Estimated Delivery Time:</span>
+                                <?= $estimated->format('M d, Y') ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
-                    <?php if ($order->status !== 'cancelled'): ?>
-                        <div class="estimated">
-                            ETA: <?= $estimated->format('M d, Y') ?>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($order->status !== 'cancelled'): ?>
+                    <?php if (!in_array($status, ['cancelled', 'delivered'])): ?>
                         <form method="POST" class="cancel-form" onsubmit="return confirm('Are you sure you want to cancel this order?');">
                             <input type="hidden" name="cancel_order_id" value="<?= $order->order_id ?>">
                             <button type="submit" class="cancel-btn">Cancel Order</button>

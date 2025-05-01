@@ -4,9 +4,9 @@ auth('Admin');
 
 //-----------------------------------------------------------------------------
 // Handle status update
-if (is_post() && isset($_POST['order_id'], $_POST['status'])) {
-    $order_id = $_POST['order_id'];
-    $status = $_POST['status'];
+if (is_post() && post('order_id') && post('status')) {
+    $order_id = post('order_id');
+    $status = post('status');
 
     $check = $_db->prepare('SELECT status FROM `order` WHERE order_id = ?');
     $check->execute([$order_id]);
@@ -21,8 +21,7 @@ if (is_post() && isset($_POST['order_id'], $_POST['status'])) {
 }
 
 //-----------------------------------------------------------------------------
-
-$filter_status = isset($_GET['status']) ? strtolower($_GET['status']) : '';
+$filter_status = strtolower(get('status', ''));
 
 // Build SQL based on filter
 $sql = '
@@ -34,7 +33,7 @@ $sql = '
 ';
 
 $params = [];
-if ($filter_status === 'shipped' || $filter_status === 'delivered') {
+if (in_array($filter_status, ['shipped', 'delivered', 'cancelled'])) {
     $sql .= ' WHERE LOWER(o.status) = ?';
     $params[] = $filter_status;
 }
@@ -67,6 +66,7 @@ include '../../../_head.php';
             <option value="">All</option>
             <option value="shipped" <?= $filter_status === 'shipped' ? 'selected' : '' ?>>Shipped</option>
             <option value="delivered" <?= $filter_status === 'delivered' ? 'selected' : '' ?>>Delivered</option>
+            <option value="cancelled" <?= $filter_status === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
         </select>
     </form>
 
@@ -79,13 +79,10 @@ include '../../../_head.php';
             $items = $item_query->fetchAll();
 
             $created_at = new DateTime($order->created_at);
-            $estimated = clone $created_at;
-            $estimated->modify('+7 days');
-
             $status = trim(strtolower($order->status));
             ?>
             <div class="order-card">
-                <div style="width: 100%; margin-bottom: 10px;">
+                <div style="width: 100%; border-bottom: 1px solid #ccc; padding-bottom: 8px;">
                     <strong>User ID:</strong> <?= $order->user_id ?> |
                     <strong>Username:</strong> <?= $order->username ?>
                 </div>
@@ -117,28 +114,29 @@ include '../../../_head.php';
 
                 <!-- Status -->
                 <div class="order-status">
-                    <div class="status <?= $status === 'cancelled' ? 'cancelled' : '' ?>">
-                        <?= ucfirst($status) ?>
+                    <div class="status-group">
+                        <div class="status <?= $status === 'cancelled' ? 'cancelled' : ($status === 'delivered' ? 'delivered' : '') ?>">
+                            <?= ucfirst($status) ?>
+                        </div>
+
+                        <?php if ($status !== 'cancelled'): ?>
+                            <form method="POST" class="status-form">
+                                <input type="hidden" name="order_id" value="<?= $order->order_id ?>">
+
+                                <div class="status-label">Update Status:</div>
+                                <label>
+                                    <input type="radio" name="status" value="shipped" <?= $status === 'shipped' ? 'checked' : '' ?>>
+                                    Shipped
+                                </label>
+                                <label>
+                                    <input type="radio" name="status" value="delivered" <?= $status === 'delivered' ? 'checked' : '' ?>>
+                                    Delivered
+                                </label>
+
+                                <button type="submit" class="update-btn">Update</button>
+                            </form>
+                        <?php endif; ?>
                     </div>
-
-                    <?php if ($status !== 'cancelled'): ?>
-                        <form method="POST">
-                            <div class="status-label">Update Status:</div>
-                            <input type="hidden" name="order_id" value="<?= $order->order_id ?>">
-
-                            <label>
-                                <input type="radio" name="status" value="shipped" <?= $status === 'shipped' ? 'checked' : '' ?>>
-                                Shipped
-                            </label><br>
-                            <label>
-                                <input type="radio" name="status" value="delivered" <?= $status === 'delivered' ? 'checked' : '' ?>>
-                                Delivered
-                            </label>
-
-                            <button type="submit" class="update-btn">Update</button>
-                        </form>
-                        <div class="estimated">ETA: <?= $estimated->format('M d, Y') ?></div>
-                    <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>

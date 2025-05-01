@@ -75,89 +75,47 @@ h1 {
 .order-status {
     flex: 1;
     min-width: 180px;
-    text-align: right;
-    font-size: 0.95rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: flex-end;
+    font-size: 0.95rem;
+}
+
+.order-status .status-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
 }
 
 .order-status .status {
     font-weight: bold;
     color: green;
-    margin-bottom: 0.3rem;
+    text-transform: capitalize;
+    margin-bottom: 1rem; 
 }
 
 .order-status .status.cancelled {
     color: red;
 }
 
-.order-status .estimated {
-    color: #666;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+.order-status .status.delivered {
+    color: #1e88e5;
 }
 
-.cancel-btn {
-    background-color: #e53935;
-    color: white;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    align-self: flex-end;
-    margin-top: auto;
-}
-
-.cancel-btn:hover {
-    background-color: #c62828;
-}
-
-.browse-link-wrapper {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.browse-link-btn {
-    display: inline-block;
-    background-color: #000;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.3s;
-}
-
-.browse-link-btn:hover {
-    background-color: #333;
-}
-
-@media (max-width: 768px) {
-    .order-card {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .order-status {
-        text-align: left;
-        margin-top: 1rem;
-    }
-}
-
-/* Admin*/
 .order-status .status-label {
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
+    margin-top: 0.3rem;
 }
 
-.order-status form {
-    text-align: left;
+.status-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
 }
 
 .update-btn {
@@ -175,4 +133,42 @@ h1 {
 
 .update-btn:hover {
     background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .order-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .order-status {
+        text-align: left;
+        align-items: flex-start;
+        margin-top: 1rem;
+    }
+
+    .order-status .status-group {
+        align-items: flex-start;
+    }
+
+    .status-form {
+        align-items: flex-start;
+    }
+}
+
+.cancel-btn {
+    background-color: #dc3545; 
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background-color: #b52a37;
 }
