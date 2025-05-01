@@ -65,7 +65,7 @@ try {
 
     $stm = $_db->prepare('
         INSERT INTO `order` (user_id, created_at, status, shipping_fee, total_amount, address_id)
-        VALUES (?, NOW(), "Pending", ?, ?, ?)
+        VALUES (?, NOW(), "Shipped", ?, ?, ?)
     ');
     $stm->execute([$user_id, $shipping_fee, $total_amount, $address_id]);
     $order_id = $_db->lastInsertId();

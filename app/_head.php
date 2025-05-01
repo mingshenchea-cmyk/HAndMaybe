@@ -41,7 +41,7 @@ $_category = getAllCategory();
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
                 <?php
-                    if($_user) {
+                    if($_user && $_user->role == "Member") {
                         $count = count_cart_items();
                         if ($count) echo "($count)";
                     }

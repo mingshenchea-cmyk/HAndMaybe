@@ -342,11 +342,13 @@ function count_cart_items() {
     $stm->execute([$_user->user_id]);
     $user_cart = $stm->fetch();
 
-    $stm = $_db->prepare('
-        SELECT * FROM cart_items WHERE cart_id = ?'
-    );
-    $stm->execute([$user_cart->cart_id]);
-    $cart = $stm->fetchAll();
+    if($user_cart) {
+        $stm = $_db->prepare('
+            SELECT * FROM cart_items WHERE cart_id = ?'
+        );
+        $stm->execute([$user_cart->cart_id]);
+        $cart = $stm->fetchAll();
+    }
 
     return count($cart);
 }
