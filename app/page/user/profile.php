@@ -6,8 +6,7 @@ include '../../_base.php';
 // Authenticated users
 auth();
 
-if (is_get()) {
-    $stm = $_db->prepare('SELECT * FROM user WHERE user_id = ?');
+$stm = $_db->prepare('SELECT * FROM user WHERE user_id = ?');
     $stm->execute([$_user->user_id]);
     $u = $stm->fetch();
 
@@ -15,6 +14,7 @@ if (is_get()) {
         redirect('/');
     }
 
+if (is_get()) {
     extract((array)$u);
     $_SESSION['profile_photo'] = $u->profile_photo;
 }
@@ -167,7 +167,7 @@ include '../../_head.php';
             <button type="submit">Update</button>
             <button type="reset">Reset</button>
             <div class="links">
-                <?php if (!$email_verified): ?>
+                <?php if (!$u->email_verified): ?>
                     <a href="verify.php" class="verify-btn">Verify Email</a>
                 <?php else: ?>
                     <span class="verify-btn disabled">Email Verified</span>
