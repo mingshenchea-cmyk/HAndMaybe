@@ -1,53 +1,74 @@
 <?php
-require '../../_base.php';
-// ----------------------------------------------------------------------------
+require '../../../_base.php';
 auth('Admin');
 
-// Handle POST request to update order status
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['status'])) {
+//-----------------------------------------------------------------------------
+// Handle status update
+if (is_post() && isset($_POST['order_id'], $_POST['status'])) {
     $order_id = $_POST['order_id'];
     $status = $_POST['status'];
 
-    $update_stm = $_db->prepare('
-        UPDATE `order`
-        SET status = ?
-        WHERE order_id = ?
-    ');
-    $update_stm->execute([$status, $order_id]);
+    $check = $_db->prepare('SELECT status FROM `order` WHERE order_id = ?');
+    $check->execute([$order_id]);
+    $current = $check->fetch();
 
-    header('Location: order_maintainence.php');
-    exit;
+    if ($current && strtolower($current->status) !== 'cancelled') {
+        $update_stm = $_db->prepare('UPDATE `order` SET status = ? WHERE order_id = ?');
+        $update_stm->execute([$status, $order_id]);
+    }
+
+    redirect("order_maintenance.php");
 }
 
-// Get all orders with user and address info
-$stm = $_db->query('
-    SELECT o.*, u.name AS user_name, a.address_line1, a.city, a.state, a.postal_code, a.country
+//-----------------------------------------------------------------------------
+
+$filter_status = isset($_GET['status']) ? strtolower($_GET['status']) : '';
+
+// Build SQL based on filter
+$sql = '
+    SELECT o.*, u.name AS username, 
+           a.address_line1, a.city, a.state, a.postal_code, a.country
     FROM `order` o
     JOIN user u ON o.user_id = u.user_id
     JOIN address a ON o.address_id = a.address_id
-    ORDER BY o.created_at DESC
-');
+';
+
+$params = [];
+if ($filter_status === 'shipped' || $filter_status === 'delivered') {
+    $sql .= ' WHERE LOWER(o.status) = ?';
+    $params[] = $filter_status;
+}
+$sql .= ' ORDER BY o.created_at DESC';
+
+$stm = $_db->prepare($sql);
+$stm->execute($params);
 $orders = $stm->fetchAll();
 
-// For item listing
 $item_query = $_db->prepare('
-    SELECT oi.quantity,
-           pv.color, pv.size, pv.product_photo,
-           p.name 
+    SELECT oi.quantity, pv.color, pv.size, pv.product_photo, p.name
     FROM order_items oi
     JOIN product_variation pv ON oi.variation_id = pv.variation_id
     JOIN product p ON pv.product_id = p.product_id
     WHERE oi.order_id = ?
 ');
 
-//-----------------------------------------------------------------------------
-$_title = 'Admin - Order Maintenance';
-include '../../_head.php';
+$_title = 'Admin Order Maintenance';
+include '../../../_head.php';
 ?>
 <link rel="stylesheet" href="/css/orderhistory.css">
 
 <div class="order-history-container">
-    <h1>All User Orders</h1>
+    <h1>Users Order</h1>
+
+    <!-- Filter form -->
+    <form method="GET" style="margin-bottom: 20px;">
+        <label for="status">Filter by Status:</label>
+        <select name="status" id="status" onchange="this.form.submit()">
+            <option value="">All</option>
+            <option value="shipped" <?= $filter_status === 'shipped' ? 'selected' : '' ?>>Shipped</option>
+            <option value="delivered" <?= $filter_status === 'delivered' ? 'selected' : '' ?>>Delivered</option>
+        </select>
+    </form>
 
     <?php if (empty($orders)): ?>
         <p>No orders found.</p>
@@ -56,14 +77,17 @@ include '../../_head.php';
             <?php
             $item_query->execute([$order->order_id]);
             $items = $item_query->fetchAll();
+
             $created_at = new DateTime($order->created_at);
             $estimated = clone $created_at;
             $estimated->modify('+7 days');
+
+            $status = trim(strtolower($order->status));
             ?>
             <div class="order-card">
-                <!-- Admin: Show user info -->
-                <div class="admin-user-info">
-                    User: <?= $order->user_name ?> (ID: <?= $order->user_id ?>)
+                <div style="width: 100%; margin-bottom: 10px;">
+                    <strong>User ID:</strong> <?= $order->user_id ?> |
+                    <strong>Username:</strong> <?= $order->username ?>
                 </div>
 
                 <!-- Items -->
@@ -91,29 +115,29 @@ include '../../_head.php';
                     <p><?= $order->postal_code ?>, <?= $order->country ?></p>
                 </div>
 
-                <!-- Admin: Status form -->
+                <!-- Status -->
                 <div class="order-status">
-                    <div class="status <?= $order->status === 'cancelled' ? 'cancelled' : '' ?>">
-                        <?= ucfirst($order->status) ?>
+                    <div class="status <?= $status === 'cancelled' ? 'cancelled' : '' ?>">
+                        <?= ucfirst($status) ?>
                     </div>
 
-                    <div class="estimated">
-                        ETA: <?= $estimated->format('M d, Y') ?>
-                    </div>
-
-                    <?php if ($order->status !== 'cancelled'): ?>
+                    <?php if ($status !== 'cancelled'): ?>
                         <form method="POST">
+                            <div class="status-label">Update Status:</div>
                             <input type="hidden" name="order_id" value="<?= $order->order_id ?>">
-                            <div class="status-options">
-                                <label>
-                                    <input type="radio" name="status" value="shipped" <?= $order->status === 'shipped' ? 'checked' : '' ?>> Shipped
-                                </label>
-                                <label>
-                                    <input type="radio" name="status" value="delivered" <?= $order->status === 'delivered' ? 'checked' : '' ?>> Delivered
-                                </label>
-                            </div>
-                            <button type="submit" class="update-status-btn">Update Status</button>
+
+                            <label>
+                                <input type="radio" name="status" value="shipped" <?= $status === 'shipped' ? 'checked' : '' ?>>
+                                Shipped
+                            </label><br>
+                            <label>
+                                <input type="radio" name="status" value="delivered" <?= $status === 'delivered' ? 'checked' : '' ?>>
+                                Delivered
+                            </label>
+
+                            <button type="submit" class="update-btn">Update</button>
                         </form>
+                        <div class="estimated">ETA: <?= $estimated->format('M d, Y') ?></div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -121,4 +145,4 @@ include '../../_head.php';
     <?php endif; ?>
 </div>
 
-<?php include '../../_foot.php'; ?>
+<?php include '../../../_foot.php'; ?>

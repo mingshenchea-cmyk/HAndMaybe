@@ -4,7 +4,7 @@ require '../../_base.php';
 auth('Member');
 
 // Handle cancel request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order_id'])) {
+if (is_post() && isset($_POST['cancel_order_id'])) {
     $order_id = $_POST['cancel_order_id'];
 
     $cancel_stm = $_db->prepare('
@@ -14,8 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order_id'])) {
     ');
     $cancel_stm->execute([$order_id, $_user->user_id]);
 
-    header('Location: order_history.php');
-    exit;
+    redirect("order_history.php");
 }
 
 $stm = $_db->prepare('

@@ -151,46 +151,28 @@ h1 {
 }
 
 /* Admin*/
-/* Admin */
-.admin-user-info {
-    width: 100%;
+.order-status .status-label {
     font-weight: bold;
     margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    color: #222;
 }
 
 .order-status form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    text-align: left;
 }
 
-.status-options {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-}
-
-.status-options label {
-    margin-bottom: 4px;
-    cursor: pointer;
-}
-
-.update-status-btn {
-    background-color: #1976d2;
+.update-btn {
+    background-color: #007bff;
     color: white;
-    padding: 8px 14px;
+    padding: 6px 12px;
     border: none;
     border-radius: 6px;
     font-size: 14px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
     transition: background-color 0.3s ease;
 }
 
-.update-status-btn:hover {
-    background-color: #125aa3;
+.update-btn:hover {
+    background-color: #0056b3;
 }
