@@ -8,11 +8,11 @@ if($token) {
     $stm->execute([$token]);
     $r = $stm->fetch();
     if(!$r) {
-        temp('info', 'Expired token');
+        temp('error', 'Expired token');
         redirect('/');
     }
 } else {
-    temp('info', 'Invalid token');
+    temp('error', 'Invalid token');
     redirect('/');
 }
 

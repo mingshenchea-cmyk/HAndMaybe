@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 01, 2025 at 12:26 PM
+-- Generation Time: May 01, 2025 at 04:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,8 @@ INSERT INTO `address` (`address_id`, `user_id`, `address_line1`, `city`, `state`
 (2, 2, '37, Jalan Beberek, Kepong Baru', 'Kuala Lumpur', 'Kuala Lumpur', 52100, 'Malaysia'),
 (3, 3, '123, Main Street, Apt 4B', 'Springfield', 'Illinois', 62704, 'USA'),
 (4, 4, '12, Ocean Avenue', 'Sydney', 'New South Wales', 2000, 'Australia'),
-(5, 5, '23, Solok Relau 2, Sentral Greens', 'Bayan Lepas', 'Pulau Pinang', 11900, 'Malaysia');
+(5, 5, '23, Solok Relau 2, Sentral Greens', 'Bayan Lepas', 'Pulau Pinang', 11900, 'Malaysia'),
+(6, 6, '69,JALAN 1,AMPANG JAYA', 'AMPANG', 'Selangor', 68000, 'Malaysia');
 
 -- --------------------------------------------------------
 
@@ -61,13 +62,6 @@ CREATE TABLE `cart` (
   `user_id` int(5) NOT NULL,
   `created_at` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`cart_id`, `user_id`, `created_at`) VALUES
-(6, 6, '2025-05-01 15:37:05.000000');
 
 -- --------------------------------------------------------
 
@@ -104,6 +98,30 @@ INSERT INTO `category` (`category_id`, `category`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `email_verification_tokens`
+--
+
+CREATE TABLE `email_verification_tokens` (
+  `user_id` int(11) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `expiry` datetime NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `email_verification_tokens`
+--
+
+INSERT INTO `email_verification_tokens` (`user_id`, `token`, `expiry`, `created_at`) VALUES
+(6, 'b9d9ad9fee03a92dadba197855b07d49fab40818a745b83d5066f6d92f287d40', '2025-05-31 21:58:18', '2025-05-01 21:58:18'),
+(6, 'a8aca4a6f996c2a0a1eb1d4864d268a479542169889f1f3b4ca4fa8362bfed8e', '2025-05-01 22:31:27', '2025-05-01 22:01:27'),
+(6, '216c79275093c46738f6635d229c5dfca5d0101b9e4ddc6dcdd689751aa58049', '2025-05-01 22:38:58', '2025-05-01 22:08:58'),
+(6, 'd6ecce785217212b11a040b2e23f1e19c2a94f6bcdf7f92b1c0c15640c2b536d', '2025-05-01 22:39:58', '2025-05-01 22:09:58'),
+(6, '9f8028a09830bb059e35f573a758be79edfcea1da0ed9b3a3ed4c6b44f8b8e11', '2025-05-01 22:40:20', '2025-05-01 22:10:20');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `order`
 --
 
@@ -116,6 +134,14 @@ CREATE TABLE `order` (
   `total_amount` int(10) NOT NULL,
   `address_id` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order`
+--
+
+INSERT INTO `order` (`order_id`, `user_id`, `created_at`, `status`, `shipping_fee`, `total_amount`, `address_id`) VALUES
+(1, 6, '2025-05-01 20:30:52.000000', 'Shipped', 10, 60, 6),
+(2, 6, '2025-05-01 20:33:16.000000', 'Shipped', 10, 35, 6);
 
 -- --------------------------------------------------------
 
@@ -130,6 +156,15 @@ CREATE TABLE `order_items` (
   `quantity` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`order_item_id`, `order_id`, `variation_id`, `quantity`) VALUES
+(1, 1, 11, 1),
+(2, 1, 6, 1),
+(3, 2, 11, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -141,6 +176,13 @@ CREATE TABLE `password_reset_tokens` (
   `user_id` int(11) NOT NULL,
   `expiry` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `password_reset_tokens`
+--
+
+INSERT INTO `password_reset_tokens` (`token`, `user_id`, `expiry`) VALUES
+('c9b4e48cfb2ec68f334a5cbaef813feacd3d76f38f06dfbe9c39dd82c748e1f8', 6, '2025-05-01 20:43:34');
 
 -- --------------------------------------------------------
 
@@ -197,12 +239,12 @@ INSERT INTO `product_variation` (`variation_id`, `product_id`, `size`, `color`, 
 (3, 1, 'M', 'Light Beige', 45, 'crew-t-beige.avif'),
 (4, 1, 'L', 'Light Beige', 6, 'crew-t-beige.avif'),
 (5, 1, 'XL', 'Light Beige', 37, 'crew-t-beige.avif'),
-(6, 1, 'XS', 'White', 50, 'crew-t-white.avif'),
+(6, 1, 'XS', 'White', 49, 'crew-t-white.avif'),
 (7, 1, 'S', 'White', 19, 'crew-t-white.avif'),
 (8, 1, 'M', 'White', 0, 'crew-t-white.avif'),
 (9, 1, 'L', 'White', 8, 'crew-t-white.avif'),
 (10, 1, 'XL', 'White', 32, 'crew-t-white.avif'),
-(11, 1, 'XS', 'Black', 28, 'crew-t-black.avif'),
+(11, 1, 'XS', 'Black', 26, 'crew-t-black.avif'),
 (12, 1, 'S', 'Black', 14, 'crew-t-black.avif'),
 (13, 1, 'M', 'Black', 46, 'crew-t-black.avif'),
 (14, 1, 'L', 'Black', 41, 'crew-t-black.avif'),
@@ -320,21 +362,22 @@ CREATE TABLE `user` (
   `gender` varchar(1) NOT NULL,
   `phone_no` int(20) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `profile_photo` varchar(100) NOT NULL
+  `profile_photo` varchar(100) NOT NULL,
+  `email_verified` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `role`, `name`, `password`, `age`, `gender`, `phone_no`, `email`, `profile_photo`) VALUES
-(1, 'Admin', 'Chea Ming Shen', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'M', 123456789, 'cms@gmail.com', 'cms_pfp.png'),
-(2, 'Admin', 'Chong Ming Li', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'M', 141047104, 'cml@gmail.com', 'cml_pfp.png'),
-(3, 'Member', 'Elaine Pang', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'F', 184012398, 'ep@gmail.com', 'ep_pfp.png'),
-(4, 'Member', 'Sum Ting Wong', '8cb2237d0679ca88db6464eac60da96345513964', 30, 'M', 175419326, 'stw@gmail.com', 'stw_pfp.png'),
-(5, 'Member', 'Ho Lee Fuk', '8cb2237d0679ca88db6464eac60da96345513964', 25, 'F', 190213092, 'hlf@gmail.com', 'hlf_pfp.png'),
-(6, 'Member', 'Ming Li Test', '7c4a8d09ca3762af61e59520943dc26494f8941b', 21, 'F', 123456789, 'minglilau9@gmail.com', '68132d3842f3d.jpg'),
-(7, 'Member', 'tung', '7869a357b954e36df60655b17ef3ac09d6e600dd', 12, 'M', 123456789, 'tung@gmail.com', '68126e795d830.jpg');
+INSERT INTO `user` (`user_id`, `role`, `name`, `password`, `age`, `gender`, `phone_no`, `email`, `profile_photo`, `email_verified`) VALUES
+(1, 'Admin', 'Chea Ming Shen', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'M', 123456789, 'cms@gmail.com', 'cms_pfp.png', 0),
+(2, 'Admin', 'Chong Ming Li', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'M', 141047104, 'cml@gmail.com', 'cml_pfp.png', 0),
+(3, 'Member', 'Elaine Pang', '8cb2237d0679ca88db6464eac60da96345513964', 21, 'F', 184012398, 'ep@gmail.com', 'ep_pfp.png', 0),
+(4, 'Member', 'Sum Ting Wong', '8cb2237d0679ca88db6464eac60da96345513964', 30, 'M', 175419326, 'stw@gmail.com', 'stw_pfp.png', 0),
+(5, 'Member', 'Ho Lee Fuk', '8cb2237d0679ca88db6464eac60da96345513964', 25, 'F', 190213092, 'hlf@gmail.com', 'hlf_pfp.png', 0),
+(6, 'Member', 'Ming Li Update', '7c4a8d09ca3762af61e59520943dc26494f8941b', 21, 'F', 123456789, 'minglilau9@gmail.com', '68132d3842f3d.jpg', 1),
+(7, 'Member', 'tung', '7869a357b954e36df60655b17ef3ac09d6e600dd', 12, 'M', 123456789, 'tung@gmail.com', '68126e795d830.jpg', 0);
 
 --
 -- Indexes for dumped tables
@@ -367,6 +410,12 @@ ALTER TABLE `cart_items`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`category_id`);
+
+--
+-- Indexes for table `email_verification_tokens`
+--
+ALTER TABLE `email_verification_tokens`
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `order`
@@ -425,19 +474,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
-  MODIFY `address_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `address_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `cart_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `cart_item_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -449,13 +498,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_item_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_item_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -491,6 +540,12 @@ ALTER TABLE `address`
 ALTER TABLE `cart_items`
   ADD CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`),
   ADD CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`variation_id`) REFERENCES `product_variation` (`variation_id`);
+
+--
+-- Constraints for table `email_verification_tokens`
+--
+ALTER TABLE `email_verification_tokens`
+  ADD CONSTRAINT `email_verification_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `order`
