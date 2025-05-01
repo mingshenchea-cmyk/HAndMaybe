@@ -107,6 +107,7 @@ foreach ($cart as $variation_id => $item) {
     }
 }
 
+// ----------------------------------------------------------------------------
 $_title = 'Checkout';
 include '../../_head.php';
 ?>
