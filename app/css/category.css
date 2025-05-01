@@ -1,0 +1,93 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.category_div{
+    display: block;
+}
+
+.category_table {
+    border-collapse: collapse;
+}
+
+th{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    border: 1px solid black;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 80px;
+}
+
+td {
+    border: 1px solid black;
+    height: 50px;
+    border-color: lightgray;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.data{
+    padding-left: 20px;
+}
+
+.button_icon{
+    width:20px;
+    padding-right: 5px;
+}
+
+.edit_box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+}
+
+.category_add, .edit_button, .delete_button, .save_button {
+    height: 40px;
+    width: 100px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
+}
+
+.edit_button {
+    background-color: black;
+}
+
+.edit_button:hover {
+    background-color: grey;
+}
+
+.delete_button {
+    background-color: red;
+}
+
+.delete_button:hover {
+    background-color: darkred;
+}
+
+.save_button,.category_add {
+    background-color: green;
+}
+
+.save_button:hover,.category_add:hover {
+    background-color: darkgreen;
+}
+
+.delete_box{
+    border: none;
+    padding-left: 10px;
+    display: flex;
+    padding-top: 5px;
+}

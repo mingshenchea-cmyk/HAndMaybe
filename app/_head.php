@@ -81,13 +81,14 @@ $_category = getAllCategory();
     <?php endif; ?>
 
     <?php 
-        if ($currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' ||  $currentPage == 'member_detail.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
+        if ($currentPage == 'category_maintenance.php' || $currentPage == 'product_add_variation.php' ||$currentPage == 'product_add.php' || $currentPage == 'member_maintenance.php' ||  $currentPage == 'member_detail.php' || $currentPage == 'product_maintenance.php' || $currentPage == 'order_maintenance.php' || $currentPage == 'product_maintenance_detail.php'):  
     ?>
         <nav>
             <div class="admin_menu">
                 <a href="/page/admin/member/member_maintenance.php">Member Maintenance</a>
                 <a href="/page/admin/product/product_maintenance.php">Product Maintenance</a>
                 <a href="/page/admin/order/order_maintenance.php">Order Maintenance</a>
+                <a href="/page/admin/category/category_maintenance.php">Category Maintenance</a>
             </div>
 
             <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):?>
