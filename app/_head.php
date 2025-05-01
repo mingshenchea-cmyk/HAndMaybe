@@ -37,6 +37,7 @@ $_category = getAllCategory();
                     <p class="profile">Profile</p>
                 </a>
             <?php endif ?>
+            <?php if ($_user?->role != "Admin"): ?>
             <a href="/page/cart/shopping_cart.php" class="nav-item">
                 <img src="/images/118096.png" alt="Shopping Bag" class="nav-icon">
                 <p class="cart">Shopping bag</p>
@@ -47,6 +48,7 @@ $_category = getAllCategory();
                     }
                 ?>
             </a>
+            <?php endif ?>
             <?php if ($_user && $_user->role == "Member"): ?>
                 <a href="/page/order/order_history.php" class="nav-item">
                     <img src="/images/orderhistoryicon.png" alt="Order History" class="nav-icon">
