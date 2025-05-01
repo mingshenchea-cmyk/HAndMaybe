@@ -52,6 +52,25 @@ if (is_post()) {
             $_SESSION['last_attempt_time'] = null;
 
             temp('info', 'Login successfully!');
+            
+            if (isset($_POST['remember_me'])) {
+                $token = generate_token();
+                $token_hash = hash('sha256', $token);
+                $expiry = date('Y-m-d H:i:s', time() + 60 * 60 * 24 * 30); // 30 days
+                
+                $stm = $_db->prepare('
+                    INSERT INTO remember_tokens (user_id, token_hash, expires_at)
+                    VALUES (?, ?, ?)
+                ');
+                $stm->execute([$u->user_id, $token_hash, $expiry]);
+            
+                setcookie('remember_me', $token, [
+                    'expires' => time() + 60 * 60 * 24 * 30,
+                    'path' => '/',
+                    'httponly' => true,
+                ]);
+            }
+
             if ($u->role == 'Admin') {
                 login($u, '/page/admin/member/member_maintenance.php'); 
             } else {
@@ -87,6 +106,10 @@ $_title = 'Login';
             <?= html_password('password', 'maxlength="100"') ?>
             <?= err('password') ?>
             <?= err('general') ?>
+
+            <label>
+                <input type="checkbox" name="remember_me"> Remember Me
+            </label>
 
             <div class="form-buttons">
                 <button type="submit">Login</button>
