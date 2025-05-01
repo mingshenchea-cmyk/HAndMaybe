@@ -164,9 +164,14 @@ include '../../_head.php';
         <?= err('gender') ?>
 
         <div class="form-buttons">
-            <button>Update</button>
+            <button type="submit">Update</button>
             <button type="reset">Reset</button>
             <div class="links">
+                <?php if (!$email_verified): ?>
+                    <a href="verify.php" class="verify-btn">Verify Email</a>
+                <?php else: ?>
+                    <span class="verify-btn disabled">Email Verified</span>
+                <?php endif; ?>
                 <a href="password.php" class="password-btn">Update password</a>
                 <a href="../security/logout.php" class="logout-btn">Log Out</a>
             </div>
