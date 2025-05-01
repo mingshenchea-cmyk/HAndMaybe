@@ -90,6 +90,7 @@ $_category = getAllCategory();
                     <a href="/page/admin/member/member_maintenance.php">Member Maintenance</a>
                     <a href="/page/admin/product/product_maintenance.php">Product Maintenance</a>
                     <a href="/page/admin/order/order_maintenance.php">Order Maintenance</a>
+                    <a href="/page/admin/category/category_maintenance.php">Category Maintenance</a>
                 </div>
 
                 <?php if ($currentPage == 'product_maintenance_detail.php' || $currentPage == 'product_maintenance.php'):?>
