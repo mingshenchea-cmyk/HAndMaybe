@@ -91,4 +91,44 @@ $(() => {
         }
     });
 
+    // Drag and drop photo
+    $('label.upload').on('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).css('border', '2px dashed #00f');
+    });
+
+    $('label.upload').on('dragleave', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).css('border', '');
+    });
+
+    $('label.upload').on('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).css('border', '');
+
+        const dt = e.originalEvent.dataTransfer;
+        if (!dt || !dt.files.length) return;
+
+        const file = dt.files[0];
+        
+        if (!file.type.startsWith('image/')) {
+            alert('Not an image!');
+            return;
+        }
+
+        const input = $(this).find('input[type="file"]')[0];
+        const img = $(this).find('img')[0];
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        input.files = dataTransfer.files;
+
+        if (img) {
+            img.src = URL.createObjectURL(file);
+        }
+    });
+
 });
