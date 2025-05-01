@@ -60,8 +60,8 @@ if (is_post()) {
         ');
         $stm->execute([$new_password, $_user->user_id]);
 
-        temp('info', 'Record updated');
-        redirect('/');
+        temp('info', 'Password updated');
+        redirect('/page/user/profile.php');
     }
 }
 
