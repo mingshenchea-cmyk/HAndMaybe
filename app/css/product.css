@@ -186,9 +186,19 @@
     margin-left: 10px;
 }
 
-input, textarea {
+.add_variation {
     margin-left: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+}
+
+.add_product{
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+span {
+    margin-left: 20px;
+    padding-bottom: 10px;
 }
 
 select {

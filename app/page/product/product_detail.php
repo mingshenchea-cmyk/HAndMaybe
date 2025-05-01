@@ -24,7 +24,9 @@ include '../../_head.php';
 if (is_post()): ?>
     <?php $quantity = 1; // Default to 1 if not provided ?>
     <?php // Call the add_to_cart function
-        add_to_cart($variation_id, $quantity, $category_num);?>
+        temp('info','Add to cart successfully!');
+        add_to_cart($variation_id, $quantity, $category_num);
+        ?>
 <?php endif ?>
 
 <div class="container">
