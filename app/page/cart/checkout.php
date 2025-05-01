@@ -26,7 +26,10 @@ $stm = $_db->prepare('
 
     if ($address) {
         extract((array)$address);
-    } 
+        $_SESSION['has_address'] = True;
+    } else {
+        $_SESSION['has_address'] = False;
+    }
 }
 
 if (is_post()) {
@@ -52,7 +55,7 @@ if (is_post()) {
             ]
         ];
 
-        if (!$address) {
+        if (!$_SESSION['has_address']) {
             $stm = $_db->prepare('
                 INSERT INTO address (user_id, address_line1, city, state, postal_code, country)
                 VALUES (?, ?, ?, ?, ?, ?)

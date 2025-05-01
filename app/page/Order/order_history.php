@@ -3,7 +3,6 @@ require '../../_base.php';
 
 auth('Member');
 
-// Get all orders by the logged-in user, with address details
 $stm = $_db->prepare('
     SELECT o.*, 
            a.address_line1, a.city, a.state, a.postal_code, a.country
@@ -32,7 +31,7 @@ include '../../_head.php';
     <?php else: ?>
         <?php
         $item_query = $_db->prepare('
-            SELECT oi.quantity, oi.total_price, 
+            SELECT oi.quantity,
                    pv.color, pv.size, pv.product_photo,
                    p.name 
             FROM order_items oi
@@ -56,11 +55,13 @@ include '../../_head.php';
                             <span><strong><?= $item->name ?></strong></span>
                             <span>Size: <?= $item->size ?></span>
                             <span>Color: <?= $item->color ?></span>
-                            <span>Total: RM<?= number_format($item->total_price, 2) ?></span>
+                            <span>Quantity: <?= $item->quantity ?></span>
                         </div>
                     <?php endforeach; ?>
                 </div>
 
+                <div class="total-amount">Total Paid: RM<?= number_format($order->total_amount, 2) ?></div>
+                
                 <!-- Shipping Info -->
                 <div class="order-shipping">
                     <h4>Shipping Info</h4>
@@ -71,10 +72,15 @@ include '../../_head.php';
                 </div>
 
                 <!-- Order Status & ETA -->
+                <?php
+                    $created_at = new DateTime($order->created_at);
+                    $estimated = clone $created_at;
+                    $estimated->modify('+7 days');
+                ?>
                 <div class="order-status">
                     <div class="status"><?= ucfirst($order->status) ?></div>
                     <div class="estimated">
-                        ETA: <?= isset($order->estimated_arrival) ? date('M d, Y', strtotime($order->estimated_arrival)) : 'TBD' ?>
+                        ETA: <?= $estimated->format('M d, Y') ?>
                     </div>
                 </div>
             </div>

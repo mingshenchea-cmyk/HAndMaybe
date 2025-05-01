@@ -47,6 +47,13 @@ $_category = getAllCategory();
                     }
                 ?>
             </a>
+            <?php if ($_user && $_user->role == "Member"): ?>
+                <a href="/page/order/order_history.php" class="nav-item">
+                    <img src="/images/orderhistoryicon.png" alt="Order History" class="nav-icon">
+                    <p class="cart">Order History</p>
+                </a>
+            <?php endif; ?>
+
         </div>
     </header>
 
