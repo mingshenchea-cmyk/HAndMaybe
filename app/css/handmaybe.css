@@ -177,6 +177,24 @@ nav input:focus {
     animation: fade 5s;
 }
 
+#error {
+    position: fixed;
+    background-color: #edd4d4;
+    border: 1px solid #a72828;
+    color: #571515;
+    border-radius: 5px;
+    padding: 10px 20px;
+    left: 50%;
+    translate: -50% 0;
+    z-index: 999;
+    top: -100px;
+    opacity: 0;
+}
+
+#error:not(:empty) {
+    animation: fade 5s;
+}
+
 @keyframes fade {
     0% { top: -100px; opacity: 0; }
     10% { top: 100px; opacity: 1; }

@@ -3,9 +3,31 @@ include '../../_base.php';
 auth('Member');
 
 $user_id = $_user->user_id;
-$cart = get_cart();
+$stm = $_db->prepare('
+    SELECT * FROM cart WHERE user_id = ?'
+);
+$stm->execute([$_user->user_id]);
+$user_cart = $stm->fetch();
+
+$stm = $_db->prepare('
+    SELECT * FROM cart_items WHERE cart_id = ?'
+);
+$stm->execute([$user_cart->cart_id]);
+$cart = $stm->fetchAll();
 
 if (!$cart) redirect('shopping_cart.php');
+
+if(is_get()) {
+$stm = $_db->prepare('
+    SELECT * FROM address WHERE user_id = ?'
+    );
+    $stm->execute([$_user->user_id]);
+    $address = $stm->fetch();
+
+    if ($address) {
+        extract((array)$address);
+    } 
+}
 
 if (is_post()) {
     $address_line1 = req('address_line1');
@@ -20,53 +42,31 @@ if (is_post()) {
     }
 
     if (!$_err) {
-        $_db->beginTransaction();
+        $_SESSION['checkout'] = [
+            'address' => [
+                'address_line1' => $address_line1,
+                'city' => $city,
+                'state' => $state,
+                'postal_code' => $postal_code,
+                'country' => $country
+            ]
+        ];
 
-        $stm = $_db->prepare('
-            INSERT INTO address (user_id, address_line1, city, state, postal_code, country)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ');
-        $stm->execute([$user_id, $address_line1, $city, $state, $postal_code, $country]);
-        $address_id = $_db->lastInsertId();
-
-        $total_amount = 0;
-        foreach ($cart as $variation_id => $item) {
-            $quantity = is_array($item) ? $item['quantity'] : $item;
-            $stm = $_db->prepare('SELECT p.price FROM product p JOIN product_variation pv ON p.product_id = pv.product_id WHERE pv.variation_id = ?');
-            $stm->execute([$variation_id]);
-            $product = $stm->fetch();
-            if ($product) {
-                $total_amount += $product->price * $quantity;
-            }
-        }
-        $total_amount += $shipping_fee;
-
-        $stm = $_db->prepare('
-            INSERT INTO `order` (user_id, created_at, status, shipping_fee, total_amount, address_id)
-            VALUES (?, NOW(), "Pending", ?, ?, ?)
-        ');
-        $stm->execute([$user_id, $shipping_fee, $total_amount, $address_id]);
-        $order_id = $_db->lastInsertId();
-
-        $stm = $_db->prepare('
-            INSERT INTO order_items (order_id, product_id, quantity)
-            VALUES (?, ?, ?)
-        ');
-        foreach ($cart as $variation_id => $item) {
-            $quantity = is_array($item) ? $item['quantity'] : $item;
-            $stmProd = $_db->prepare('
-                SELECT p.product_id FROM product p JOIN product_variation pv ON p.product_id = pv.product_id WHERE pv.variation_id = ?
+        if (!$address) {
+            $stm = $_db->prepare('
+                INSERT INTO address (user_id, address_line1, city, state, postal_code, country)
+                VALUES (?, ?, ?, ?, ?, ?)
             ');
-            $stmProd->execute([$variation_id]);
-            $product = $stmProd->fetch();
-            if ($product) {
-                $stm->execute([$order_id, $product->product_id, $quantity]);
-            }
+            $stm->execute([$user_id, $address_line1, $city, $state, $postal_code, $country]);
+        } else {
+            $stm = $_db->prepare('
+                UPDATE address 
+                SET address_line1 = ?, city = ?, state = ?, postal_code = ?, country = ?
+                WHERE user_id = ? 
+            ');
+            $stm->execute([$address_line1, $city, $state, $postal_code, $country, $user_id]);
         }
 
-        $_db->commit();
-        set_cart();
-        temp('info', 'Order placed successfully!');
         redirect("payment.php");
     }
 }
@@ -80,14 +80,14 @@ $total = 0;
 $total_items = 0;
 $shipping_fee = 10.00;
 $stm = $_db->prepare('
-    SELECT p.product_id, p.name, p.description, p.price,
-           pv.color, pv.size, pv.product_photo
+    SELECT p.product_id, p.name, p.description, p.price, pv.color, pv.size, pv.product_photo
     FROM product p
     JOIN product_variation pv ON p.product_id = pv.product_id
     WHERE pv.variation_id = ?
 ');
 foreach ($cart as $variation_id => $item) {
-    $quantity = is_array($item) ? $item['quantity'] : $item;
+    $variation_id = $item->variation_id;
+    $quantity = $item->quantity;
     $stm->execute([$variation_id]);
     $product = $stm->fetch();
     if ($product) {
@@ -114,7 +114,7 @@ include '../../_head.php';
 <link rel="stylesheet" href="/css/checkout.css">
 
 <div class="checkout-container">
-    <form action="payment.php" method="post" class="checkout-form">
+    <form method="post" class="checkout-form">
         <div class="checkout-left">
             <h2>Your Info</h2>
             <p><strong>Name:</strong> <?= $user->name ?></p>
@@ -124,11 +124,16 @@ include '../../_head.php';
             <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
 
             <h3>Shipping Address</h3>
-            <label>Address Line 1: <input name="address_line1" required></label>
-            <label>City: <input name="city" required></label>
-            <label>State: <input name="state" required></label>
-            <label>Postal Code: <input name="postal_code" required></label>
-            <label>Country: <input name="country" required></label>
+            <label>Address Line 1:</label>
+            <?= html_text('address_line1', 'required') ?>
+            <label>City:</label>
+            <?= html_text('city', 'required') ?>
+            <label>State:</label>
+            <?= html_text('state', 'required') ?>
+            <label>Postal Code:</label>
+            <?= html_text('postal_code', 'required') ?>
+            <label>Country:</label>
+            <?= html_text('country', 'required') ?>
             <?= err('address') ?>
         </div>
 
